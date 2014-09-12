@@ -17,3 +17,6 @@ parameters:
     debug_toolbar:          true
     debug_redirects:        false
     use_assetic_controller: true
+
+    node_bin: /usr/bin/node # Le chemin du binaire node
+    node_modules: /usr/local/lib/node_modules # le path ou se trouve le dossier less
