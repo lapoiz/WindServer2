@@ -1,0 +1,11 @@
+la_poiz_bootstrap_demo:
+    resource: "@LaPoizBootstrapDemoBundle/Resources/config/routing.yml"
+    prefix:   /bootstrap_demo
+
+la_poiz_wind:
+    resource: "@LaPoizWindBundle/Resources/config/routing.yml"
+    prefix:   /
+
+LaPoizHighchartsBundle:
+    resource: "@LaPoizHighchartsBundle/Resources/config/routing.yml"
+    prefix:   /hgraph
