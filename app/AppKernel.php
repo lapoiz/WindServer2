@@ -17,8 +17,6 @@ class AppKernel extends Kernel
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new LaPoiz\WindBundle\LaPoizWindBundle(),
-            new LaPoiz\HighchartsBundle\LaPoizHighchartsBundle(),
-            new LaPoiz\BootstrapDemoBundle\LaPoizBootstrapDemoBundle(),
             new Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle(),
 
             new Braincrafted\Bundle\BootstrapBundle\BraincraftedBootstrapBundle(),
