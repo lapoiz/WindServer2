@@ -1,0 +1,12 @@
+parameters:
+#    la_poiz_wind.example.class: LaPoiz\WindBundle\Example
+
+services:
+    la_poiz_wind.form.type.testGetMaree:
+        class: LaPoiz\WindBundle\Form\TestGetMareeType
+        tags:
+            - { name: form.type, alias: testGetMaree }
+
+#    la_poiz_wind.example:
+#        class: %la_poiz_wind.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

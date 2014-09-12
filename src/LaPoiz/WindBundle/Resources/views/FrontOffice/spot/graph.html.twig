@@ -1,0 +1,24 @@
+{% macro graph(spot) %}
+
+<div id="meteoGraph" style="width: 800px; height: 310px; margin: 0 auto"></div>
+<div id="Loading"></div>
+<div id="jsonData" style="visibility: hidden"></div>
+
+
+
+    {% from "LaPoizWindBundle:FrontOffice/spot:graphScript.html.twig" import script %}
+    {{ script(spot) }}
+
+
+    <script>
+        /** Load Json and create Meteogram */
+        $(function () { // On DOM ready...
+            $.getJSON(
+                    '{{ path('_fo_json_spot_data',{'id':spot.id}) }}',
+                    function (xml) {
+                        var meteogram = new Meteogram(xml, 'meteoGraph');
+                    });
+        });
+    </script>
+
+{% endmacro %}

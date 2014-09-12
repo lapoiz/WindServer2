@@ -1,0 +1,14 @@
+LaPoiz\WindBundle\Entity\Spot:
+  properties:
+    nom: 
+      - NotBlank: ~
+    description:
+      - NotBlank: ~
+    googleMapURL:
+      - Url: ~      
+    localisationDescription:
+      - NotBlank: ~
+    gpsLong:
+      - NotBlank: ~
+    gpsLat:
+      - NotBlank: ~

@@ -1,0 +1,72 @@
+{% extends 'LaPoizWindBundle:BackOffice:base.html.twig' %}
+
+{% block bodyPage %}
+
+    <div class="starter-template">
+        <h1>Test marée</h1>
+        <h2>Tester la récupération de données</h2>
+
+        <div class="row">
+            <div class="col-sm-8 col-sm-offset-2">
+                {{ form_start(form, {
+                    'style': 'horizontal',
+                    'label_col': 2,
+                    'widget_col': 4 }) }}
+
+                {{ form_errors(form, { 'global_errors': true }) }}
+
+                {{ form_end(form) }}
+
+            </div>
+        </div>
+
+        <div class="row">
+            Url: <a href="{{ mareeURL }}" target="_blank">{{ mareeURL }}</a> <br /> <br />
+        </div>
+
+        {% if  prevMaree is defined and prevMaree!= null %}
+        <h2>Prévision de {{ mareeURL }}</h2>
+        <div class="row">
+            <table class="table table-striped table-hover table-bordered">
+                {% for key, jour in prevMaree %}
+                    <tr>
+                        <td>{{ "now"|date("d/m/Y") }} + {{ key }} jours</td>
+                    {% for heure, hauteur in jour %}
+                        <td>{{ heure }}: {{ hauteur }}</td>
+                    {% endfor %}
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+        <div class="row">
+            <a href="{{ path('_bo_test_maree_save', {'id':spot.id}) }}" class="btn btn-primary">Enregistrer</a>
+        </div>
+
+        {% endif %}
+
+        {% if  mareeDateDB is defined and mareeDateDB!=null %}
+        <h2>Prévision dans la Base de données</h2>
+
+            <div class="row">
+                <div class="col-sm-6 col-sm-offset-2">
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Date Prev</th>
+                                <th>Created</th>
+                            </tr>
+                        </thead>
+                        {% for mareeDate in mareeDateDB %}
+                            <tr>
+                                <td>{{ mareeDate.datePrev|date("d/m/Y") }}</td>
+                                <td>{{ mareeDate.created|date("d/m/Y") }}</td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+
+{% endblock %}

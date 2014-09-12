@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="{% block descriptionPage %}Site pour visualiser le vent sur les spots de kite en France.{% endblock %}">
+    <meta name="author" content="Damien Poizat">
+    <link rel="shortcut icon" href="{{ asset('bundles/lapoizwind/images/ico/favicon.png') }}">
+
+    <title>{% block titlePage %}LaPoizWind{% endblock %}</title>
+    <!-- Bootstrap core CSS -->
+    <link href="{{ asset('bundles/lapoizwind/css/bootstrap.css') }}" rel="stylesheet" media="screen">
+
+    <!-- HTML5 Shim and Respond.js add IE8 support of HTML5 elements and media queries -->
+    {% include 'BraincraftedBootstrapBundle::ie8-support.html.twig' %}
+
+    <!-- Icons en plus -->
+    <link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="{{ asset('bundles/lapoizwind/css/laPoizWind.css') }}" rel="stylesheet">
+
+
+    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="{{ asset('bundles/lapoizwind/js/bootstrap.min.js') }}"></script>
+
+    {% block javascriptsHeader %}   {% endblock %}
+    {% block scriptGraph %}    {% endblock %}
+    {% block stylesheets %}    {% endblock %}
+
+</head>
+
+    
+<body>
+
+    {% from "LaPoizWindBundle:FrontOffice/PageComposant:nav.html.twig" import view %}
+    {{ view(listSpot) }}
+
+    {% from "LaPoizWindBundle:FrontOffice/PageComposant:connectModal.html.twig" import view %}
+    {{ view() }}
+
+
+    <div class="container">
+
+        {% block bodyPage %}
+            CORPS DE LA PAGE .................
+        {% endblock %}
+    </div><!-- /.container -->
+
+    {% block javascriptsFooter %}   {% endblock %}
+
+    </body>
+</html>

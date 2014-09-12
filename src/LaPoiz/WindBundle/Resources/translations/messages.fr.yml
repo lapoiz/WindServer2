@@ -1,0 +1,134 @@
+#####################
+# Texte en Français #
+#####################
+# Texte du fil d'ariane
+ariane.home: Acceuil
+ariane.websites: Les sites web
+
+# Texte des Titres
+admin.websites.title: LaPoizWind - Admin - Websites
+admin.list.spot.title: Liste des spots
+admin.list.website.title: Liste des websites
+admin.dataWindPrev.title: Prévision pour un spot par un site web
+
+spot.list.title: Liste des spots
+spot.general.title: Génèral
+spot.localisation.title: Localisation
+
+spot.historique.date.prevision.label: Prévision pour le (dd-mm-yyyy)
+spot.history.prevision.one.date.title.date: Prévision pour le 
+spot.history.prevision.one.date.title.table: Prévision du
+
+
+
+website.index.title.page: LaPoizWind - Liste des sites web
+website.index.title: Liste des sites web
+
+# Authentification
+auth.username.label: Login
+auth.password.label: Mot de passe
+auth.button.login: S'authentifier
+
+# Titre de fenetre
+admin.window.title.spot.edit: Editer un spot
+admin.window.title.spot.add: Ajouter un spot
+admin.window.title.spot.add.website: Ajouter un site Internet
+
+# Titre des formulaires
+admin.spot.edit.spot: Spot
+
+# Texte des labels des formulaires - admin
+admin.dataWindPrev.display.label.date.created: date de création
+admin.dataWindPrev.display.label.slot.time: temps de mise à jour
+admin.dataWindPrev.display.label.date.last.analyse: date de la derniere analyse
+admin.dataWindPrev.display.label.nb.analyse: nombre d'analyse
+admin.dataWindPrev.display.label.url: url
+
+admin.dataWindPrev.test.label.step: étape
+admin.dataWindPrev.test.label.step.error: Error: aucune étape réalisé
+admin.dataWindPrev.test.label.step.start: Etape réalisée
+admin.dataWindPrev.test.label.step.getPage: Récupération de la page, réalisée
+admin.dataWindPrev.test.label.step.analyse: Analyse de la page, réalisée
+admin.dataWindPrev.test.label.step.transforme: Transformation des données, fini
+admin.dataWindPrev.test.label.step.save: Sauvegarde réalisée
+admin.dataWindPrev.test.label.chrono: temps (ms)
+admin.dataWindPrev.label.success.remove.prevDate: effacé
+
+admin.previsionDate.label.created: crée le
+admin.previsionDate.label.datePrev: Prévision pour le
+
+admin.dataWindPrev.analyse.date.analyse: date de l'analyse (yyyy-mm-dd)
+admin.dataWindPrev.analyse.date.analyse.title.date: Analyse réalisé le 
+admin.dataWindPrev.analyse.date.prevision: date de prevision  (yyyy-mm-dd)
+admin.dataWindPrev.analyse.date.prevision.title.date: Prévision pour le  
+
+admin.website.label.name: Nom
+admin.website.label.url: URL
+admin.website.label.logo: Logo
+
+# Legende des formulaires
+admin.website.legend.general: Général
+admin.spot.legend.localisation: Localisation
+admin.spot.legend.general: Général
+
+# Texte des labels des formulaires - admin/ou non
+spot.label.name: Nom
+spot.label.description: Description
+spot.label.isKite: Kite possible
+spot.label.isWindsurf: Windsurf possible
+spot.label.googleMapLink: Lien google map
+spot.label.forGoing: Pour y aller
+spot.label.gpsData: Donnée GPS
+
+# Texte des boutons
+admin.button.edit: edit
+admin.button.cancel: annuler
+admin.button.save: sauver
+admin.button.add: ajouter
+admin.button.delete: effacer
+admin.button.confirm: Confirmer
+
+admin.dataWindPrev.button.delete: Effacer
+admin.dataWindPrev.button.modif.spot: Modifier le spot
+admin.dataWindPrev.button.history.analyse: Historique des analyses
+admin.dataWindPrev.button.history.data : Historique des données
+admin.dataWindPrev.button.test : Test analyse
+admin.dataWindPrev.button.test.step1 : Récupération de la page
+admin.dataWindPrev.button.test.step2 : Analyse de la page
+admin.dataWindPrev.button.test.step3 : Transformation des données
+admin.dataWindPrev.button.test.save :  Enregistrement des données
+admin.dataWindPrev.button.test.remove.listPrevDate: effacer ces données
+
+admin.dataWindPrev.button.analyse.display: Afficher
+
+admin.spot.button.modify.description: Modifier
+
+# Texte/Titre des tableaux
+admin.dataWindPrev.date.prev: Prévu le
+admin.dataWindPrev.date.analyse: Prévision du
+
+# autre texte
+header.connected.label: Connecté en tant que
+header.connected.link.label.logout: Déconnexion
+header.connected.link.label.login: Connexion
+header.link.label.admin: admin
+
+#warning
+warning.list.spot.notFound: Aucun spot n'a étè trouvé.
+warning.list.website.notFound: Aucun site web n'a étè trouvé.
+warning.list.dataWindPrev.notFound: Aucun dataWindPrev n'a étè trouvé.
+
+#error message
+error.message.ajax.website.not.found: Site internet: "%websiteName%" n'est pas encore accepter par LaPoizWind...
+
+# Notifications
+notification.info.spot.save.content: Modifications du spot sauvegardés !
+notification.info.spot.save.title: Sauvegarde réussite
+notification.info.spot.add.content: Ajout d'un nouveau spot réussit !
+notification.info.spot.add.title: Ajout réussit
+notification.info.spot.delete.content: Spot effacé avec succé !
+notification.info.spot.delete.title: Spot effacé
+notification.validation.delete.dataWindPrev.title: Effacer cet élément ?
+notification.validation.delete.dataWindPrev.content: Voulez vous vraiment effacer cet élément ?
+notification.validation.delete.spot.title: Effacer ce spot élément ?
+notification.validation.delete.spot.content: Voulez vous vraiment effacer ce Spot ?

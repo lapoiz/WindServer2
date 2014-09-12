@@ -1,0 +1,28 @@
+{% macro navSpot(spot, dataWindPrev) %}
+                <div class="row">
+
+                    <div class="col-sm-12">
+                        <h3>{{ spot.nom }}</h3>
+                        <ul class="nav nav-pills nav-stacked">
+                            <li><a href="#"><i class="icon-white icon-eye-open"></i> Afficher</a></li>
+                            <li class=""><a href="#"><i class="icon-pencil icon-white"></i> Editer</a></li>
+                            <li><a href="#"><i class="icon-trash icon-white"></i> Effacer</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="col-sm-12">
+                        <h3>Les sites</h3>
+                        <a href="#" class="btn btn-inverse"><i class="icon-white icon-plus"></i> Ajouter</a>
+                        {% if spot.dataWindPrev is not null %}
+                            <ul class="nav nav-pills nav-stacked">
+                                {% for dataWindPrevSpot in spot.dataWindPrev %}
+                                    <li class="{% if dataWindPrev is defined and dataWindPrev is not null and dataWindPrevSpot.id == dataWindPrev.id %}active{% endif %}">
+                                        <a href="{{ path('_bo_dataWindPrev',{'id':dataWindPrevSpot.id}) }}">{{ dataWindPrevSpot.website.nom }}</a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+
+                </div>
+{% endmacro %}

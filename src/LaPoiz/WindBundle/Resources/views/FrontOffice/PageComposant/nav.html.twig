@@ -1,0 +1,56 @@
+{% macro view(listSpot) %}
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="{{ path('_index') }}">
+                LaPoiz Wind
+            </a>
+        </div>
+        <div class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li class="dropdown {% if app.request.attributes.get('_route') starts with '_index' %} active{% endif %}">
+                    <a data-toggle="dropdown" href="#">Les spots<b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+
+                    {% for spot in listSpot %}
+                        <li class="active"><a href="{{ path('_fo_spot_graph',{'id':spot.id}) }}"><span class="glyphicon glyphicon-stats"></span>{{ spot.nom }}</a></li>
+                    {% endfor %}
+
+                        <li class="divider"></li>
+                        <li class="disabled"><a href="#"><span class="glyphicon glyphicon-plus"></span> Créer un spot</a></li>
+                    </ul>
+                </li>
+                <li> <a href="#">Où naviguer ce we ?</a> </li>
+                <li class=" {% if app.request.attributes.get('_route') starts with '_fo_concept' %}active{% endif %}"> <a href="{{ path('_fo_concept') }}">Le concept du site</a> </li>
+                <li> <a href="parametrage.html">Les paramètres</a> </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <!--
+                <li><div id="language_choice">Choisir la langue :
+                        <a href="{{ path('language_choice', {'langue' : 'fr'}) }}">FR</a> |
+                        <a href="{{ path('language_choice', {'langue' : 'en'}) }}">EN</a>
+                    </div>
+                </li>
+                -->
+                <li>
+                    {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                        {{ "header.connected.label" | trans }} {{ app.user.username }} - <a href="{{ path('logout') }}">{{ "header.connected.link.label.logout" | trans }}</a>
+                    {% else %}
+                        <a class="btn pull-right" data-toggle="modal" href="#login">{{ "header.connected.link.label.login" | trans }}</a>
+                    {% endif %}
+                </li>
+                <li>
+                    {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                        <a href="{{ path('_bo_index') }}">{{ "header.link.label.admin" | trans }}</a>
+                    {% endif %}
+                </li>
+            </ul>
+        </div>
+    </div>
+
+{% endmacro %}

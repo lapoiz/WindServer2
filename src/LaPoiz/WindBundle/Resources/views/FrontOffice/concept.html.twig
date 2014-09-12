@@ -1,0 +1,146 @@
+{% extends 'LaPoizWindBundle:FrontOffice:base.html.twig' %}
+
+{% block bodyPage %}
+
+    <div class="row">
+        <div class="col-md-12">
+            <h2>Le besoin</h2>
+            <p class="paragraphe">
+                Le site LaPoizWind concentre les informations nécessaires pour <b>organiser ses sessions de kite</b>
+                (ou de windsurf).
+            </p>
+            <p>
+                En temps normal, nous devons <b>aller voir les différents sites internet de prévision météo</b> comme
+                Windguru, Météo France, Baston, WindFinder … En ajoutant le cas échéant les spécificités du
+                spot (thermique, effet venturi…).<br>
+                Si le vent est suffisamment puissant, il faut regarder <b>l’orientation du vent</b>, afin de ne pas se
+                déplacer pour rien (vent offshore, falaise détournant le vent…).<br>
+                Puis (pour les spots de l’océan) regarder <b>les marées</b>. Des spots comme le Crotoy ne sont pas
+                navigable en marée basse (plus d’eau), d’autre comme Saint-Aubin sont dangereux en haute
+                marrée (peu de plage, très proche des falaises) mais navigable…<br>
+                Idéalement, il serait génial de pouvoir comparer les prévisions, vis-à-vis du vent réel.
+                Afin d’avoir un œil critique sur les prévisions.
+            </p>
+            <div class= "well">
+                Par exemple : ils annoncent lundi matin : 25 Nd en ouest à l’Almanarre pour ce week-end. J’aimerais savoir si, les prévisions sur l’Almanarre du lundi pour le week-end suivant, pour des vents entre 20 et 30 Nds, sont fiables à 90%, ou à 25%.
+            </div>
+            <p>
+                Enfin si on pouvait avoir un petit outil, qui pourrait me dire <b>où naviguer ce week-end</b> en fonction de paramètre comme :
+            <ul>
+                <li>La puissance du vent – ex : je veux un vent supérieur à 20 Nd</li>
+                <li>La distance vis-à-vis de chez moi</li>
+                <li>La sécurité (en fonction de mon niveau, cf exemple de Saint-Aubin en marée haute)</li>
+                <li>Le temps (si maman viens avec toi pour bronzer)</li>
+            </ul>
+            </p>
+            <p>
+                Les paragraphes suivants expliquent le fonctionnement du site LaPoizWind et ses futures évolutions.
+            </p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-7">
+            <h2>Get Data</h2>
+            <p>
+                Pour <b>récupérer les prévisions de vent</b> des différents spots, LaPoizWind réalise les mêmes actions, tous les jours à 8h du matin :
+            <ol>
+                <li><b>demander</b> la page internet de météo France</li>
+                <li><b>analyser</b> la page, pour en extraire les prévisions sur 7 jours.</li>
+                <li><b>enregistrer</b> ces prévisions dans sa base de données.</li>
+            </ol>
+            Ces opérations sont faites pour tous les spots enregistrés dans LaPoizWind, depuis différents sites
+            de prévisions de vent : www.windguru.cz , www.meteofrance.com  et www.windfinder.com.
+            J’en ajouterais d’autre dans le future.<br>
+            Ce principe de demande->analyse->sauvegarde d’une page, est également fait sur le site
+            http://maree.info afin de récupérer les heures et hauteurs de marée pour les spots de l’océan.<br>
+            LaPoizWind a donc dans sa base de données les prévisions de:
+            <ul>
+                <li>La force du vent</li>
+                <li>L’orientation du vent</li>
+                <li>Le temps (soleil, pluie, température…)</li>
+                <li>les marées</li>
+            </ul>
+            <p>
+        </div>
+
+        <div class="col-md-5">
+            <img src="{{ asset('bundles/lapoizwind/images/conceptPicture/GetData.png') }}" class="img-responsive center-block" alt="Comment le site récupére les données météos"
+                 style="max-width: 100%;
+                     margin-top: 50px " />
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-7">
+            <div class="panel panel-warning">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Attention</h3>
+                </div>
+                <div class="panel-body">Si la page s’un des sites (Windguru, météo France…) changent, LaPoizWind ne pourra plus analyser la page.<br />Je devrais coder de nouveau l’analyseur de ce site, afin de pouvoir enregistrer les données.<br />
+                    N’hésitez pas à m’envoyer un mail, via le formulaire de contact si c’est le cas.</div>
+            </div>
+            <p>
+                Le même system d’analyse->enregistrement est utilisé pour récupérer le vent réel sur les spots.
+                Cela se fait grâce aux balises de vent de la FFVL
+                (<a href="http://carte.ffvl.fr/?mode=parapente" target="_blank">carte des balises de vent</a> décochez "Decollages" et "Atterissages").<br>
+                Les balises de la FFVL ne couvrent pas l'ensemble des spots, il faudra que je code d’autre analyseur
+                de page, pour d’autres systems de balise de vent.
+            </p>
+        </div>
+        <div class="col-md-5">
+            <img src="{{ asset('bundles/lapoizwind/images/conceptPicture/Balise%20vent.png') }}" class="img-responsive center-block" alt="Comment le site récupére les données sur le vent en temps réel"
+                 style="max-width: 75%;" />
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <img src="{{ asset('bundles/lapoizwind/images/conceptPicture/Contributeur.png') }}"  class="img-responsive" alt="Comment le site est alimenté de nouveau contenu"
+                 style="max-width: 75%;" />
+        </div>
+        <div class="col-md-6">
+            <h2>Contribution</h2>
+            <p>
+                Une fois la <i>« mécanique »</i> mis en place, l’administrateur peut très simplement ajouter autant de site que
+                souhaité. Il suffit de fournir l’URL de Windguru, météo France…
+            </p>
+            <p>
+                En revanche, la FFVL ne possède pas beaucoup de balise de vent.
+            </p>
+            <p>
+                Ce qui est intéressant, ce sont <b>les retours des kiteurs sur les spots</b>. Les dangers, les spécificités du
+                vent (thermique …), afin d’avoir un system le plus fiable possible.
+            </p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <h2>Le rendu</h2>
+            <p>
+                Le but final du site est de <b>centraliser sur un graphique</b> l’ensemble des informations sur un spot,
+                afin de pouvoir prévoir une session de kite.
+            </p>
+            <p>
+                La première version (septembre 2014) comprendra le graphique des prévisions, intégrant les marées,
+                ainsi que le moteur permettant de choisir le meilleur spot en fonction de différents critères (vent, distance …).
+            </p>
+            <p>
+                Une application mobile sera disponible (gratuitement) pour remonter ces mêmes info en novembre.
+            </p>
+            <p>
+                Enfin en décembre, je prévois d’exploiter les données des balises de vent, afin de comparer les
+                prévisions avec le vent enregistré. Cette historique permettra de calculer la fiabilité des prévisions.<br>
+                Il sera également possible de visualiser l’évolution des prévisions pour un spot pour une date.
+                Prévision de vent j-6, j-5, j-4… afin de voir la tendance des prévisions.
+            </p>
+        </div>
+        <div class="col-md-8">
+            <img src="{{ asset('bundles/lapoizwind/images/conceptPicture/Display.png') }}" class="img-responsive" alt="Comment sont affichées les données"
+                 style="max-width: 100%;
+                     margin-top: 50px" />
+        </div>
+    </div>
+
+{% endblock %}

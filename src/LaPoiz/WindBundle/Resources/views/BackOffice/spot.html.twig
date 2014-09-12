@@ -1,0 +1,20 @@
+{% extends 'LaPoizWindBundle:BackOffice:base.html.twig' %}
+
+{% block bodyPage %}
+
+    <div class="starter-template">
+        <div class="row">
+            <div class="col-sm-2">
+                {% from "LaPoizWindBundle:BackOffice/Spot:nav.html.twig" import navSpot %}
+                {{ navSpot(spot, (dataWindPrev is defined?dataWindPrev:null)) }}
+            </div>
+
+            <div class="col-sm-10">
+                Display
+            </div>
+        </div>
+    </div>
+
+
+
+{% endblock %}

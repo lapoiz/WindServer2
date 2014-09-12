@@ -1,0 +1,257 @@
+login:
+    pattern: /login
+    defaults: { _controller: LaPoizWindBundle:Security:login }
+
+login_check:
+    pattern: /login_check
+
+logout:
+    pattern: /logout
+    defaults: { _controller: LaPoizWindBundle:Default:index }
+
+
+language_choice:
+  pattern: /language_choice/{langue}
+  defaults: { _controller: LaPoizWindBundle:Default:choiceLanguage }
+
+
+
+_index:
+  defaults: { _controller: LaPoizWindBundle:FO:index }
+  pattern: /index
+
+_fo_concept:
+  defaults: { _controller: LaPoizWindBundle:FO:concept }
+  pattern: /concept
+
+_fo_spot_graph:
+  defaults: { _controller: LaPoizWindBundle:FO:spotGraph }
+  pattern: /spot/{id}
+
+_fo_json_spot_data:
+  defaults: { _controller: LaPoizWindBundle:FOJson:get }
+  pattern: /fo/json/spot/data/{id}
+
+
+
+
+_bo_index:
+  defaults: { _controller: LaPoizWindBundle:BO:index }
+  pattern: /admin/BO
+
+_bo_spot:
+  defaults: { _controller: LaPoizWindBundle:BO:displaySpot }
+  pattern: /admin/spot/display/{id}
+
+_bo_spot_edit:
+  defaults: { _controller: LaPoizWindBundle:BO:editSpot }
+  pattern: /admin/spot/edit/{id}
+
+_bo_spot_delete:
+  defaults: { _controller: LaPoizWindBundle:BO:deleteSpot }
+  pattern: /admin/spot/delete/{id}
+
+
+_bo_dataWindPrev:
+  defaults: { _controller: LaPoizWindBundle:BO:dataWindPrev }
+  pattern: /admin/spot/dataWindPrev/{id}
+
+_bo_test:
+  defaults: { _controller: LaPoizWindBundle:BOTest:index }
+  pattern: /admin/BO/test
+
+_bo_test_maree:
+  defaults: { _controller: LaPoizWindBundle:BOTest:maree }
+  pattern: /admin/BO/test/maree
+
+_bo_test_maree_save:
+  defaults: { _controller: LaPoizWindBundle:BOTest:mareeSave }
+  pattern: /admin/BO/test/maree/save/{id}
+
+
+
+
+
+_json_spot_data:
+  defaults: { _controller: LaPoizWindBundle:JsonSpot:get, renderTo: null }
+  pattern: /json/spot/data/{id}/{renderTo}
+
+_json_spot_data_test:
+  defaults: { _controller: LaPoizWindBundle:JsonSpot:getTest }
+  pattern: /json/spot/data_test/{id}
+
+_json_spot_datatest:
+  defaults: { _controller: LaPoizWindBundle:JsonSpot:getTest }
+  pattern: /json/spot/dataTest/{id}
+
+_json_spot_list:
+  defaults: { _controller: LaPoizWindBundle:JsonSpot:list }
+  pattern: /json/spot/list
+
+_spot_display:
+  defaults: { _controller: LaPoizWindBundle:Spot:display }
+  pattern: /spot/display/{id}
+
+_ajax_spot_history_data_for_dateprev:
+  defaults: { _controller: LaPoizWindBundle:AjaxDataWindPrev:spotHistoryDataForDatePrev }
+  pattern: /spot/ajax/dataWindPrev/history/data/date_prev/{id}/{date}
+
+
+_admin:
+  pattern: /admin
+  defaults: { _controller: LaPoizWindBundle:AdminSpot:list }
+
+_admin_spots:
+  defaults: { _controller: LaPoizWindBundle:AdminSpot:list }
+  pattern: /admin/spots 
+
+_ajax_get_listSpots:
+  defaults: { _controller: LaPoizWindBundle:AdminSpot:ajaxGetListSpots }
+  pattern: /ajax/spot/get/list
+
+_ajax_get_add_spot_form:
+  defaults: { _controller: LaPoizWindBundle:AdminSpot:ajaxGetAddForm }
+  pattern: /admin/ajax/spot/get/addForm 
+
+_ajax_spot_create:
+  defaults: { _controller: LaPoizWindBundle:AdminSpot:ajaxCreate }
+  pattern: /admin/ajax/spot/add 
+
+_ajax_spot_get_listWebsites:
+  defaults: { _controller: LaPoizWindBundle:AdminSpot:ajaxGetListWebsites }
+  pattern: /ajax/spot/get/list/{id}
+
+_ajax_spot_add_website:
+  defaults: { _controller: LaPoizWindBundle:AdminSpot:ajaxAddWebsite }
+  pattern: /admin/ajax/spot/add/website
+
+_ajax_spot_get_add_website_form:
+  defaults: { _controller: LaPoizWindBundle:AdminSpot:ajaxGetAddWebsiteForm }
+  pattern: /admin/ajax/spot/get/addWebsiteForm/{id}
+
+_admin_spot_display:
+  defaults: { _controller: LaPoizWindBundle:AdminSpot:display }
+  pattern: /admin/spot/display/{id}
+
+
+
+
+
+# a effacer
+_admin_spot_edit_a_effacer:
+  defaults: { _controller: LaPoizWindBundle:AdminSpot:edit }
+  pattern: /admin/spot/edit/{id}
+
+_ajax_spot_description:
+  defaults: { _controller: LaPoizWindBundle:AdminSpot:ajaxDescription }
+  pattern: /ajax/spot/desc/{id}
+
+_ajax_spot_edit:
+  defaults: { _controller: LaPoizWindBundle:AdminSpot:ajaxEdit }
+  pattern: /admin/ajax/spot/edit/{id}
+
+_ajax_spot_update:
+  defaults: { _controller: LaPoizWindBundle:AdminSpot:ajaxUpdate, id: -1 }
+  pattern: /admin/ajax/spot/update/{id}
+
+# a effacer
+_admin_spot_update:
+  defaults: { _controller: LaPoizWindBundle:AdminSpot:update }
+  pattern: /admin/spot/update/{id}
+
+_admin_websites:
+  defaults: { _controller: LaPoizWindBundle:WebSite:list }
+  pattern: /admin/websites
+
+
+_admin_dataWindPrev_display:
+  defaults: { _controller: LaPoizWindBundle:AdminDataWindPrev:display }
+  pattern: /admin/dataWindPrev/display/{id}
+
+_ajax_dataWindPrev_edit:
+  defaults: { _controller: LaPoizWindBundle:AjaxDataWindPrev:ajaxEdit }
+  pattern: /admin/ajax/dataWindPrev/edit/{id}
+
+_admin_dataWindPrev_delete:
+  defaults: { _controller: LaPoizWindBundle:AdminDataWindPrev:delete }
+  pattern: /admin/dataWindPrev/delete/{id}
+
+_ajax_dataWindPrev_history_analyse:
+  defaults: { _controller: LaPoizWindBundle:AjaxDataWindPrev:historyAnalyse }
+  pattern: /admin/ajax/dataWindPrev/history/analyse/{id}
+
+_ajax_dataWindPrev_history_data:
+  defaults: { _controller: LaPoizWindBundle:AjaxDataWindPrev:historyData }
+  pattern: /admin/ajax/dataWindPrev/history/data/{id}
+
+_ajax_dataWindPrev_test:
+  defaults: { _controller: LaPoizWindBundle:AjaxDataWindPrevGetData:test }
+  pattern: /admin/ajax/dataWindPrev/test/{id}
+
+_ajax_dataWindPrev_test_step1:
+  defaults: { _controller: LaPoizWindBundle:AjaxDataWindPrevGetData:testStep1 }
+  pattern: /admin/ajax/dataWindPrev/test/step1/{id}
+
+_ajax_dataWindPrev_test_step2:
+  defaults: { _controller: LaPoizWindBundle:AjaxDataWindPrevGetData:testStep2 }
+  pattern: /admin/ajax/dataWindPrev/test/step2/{id}
+
+_ajax_dataWindPrev_test_step3:
+  defaults: { _controller: LaPoizWindBundle:AjaxDataWindPrevGetData:testStep3 }
+  pattern: /admin/ajax/dataWindPrev/test/step3/{id}
+
+_ajax_dataWindPrev_test_save:
+  defaults: { _controller: LaPoizWindBundle:AjaxDataWindPrevGetData:testSave }
+  pattern: /admin/ajax/dataWindPrev/test/save/{id}
+
+_ajax_dataWindPrev_test_remove_previsionDate:
+  defaults: { _controller: LaPoizWindBundle:AjaxDataWindPrevGetData:removePrevisionDate }
+  pattern: /admin/ajax/dataWindPrev/test/remove/previsionDate/{id}
+
+_ajax_dataWindPrev_history_data_from_date_analyse:
+  defaults: { _controller: LaPoizWindBundle:AjaxDataWindPrev:historyDataFromDateAnalyse }
+  pattern: /admin/ajax/dataWindPrev/history/data/date_analyse/{id}/{date}
+
+_ajax_dataWindPrev_history_data_for_dateprev:
+  defaults: { _controller: LaPoizWindBundle:AjaxDataWindPrev:historyDataForDatePrev }
+  pattern: /admin/ajax/dataWindPrev/history/data/date_prev/{id}/{date}
+
+
+_ajax_spot_data_from_date_filtre:
+  defaults: { _controller: LaPoizWindBundle:AjaxSpot:dataForFilterDate }
+  pattern: /spot/ajax/dataWindPrev/data/date/{id}/{date}
+
+
+_tests:
+  defaults: { _controller: LaPoizWindBundle:Test:index }
+  pattern: /admin/tests
+
+_test_notification:
+  defaults: { _controller: LaPoizWindBundle:Test:notifications }
+  pattern: /admin/test/notification
+
+_test_multiselect:
+  defaults: { _controller: LaPoizWindBundle:Test:multiselect }
+  pattern: /admin/test/multiselect
+
+_test_info:
+  defaults: { _controller: LaPoizWindBundle:Test:phpInfo }
+  pattern: /admin/test/phpInfo
+
+_test_ajax_create_dataWindPrev:
+  defaults: { _controller: LaPoizWindBundle:Test:createDataWindPrev }
+  pattern: /admin/test/add/dataWindPrev/{id}
+
+_test_ajax_create_spot:
+  defaults: { _controller: LaPoizWindBundle:Test:createSpot }
+  pattern: /admin/test/add/spot
+
+_test_goutte:
+  defaults: { _controller: LaPoizWindBundle:Test:goutte }
+  pattern: /admin/test/goutte
+
+
+
+_bootstrap_demo_index:
+  defaults: { _controller: LaPoizWindBundle:Bootstrap:index }
+  pattern: /bootstrap/demo/index
