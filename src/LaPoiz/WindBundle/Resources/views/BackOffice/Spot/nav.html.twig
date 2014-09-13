@@ -1,28 +1,65 @@
 {% macro navSpot(spot, dataWindPrev) %}
-                <div class="row">
+    <div class="row">
+        <div class="col-sm-12">
+            <h3>{{ spot.nom }}</h3>
+            <ul class="nav nav-pills nav-stacked">
+                <li><a href="#"><i class="icon-white icon-eye-open"></i> Afficher</a></li>
+                <li class=""><a href="#"><i class="icon-pencil icon-white"></i> Editer</a></li>
+                <li><a href="#"><i class="icon-trash icon-white"></i> Effacer</a></li>
+            </ul>
+        </div>
+    </div>
 
-                    <div class="col-sm-12">
-                        <h3>{{ spot.nom }}</h3>
-                        <ul class="nav nav-pills nav-stacked">
-                            <li><a href="#"><i class="icon-white icon-eye-open"></i> Afficher</a></li>
-                            <li class=""><a href="#"><i class="icon-pencil icon-white"></i> Editer</a></li>
-                            <li><a href="#"><i class="icon-trash icon-white"></i> Effacer</a></li>
-                        </ul>
-                    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <h3>Les sites</h3>
+            <a href="#" class="btn btn-inverse"><i class="icon-white icon-plus"></i> Ajouter</a>
+            {% if spot.dataWindPrev is not null %}
+                <ul class="nav nav-pills nav-stacked">
+                    {% for dataWindPrevSpot in spot.dataWindPrev %}
+                    <li class="{% if dataWindPrev is defined and dataWindPrev is not null and dataWindPrevSpot.id == dataWindPrev.id %}active{% endif %}">
+                        <a href="{{ path('_bo_dataWindPrev',{'id':dataWindPrevSpot.id}) }}">{{ dataWindPrevSpot.website.nom }}</a>
+                    </li>
+                    {% endfor %}
+                 </ul>
+            {% endif %}
+        </div>
+    </div>
 
-                    <div class="col-sm-12">
-                        <h3>Les sites</h3>
-                        <a href="#" class="btn btn-inverse"><i class="icon-white icon-plus"></i> Ajouter</a>
-                        {% if spot.dataWindPrev is not null %}
-                            <ul class="nav nav-pills nav-stacked">
-                                {% for dataWindPrevSpot in spot.dataWindPrev %}
-                                    <li class="{% if dataWindPrev is defined and dataWindPrev is not null and dataWindPrevSpot.id == dataWindPrev.id %}active{% endif %}">
-                                        <a href="{{ path('_bo_dataWindPrev',{'id':dataWindPrevSpot.id}) }}">{{ dataWindPrevSpot.website.nom }}</a>
-                                    </li>
-                                {% endfor %}
-                            </ul>
-                        {% endif %}
-                    </div>
 
-                </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <h3>La marée</h3>
+            <ul class="nav nav-pills nav-stacked">
+                {% if spot.parameter.mareeURL is  null %}
+                <li> <a href="#" class="btn btn-inverse"><i class="icon-white icon-plus"></i> Ajouter</a></li>
+                {% else %}
+                <li class=""><a href="#"><i class="icon-pencil icon-white"></i> Editer</a></li>
+                <li><a href="#"><i class="icon-trash icon-white"></i> Effacer</a></li>
+                <li class=""><a onclick="getMareeData()"> Get Data</a></li>
+                {%  endif %}
+            </ul>
+        </div>
+    </div>
+
+
+    <script>
+        {% if spot.parameter.mareeURL is not null and if dataWindPrev is defined and dataWindPrev is not null %}
+        function getMareeData(){
+            Alert("getMareeData");
+            $('#result').html('<img src="{{ asset('bundles/lapoizwind/images/loading.gif') }}" alt="Loading Ajax data" />');
+            var id = {{ dataWindPrev.id }};
+            $.ajax({
+                type: "POST",
+                url: "{{ path('_bo_ajax_maree_getPrev', {'id':dataWindPrev.id})}}",
+                id: id,
+                cache: false,
+                success: function(data){
+                    $('#result').html(data);
+                }
+            });
+            return false;
+        };
+        {%  endif %}
+    </script>
 {% endmacro %}

@@ -1,21 +1,37 @@
-{% extends 'LaPoizWindBundle:BackOffice:base.html.twig' %}
+{% extends 'LaPoizWindBundle:BackOffice:spot.html.twig' %}
 
-{% block bodyPage %}
+{% block bodySpotPage %}
 
-    <div class="starter-template">
-        <div class="row">
-            <div class="col-sm-2">
-                {% from "LaPoizWindBundle:BackOffice/Spot:nav.html.twig" import navSpot %}
-                {{ navSpot(spot, (dataWindPrev is defined?dataWindPrev:null)) }}
-            </div>
-
-            <div class="col-sm-10">
-
-
-
-
-            </div>
+    <div class="row">
+        <div class="col-sm-12">
+            {% from "LaPoizWindBundle:BackOffice/Spot:navDataWindPrev.html.twig" import navDataWindPrev %}
+            {{ navDataWindPrev(spot, dataWindPrev) }}
         </div>
     </div>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div id="result"></div>
+        </div>
+    </div>
+
+    <script>
+
+        function test(){
+            $('#result').html('<img src="{{ asset('bundles/lapoizwind/images/loading.gif') }}" alt="Loading Ajax data" />');
+            var id = {{ dataWindPrev.id }};
+            $.ajax({
+                type: "POST",
+                url: "{{ path('_ajax_dataWindPrev_test', {'id':dataWindPrev.id})}}",
+                id: id,
+                cache: false,
+                success: function(data){
+                    $('#result').html(data);
+                }
+            });
+            return false;
+        };
+
+    </script>
 
 {% endblock %}

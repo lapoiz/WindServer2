@@ -1,0 +1,9 @@
+<table class="table table-bordered table-hover">
+{% for jour in prevMaree %}
+    <tr>
+    {% for key,maree in jour %}
+        <td>{{ key }}:{{ maree }}</td>
+    {% endfor %}
+    </tr>
+{% endfor %}
+</table>
