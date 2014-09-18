@@ -34,8 +34,12 @@
     
 <body>
 
+    {% if listSpot is defined %}
+
     {% from "LaPoizWindBundle:FrontOffice/PageComposant:nav.html.twig" import view %}
     {{ view(listSpot) }}
+
+    {% endif %}
 
     {% from "LaPoizWindBundle:FrontOffice/PageComposant:connectModal.html.twig" import view %}
     {{ view() }}

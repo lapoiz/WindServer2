@@ -40,7 +40,7 @@
     <div class="container">
 
         {% block bodyPage %}
-            CORPS DE LA PAGE .................
+            {{ errMessage }}
         {% endblock %}
     </div><!-- /.container -->
 
@@ -48,6 +48,6 @@
     <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
     <script src="{{ asset('bundles/lapoizwind/js/bootstrap.min.js') }}"></script>
 
-    {% block javascriptsEnd %}{% endblock %}
+    {% block javascripts %}{% endblock %}
     </body>
 </html>

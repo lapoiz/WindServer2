@@ -11,12 +11,23 @@
 
             <div class="col-sm-10">
                 {% block bodySpotPage %}
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div id="result">
+
+                            </div>
+                        </div>
+                    </div>
 
                 {% endblock %}
             </div>
         </div>
     </div>
 
+{% endblock %}
 
-
+{% block javascriptsEnd %}
+    <script>
+        $('#afficherSpotLink').get(0).click();
+    </script>
 {% endblock %}

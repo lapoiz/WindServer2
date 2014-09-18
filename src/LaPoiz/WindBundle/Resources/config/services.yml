@@ -7,6 +7,20 @@ services:
         tags:
             - { name: form.type, alias: testGetMaree }
 
+    la_poiz_wind.form.type.spot:
+        class: LaPoiz\WindBundle\Form\SpotType
+        tags:
+            - { name: form.type, alias: spot }
+
+    la_poiz_wind.form.type.dataWindPrev:
+        class: LaPoiz\WindBundle\Form\DataWindPrevType
+        tags:
+            - { name: form.type, alias: dataWindPrevForm }
+
+    la_poiz_wind.form.type.maree:
+        class: LaPoiz\WindBundle\Form\MareeType
+        tags:
+            - { name: form.type, alias: mareeForm }
 #    la_poiz_wind.example:
 #        class: %la_poiz_wind.example.class%
 #        arguments: [@service_id, "plain_value", %parameter%]

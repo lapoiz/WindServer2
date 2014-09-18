@@ -1,0 +1,37 @@
+{% if spot is defined and spot is not null %}
+
+    <div class="row">
+        <div class="col-sm-12">
+            {{ form_start(form, {
+                'style': 'horizontal',
+                'label_col': 2,
+                'widget_col': 8,
+            })}}
+
+            {{ form_errors(form, { 'global_errors': true }) }}
+
+            {{ form_end(form) }}
+
+        </div>
+    </div>
+
+    <script>
+        $("#spot_form").submit(function(){
+
+            $('#result').html('<img src="{{ asset('bundles/lapoizwind/images/loading.gif') }}" alt="Loading Ajax data" />');
+            var formElement = $('#spot_form');
+
+            var DATA = formElement.serialize();
+            //var formData = new FormData(formElement);
+
+            $.post("{{ path('_bo_ajax_spot_edit', {'id':spot.id})}}",
+                    $('#spot_form').serialize(),
+                    function success(data){
+                        $('#result').html(data);
+                    }
+            );
+
+        });
+    </script>
+
+{% endif %}

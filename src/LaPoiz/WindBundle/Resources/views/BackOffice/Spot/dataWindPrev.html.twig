@@ -15,23 +15,4 @@
         </div>
     </div>
 
-    <script>
-
-        function test(){
-            $('#result').html('<img src="{{ asset('bundles/lapoizwind/images/loading.gif') }}" alt="Loading Ajax data" />');
-            var id = {{ dataWindPrev.id }};
-            $.ajax({
-                type: "POST",
-                url: "{{ path('_ajax_dataWindPrev_test', {'id':dataWindPrev.id})}}",
-                id: id,
-                cache: false,
-                success: function(data){
-                    $('#result').html(data);
-                }
-            });
-            return false;
-        };
-
-    </script>
-
 {% endblock %}

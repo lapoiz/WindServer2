@@ -1,0 +1,42 @@
+    <h3>URL pour récupérer les prévisions de marées</h3>
+    <div class="row">
+        <div class="col-sm-12">
+            {{ form_start(form, {
+                'style': 'vertical',
+                'label_col': 2,
+                'widget_col': 8,
+            })}}
+
+            {{ form_errors(form, { 'global_errors': true }) }}
+
+            {{ form_end(form) }}
+
+        </div>
+    </div>
+
+    <script>
+        $("#maree_form").submit(function(){
+
+            $('#result').html('<img src="{{ asset('bundles/lapoizwind/images/loading.gif') }}" alt="Loading Ajax data" />');
+            var formElement = $('#maree_form');
+
+            var DATA = formElement.serialize();
+            //var formData = new FormData(formElement);
+            $.ajax({
+                type: "POST",
+                url: "{{ path('_bo_ajax_spot_maree_edit', {'id':spot.id})}}",
+                data: DATA,
+                cache: false,
+                success: function(data){
+                    $('#result').html(data);
+                },
+                error: function(XHR, status, error){
+                    console.log(error);
+                },
+                complete: function(XHR, status){
+                    console.log(status);
+                }
+            });
+            return false;
+        })
+    </script>

@@ -43,13 +43,10 @@ _bo_spot:
   defaults: { _controller: LaPoizWindBundle:BO:displaySpot }
   pattern: /admin/spot/display/{id}
 
-_bo_spot_edit:
-  defaults: { _controller: LaPoizWindBundle:BO:editSpot }
-  pattern: /admin/spot/edit/{id}
+_bo_spot_create:
+  defaults: { _controller: LaPoizWindBundle:BO:createSpot }
+  pattern: /admin/spot/create
 
-_bo_spot_delete:
-  defaults: { _controller: LaPoizWindBundle:BO:deleteSpot }
-  pattern: /admin/spot/delete/{id}
 
 
 _bo_dataWindPrev:
@@ -68,8 +65,45 @@ _bo_test_maree_save:
   defaults: { _controller: LaPoizWindBundle:BOTest:mareeSave }
   pattern: /admin/BO/test/maree/save/{id}
 
+_bo_ajax_maree_getPrev:
+  defaults: { _controller: LaPoizWindBundle:BOAjax:getMareePrev }
+  pattern: /admin/BO/ajax/maree/get/{id}
 
+_bo_ajax_maree_save:
+  defaults: { _controller: LaPoizWindBundle:BOAjax:mareeSave }
+  pattern: /admin/BO/ajax/maree/save/{id}
 
+_bo_ajax_spot_display:
+  defaults: { _controller: LaPoizWindBundle:BOAjax:spotDisplay }
+  pattern: /admin/BO/ajax/spot/display/{id}
+
+_bo_ajax_spot_edit:
+  defaults: { _controller: LaPoizWindBundle:BOAjax:spotEdit }
+  pattern: /admin/BO/ajax/spot/edit/{id}
+
+_bo_ajax_spot_delete:
+  defaults: { _controller: LaPoizWindBundle:BOAjax:spotDelete }
+  pattern: /admin/BO/ajax/spot/delete/{id}
+
+_bo_ajax_spot_add_site:
+  defaults: { _controller: LaPoizWindBundle:BOAjax:spotAddSite }
+  pattern: /admin/BO/ajax/spot/{id}/addSite
+
+_bo_ajax_spot_webSite_delete:
+  defaults: { _controller: LaPoizWindBundle:BOAjax:spotSiteDelete }
+  pattern: /admin/BO/ajax/spot/{id}/addSite
+
+_bo_ajax_spot_dataWindPrev:
+  defaults: { _controller: LaPoizWindBundle:BOAjax:spotWebSite }
+  pattern: /admin/BO/ajax/spot/webSite/{id}
+
+_bo_ajax_spot_maree_edit:
+  defaults: { _controller: LaPoizWindBundle:BOAjax:spotMareeEdit }
+  pattern: /admin/BO/ajax/spot/{id}/maree/edit
+
+_bo_ajax_spot_maree_delete:
+  defaults: { _controller: LaPoizWindBundle:BOAjax:spotMareeDelete }
+  pattern: /admin/BO/ajax/spot/{id}/maree/delete
 
 
 _json_spot_data:

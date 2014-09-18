@@ -3,9 +3,9 @@
         <div class="col-sm-12">
             <h3>{{ spot.nom }}</h3>
             <ul class="nav nav-pills nav-stacked">
-                <li><a href="#"><i class="icon-white icon-eye-open"></i> Afficher</a></li>
-                <li class=""><a href="#"><i class="icon-pencil icon-white"></i> Editer</a></li>
-                <li><a href="#"><i class="icon-trash icon-white"></i> Effacer</a></li>
+                <li class="active toto" id="menuAfficher"><a onclick="afficherSpot(this)" id="afficherSpotLink"><i class="icon-white icon-eye-open"></i> Afficher</a></li>
+                <li class="" id="menuEditer"><a onclick="editerSpot(this)"><i class="icon-pencil icon-white"></i> Editer</a></li>
+                <li class="" id="menuEditer"><a onclick="effacerSpot(this)"><i class="icon-trash icon-white"></i> Effacer</a></li>
             </ul>
         </div>
     </div>
@@ -13,16 +13,16 @@
     <div class="row">
         <div class="col-sm-12">
             <h3>Les sites</h3>
-            <a href="#" class="btn btn-inverse"><i class="icon-white icon-plus"></i> Ajouter</a>
-            {% if spot.dataWindPrev is not null %}
-                <ul class="nav nav-pills nav-stacked">
+            <ul class="nav nav-pills nav-stacked">
+                <li class="" id="menuAddSite"> <a onclick="ajouterSite(this)"><i class="icon-plus icon-white"></i> Ajouter</a></li>
+                {% if spot.dataWindPrev is not null %}
                     {% for dataWindPrevSpot in spot.dataWindPrev %}
-                    <li class="{% if dataWindPrev is defined and dataWindPrev is not null and dataWindPrevSpot.id == dataWindPrev.id %}active{% endif %}">
-                        <a href="{{ path('_bo_dataWindPrev',{'id':dataWindPrevSpot.id}) }}">{{ dataWindPrevSpot.website.nom }}</a>
+                    <li class="" id="menuSpot{{ dataWindPrevSpot.id }}">
+                        <a onclick="dataWindPrev(this,'{{ dataWindPrevSpot.id }}')">{{ dataWindPrevSpot.website.nom }}</a>
                     </li>
                     {% endfor %}
-                 </ul>
-            {% endif %}
+                {% endif %}
+            </ul>
         </div>
     </div>
 
@@ -31,12 +31,12 @@
         <div class="col-sm-12">
             <h3>La marée</h3>
             <ul class="nav nav-pills nav-stacked">
-                {% if spot.parameter.mareeURL is  null %}
-                <li> <a href="#" class="btn btn-inverse"><i class="icon-white icon-plus"></i> Ajouter</a></li>
+                {% if spot.parameter is defined and spot.parameter.mareeURL is defined and spot.parameter.mareeURL is  null %}
+                    <li class="" id="menuMareeCreate"> <a href="#" class="btn btn-inverse"><i class="icon-white icon-plus"></i> Ajouter</a></li>
                 {% else %}
-                <li class=""><a href="#"><i class="icon-pencil icon-white"></i> Editer</a></li>
-                <li><a href="#"><i class="icon-trash icon-white"></i> Effacer</a></li>
-                <li class=""><a onclick="getMareeData()"> Get Data</a></li>
+                    <li class="" id="menuMareeEditer"><a onclick="mareeEditer(this)"><i class="icon-pencil icon-white"></i> Editer</a></li>
+                    <li id="menuMareeEffacer"><a onclick="mareeEffacer(this)"><i class="icon-trash icon-white"></i> Effacer</a></li>
+                    <li class="" id="menuMareeGetData"><a onclick="getMareeData(this)"> Get Data</a></li>
                 {%  endif %}
             </ul>
         </div>
@@ -44,14 +44,88 @@
 
 
     <script>
-        {% if spot.parameter.mareeURL is not null and if dataWindPrev is defined and dataWindPrev is not null %}
-        function getMareeData(){
-            Alert("getMareeData");
+        function afficherSpot(elemLink) {
+            deselectAllMenu();
+            elemLink.parentNode.className = elemLink.parentNode.className+" active";
             $('#result').html('<img src="{{ asset('bundles/lapoizwind/images/loading.gif') }}" alt="Loading Ajax data" />');
-            var id = {{ dataWindPrev.id }};
+            var id = {{ spot.id }};
             $.ajax({
                 type: "POST",
-                url: "{{ path('_bo_ajax_maree_getPrev', {'id':dataWindPrev.id})}}",
+                url: "{{ path('_bo_ajax_spot_display', {'id':spot.id})}}",
+                id: id,
+                cache: false,
+                success: function(data){
+                    $('#result').html(data);
+                }
+            });
+            return false;
+        }
+
+        function editerSpot(elemLink) {
+            deselectAllMenu();
+            elemLink.parentNode.className = elemLink.parentNode.className+" active";
+            $('#result').html('<img src="{{ asset('bundles/lapoizwind/images/loading.gif') }}" alt="Loading Ajax data" />');
+            var id = {{ spot.id }};
+            $.ajax({
+                type: "GET",
+                url: "{{ path('_bo_ajax_spot_edit', {'id':spot.id})}}",
+                id: id,
+                cache: false,
+                success: function(data){
+                    $('#result').html(data);
+                }
+            });
+            return false;
+        }
+
+        function ajouterSite(elemLink) {
+            deselectAllMenu();
+            elemLink.parentNode.className = elemLink.parentNode.className+" active";
+            $('#result').html('<img src="{{ asset('bundles/lapoizwind/images/loading.gif') }}" alt="Loading Ajax data" />');
+            var id = {{ spot.id }};
+            $.ajax({
+                type: "GET",
+                url: "{{ path('_bo_ajax_spot_add_site', {'id':spot.id})}}",
+                id: id,
+                cache: false,
+                success: function(data){
+                    $('#result').html(data);
+                }
+            });
+            return false;
+        }
+
+        function effacerSpot(elemLink) {
+            if (confirm("Voulez vous vraiment effacer le spot {{ spot.nom }} ? ")) {
+                window.location.replace("{{ path('_bo_ajax_spot_delete', {'id':spot.id})}}");
+            }
+        }
+
+        function dataWindPrev(elemLink, dataWindPrevId) {
+            deselectAllMenu();
+            elemLink.parentNode.className = elemLink.parentNode.className+" active";
+            $('#result').html('<img src="{{ asset('bundles/lapoizwind/images/loading.gif') }}" alt="Loading Ajax data" />');
+            var URL = "{{ path('_bo_ajax_spot_dataWindPrev', {'id':'dataWindPrevId'}) }}".replace("/dataWindPrevId","/"+dataWindPrevId);
+            $.ajax({
+                type: "GET",
+                url: URL,
+                cache: false,
+                success: function(data){
+                    $('#result').html(data);
+                }
+            });
+            return false;
+        }
+
+        {% if spot.parameter is defined and spot.parameter.mareeURL is defined and spot.parameter.mareeURL is not null %}
+        function mareeEditer(elemLink){
+            deselectAllMenu();
+            elemLink.parentNode.className = elemLink.parentNode.className+" active";
+            $('#result').html('<img src="{{ asset('bundles/lapoizwind/images/loading.gif') }}" alt="Loading Ajax data" />');
+            var id = {{ spot.id }};
+            $.ajax({
+                type: "POST",
+                url: "{{ path('_bo_ajax_spot_maree_edit', {'id':spot.id})}}",
                 id: id,
                 cache: false,
                 success: function(data){
@@ -60,6 +134,67 @@
             });
             return false;
         };
+        function mareeEffacer(elemLink){
+            deselectAllMenu();
+            elemLink.parentNode.className = elemLink.parentNode.className+" active";
+            $('#result').html('<img src="{{ asset('bundles/lapoizwind/images/loading.gif') }}" alt="Loading Ajax data" />');
+            var id = {{ spot.id }};
+            $.ajax({
+                type: "POST",
+                url: "{{ path('_bo_ajax_spot_maree_delete', {'id':spot.id})}}",
+                id: id,
+                cache: false,
+                success: function(data){
+                    $('#result').html(data);
+                }
+            });
+            return false;
+        };
+        function getMareeData(elemLink){
+            deselectAllMenu();
+            elemLink.parentNode.className = elemLink.parentNode.className+" active";
+            $('#result').html('<img src="{{ asset('bundles/lapoizwind/images/loading.gif') }}" alt="Loading Ajax data" />');
+            var id = {{ spot.id }};
+            $.ajax({
+                type: "POST",
+                url: "{{ path('_bo_ajax_maree_getPrev', {'id':spot.id})}}",
+                id: id,
+                cache: false,
+                success: function(data){
+                    $('#result').html(data);
+                }
+            });
+            return false;
+        };
+
+
+
+
+
         {%  endif %}
+
+        function deselectAllMenu() {
+            // liste des menu fixe et connu
+            idMenuArray = new Array ("menuAfficher", "menuEditer", "menuEditer", "menuAddSite");
+            // ajouter les menu des webSites
+
+            {% if spot.parameter is defined and spot.parameter.mareeURL is defined and spot.parameter.mareeURL is null %}
+                idMenuArray.push("menuMareeCreate");
+            {% else %}
+                idMenuArray.push("menuMareeEditer");
+                idMenuArray.push("menuMareeEffacer");
+                idMenuArray.push("menuMareeGetData");
+            {% endif %}
+
+            $( "li[id^='menuSpot']" ).each(function() {
+                idMenuArray.push(this.id);
+            });
+
+            for (i=0; i<idMenuArray.length; i++) {
+                menuElem = document.getElementById(idMenuArray[i]);
+                menuElem.className = menuElem.className.replace("active","");
+            }
+        }
+
     </script>
 {% endmacro %}

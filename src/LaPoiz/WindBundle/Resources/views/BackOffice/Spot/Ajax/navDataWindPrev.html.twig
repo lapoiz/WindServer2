@@ -1,0 +1,36 @@
+{% macro navDataWindPrev(dataWindPrev) %}
+    <button type="button" class="btn btn-primary" onClick="test();">Test récupération des données</button>
+    <button type="button" class="btn btn-primary">Get and save data</button>
+    <button type="button" class="btn btn-primary" onClick="deleteSite();">Effacer le site {{ dataWindPrev.website.nom }}</button>
+    <button type="button" class="btn btn-primary">Historique des analyses</button>
+    <button type="button" class="btn btn-primary">Historique des données</button>
+
+
+    <script>
+
+        function test(){
+            $('#result').html('<img src="{{ asset('bundles/lapoizwind/images/loading.gif') }}" alt="Loading Ajax data" />');
+            var id = {{ dataWindPrev.id }};
+            $.ajax({
+                type: "POST",
+                url: "{{ path('_ajax_dataWindPrev_test', {'id':dataWindPrev.id})}}",
+                id: id,
+                cache: false,
+                success: function(data){
+                    $('#result').html(data);
+                }
+            });
+            return false;
+        };
+
+        function deleteSite() {
+            if (confirm("Voulez vous vraiment effacer le site {{ dataWindPrev.website.nom }} du spot ? ")) {
+                window.location.replace("{{ path('_bo_ajax_spot_webSite_delete', {'id':dataWindPrev.id})}}");
+            }
+        }
+
+    </script>
+
+
+
+{% endmacro %}
