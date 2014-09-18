@@ -58,7 +58,7 @@ class BOTestController extends Controller
 
         return $this->container->get('templating')->renderResponse('LaPoizWindBundle:BackOffice/Test:maree.html.twig',
             array(
-                'spots' => $spots,
+                'listSpot' => $spots,
                 'spot' => $spot,
                 'form' => $form->createView(),
                 'mareeURL' => $mareeURL,
@@ -96,7 +96,7 @@ class BOTestController extends Controller
 
         return $this->container->get('templating')->renderResponse('LaPoizWindBundle:BackOffice/Test:maree.html.twig',
             array(
-                'spots' => $spots,
+                'listSpot' => $spots,
                 'spot' => $spot,
                 'form' => $form->createView(),
                 'mareeURL' => $mareeURL,

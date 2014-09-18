@@ -1,8 +1,10 @@
 <?php
 namespace LaPoiz\WindBundle\Controller;
 
+use LaPoiz\WindBundle\Entity\Spot;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Security\Core\SecurityContext;
+use Symfony\Component\HttpFoundation\Request;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
@@ -40,7 +42,6 @@ class BOController extends Controller
         // récupere tous les spots
         $listSpot = $em->getRepository('LaPoizWindBundle:Spot')->findAll();
 
-
         if (isset($id) && $id!=-1)
         {
             $spot = $em->find('LaPoizWindBundle:Spot', $id);
@@ -59,42 +60,51 @@ class BOController extends Controller
                 'LaPoizWindBundle:BackOffice:errorPage.html.twig',
                 array('errMessage' => "Miss id of spot... !"));
         }
-
     }
+
 
     /**
      * @Template()
      */
-    public function deleteSpotAction($id)
+    public function createSpotAction(Request $request)
     {
         $em = $this->container->get('doctrine.orm.entity_manager');
-        $spot = $em->find('LaPoizWindBundle:Spot', $id);
-        if (!$spot)
-        {
-            return $this->container->get('templating')->renderResponse(
-                'LaPoizWindBundle:BackOffice:errorBlock.html.twig',
-                array('errMessage' => "No spot find !"));
-        }
-        // spot find
-        $spotId = $spot->getId();
-        $em->remove($spot);
-        $em->flush();
 
-        // display BO home page
+        // récupere tous les spots
         $listSpot = $em->getRepository('LaPoizWindBundle:Spot')->findAll();
-        $notification = array ('type'=>'success',
-            'title'=>$this->get('translator')->trans('notification.info.spot.delete.title'),
-            'content'=>$this->get('translator')->trans('notification.info.spot.delete.content'));
 
+        $spot = new Spot();
+        $form = $this->createForm('spot',$spot);
 
-        return $this->container->get('templating')->renderResponse('LaPoizWindBundle:BackOffice:index.html.twig',
-            array(
-                'listSpot' => $$listSpot,
-                'notification' => $notification
-            )
-        );
+        $form->add('actions', 'form_actions', [
+                'buttons' => [
+                    'save' => ['type' => 'submit', 'options' => ['label' => 'Save']],
+                ]
+            ]);
+
+        if ('POST' == $request->getMethod()) {
+            $form->handleRequest($request);
+
+            if ($form->isValid()) {
+                $spot = $form->getData();
+                $em->persist($spot);
+                $em->flush();
+                return $this->render('LaPoizWindBundle:BackOffice:spot.html.twig', array(
+                        'spot' => $spot,
+                        'listSpot' => $listSpot
+                    ));
+            } else {
+                return $this->render('LaPoizWindBundle:BackOffice/Spot:createSpot.html.twig', array(
+                        'form' => $form->createView(),
+                        'listSpot' => $listSpot
+                    ));
+            }
+        }
+        return $this->render('LaPoizWindBundle:BackOffice/Spot:createSpot.html.twig', array(
+                'form' => $form->createView(),
+                'listSpot' => $listSpot
+            ));
     }
-
 
 
 
