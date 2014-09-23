@@ -32,7 +32,7 @@
             <h3>La marée</h3>
             <ul class="nav nav-pills nav-stacked">
                 {% if spot.parameter is defined and spot.parameter.mareeURL is defined and spot.parameter.mareeURL is  null %}
-                    <li class="" id="menuMareeCreate"> <a href="#" class="btn btn-inverse"><i class="icon-white icon-plus"></i> Ajouter</a></li>
+                    <li class="" id="menuMareeCreate"> <a  onclick="addMaree(this)"><i class="icon-white icon-plus"></i> Ajouter</a></li>
                 {% else %}
                     <li class="" id="menuMareeEditer"><a onclick="mareeEditer(this)"><i class="icon-pencil icon-white"></i> Editer</a></li>
                     <li id="menuMareeEffacer"><a onclick="mareeEffacer(this)"><i class="icon-trash icon-white"></i> Effacer</a></li>
@@ -167,11 +167,25 @@
             return false;
         };
 
-
-
-
-
         {%  endif %}
+
+
+        function addMaree(elemLink){
+            deselectAllMenu();
+            elemLink.parentNode.className = elemLink.parentNode.className+" active";
+            $('#result').html('<img src="{{ asset('bundles/lapoizwind/images/loading.gif') }}" alt="Loading Ajax data" />');
+
+            $.ajax({
+                type: "POST",
+                url: "{{ path('_bo_ajax_maree_create', {'id':spot.id})}}",
+                cache: false,
+                success: function(data){
+                    $('#result').html(data);
+                }
+            });
+            return false;
+        };
+
 
         function deselectAllMenu() {
             // liste des menu fixe et connu
@@ -194,6 +208,9 @@
                 menuElem = document.getElementById(idMenuArray[i]);
                 menuElem.className = menuElem.className.replace("active","");
             }
+
+            $('#navAjax').html('');
+            $('#subNavAjax').html('');
         }
 
     </script>

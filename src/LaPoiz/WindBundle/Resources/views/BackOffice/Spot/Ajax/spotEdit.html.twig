@@ -6,6 +6,8 @@
                 'style': 'horizontal',
                 'label_col': 2,
                 'widget_col': 8,
+                'methode' : 'POST',
+                'action' : path('_bo_ajax_spot_edit', {'id':spot.id})
             })}}
 
             {{ form_errors(form, { 'global_errors': true }) }}
@@ -16,21 +18,21 @@
     </div>
 
     <script>
-        $("#spot_form").submit(function(){
+        $("#spot_form").on('submit', function(e){
 
             $('#result').html('<img src="{{ asset('bundles/lapoizwind/images/loading.gif') }}" alt="Loading Ajax data" />');
-            var formElement = $('#spot_form');
 
-            var DATA = formElement.serialize();
-            //var formData = new FormData(formElement);
+            e.preventDefault();
+            var $this = $(this);
 
-            $.post("{{ path('_bo_ajax_spot_edit', {'id':spot.id})}}",
-                    $('#spot_form').serialize(),
-                    function success(data){
-                        $('#result').html(data);
-                    }
-            );
-
+            $.ajax({
+                url: $this.attr('action'),
+                type: $this.attr('method'),
+                data: $this.serialize(),
+                success: function(html) {
+                    $('#result').html(html);
+                }
+            });
         });
     </script>
 

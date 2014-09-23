@@ -48,7 +48,8 @@ class MareeDateRepository extends EntityRepository
         $queryBuilder = $this->createQueryBuilder('mareeDate');
         $queryBuilder
             ->select('mareeDate')
-            //->where("mareeDate.datePrev > ?",date("Y-m-d", time()))
+            ->where("mareeDate.datePrev >= :datecourant")
+                ->setParameter('datecourant', new \Datetime(date('d-m-Y')))
             ->addOrderBy('mareeDate.datePrev', 'ASC');
         //$queryBuilder->expr()->gte("mareeDate.datePrev", ":currentDate");
         //$queryBuilder->setParameter('currentDate', new \DateTime());

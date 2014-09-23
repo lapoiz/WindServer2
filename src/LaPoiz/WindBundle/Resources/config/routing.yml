@@ -53,6 +53,26 @@ _bo_dataWindPrev:
   defaults: { _controller: LaPoizWindBundle:BO:dataWindPrev }
   pattern: /admin/spot/dataWindPrev/{id}
 
+
+_bo_ajax_dataWindPrev_test_step1:
+  defaults: { _controller: LaPoizWindBundle:BOAjaxDataWindPrev:testStep1 }
+  pattern: /admin/BO/ajax/spot/dataWindPrev/test/step1/{id}
+
+_bo_ajax_dataWindPrev_test_step2:
+  defaults: { _controller: LaPoizWindBundle:BOAjaxDataWindPrev:testStep2 }
+  pattern: /admin/BO/ajax/spot/dataWindPrev/test/step2/{id}
+
+_bo_ajax_dataWindPrev_test_step3:
+  defaults: { _controller: LaPoizWindBundle:BOAjaxDataWindPrev:testStep3 }
+  pattern: /admin/BO/ajax/spot/dataWindPrev/test/step3/{id}
+
+_bo_ajax_dataWindPrev_test_save:
+  defaults: { _controller: LaPoizWindBundle:BOAjaxDataWindPrev:testSave }
+  pattern: /admin/BO/ajax/spot/dataWindPrev/test/save/{id}
+
+
+
+
 _bo_test:
   defaults: { _controller: LaPoizWindBundle:BOTest:index }
   pattern: /admin/BO/test
@@ -67,11 +87,15 @@ _bo_test_maree_save:
 
 _bo_ajax_maree_getPrev:
   defaults: { _controller: LaPoizWindBundle:BOAjax:getMareePrev }
-  pattern: /admin/BO/ajax/maree/get/{id}
+  pattern: /admin/BO/ajax/spot/maree/get/{id}
 
 _bo_ajax_maree_save:
   defaults: { _controller: LaPoizWindBundle:BOAjax:mareeSave }
-  pattern: /admin/BO/ajax/maree/save/{id}
+  pattern: /admin/BO/ajax/spot/maree/save/{id}
+
+_bo_ajax_maree_create:
+  defaults: { _controller: LaPoizWindBundle:BOAjax:mareeCreate }
+  pattern: /admin/BO/ajax/spot/{id}/maree/create
 
 _bo_ajax_spot_display:
   defaults: { _controller: LaPoizWindBundle:BOAjax:spotDisplay }
@@ -91,7 +115,7 @@ _bo_ajax_spot_add_site:
 
 _bo_ajax_spot_webSite_delete:
   defaults: { _controller: LaPoizWindBundle:BOAjax:spotSiteDelete }
-  pattern: /admin/BO/ajax/spot/{id}/addSite
+  pattern: /admin/BO/ajax/spot/site/delete/{id}
 
 _bo_ajax_spot_dataWindPrev:
   defaults: { _controller: LaPoizWindBundle:BOAjax:spotWebSite }
@@ -221,22 +245,6 @@ _ajax_dataWindPrev_history_data:
 _ajax_dataWindPrev_test:
   defaults: { _controller: LaPoizWindBundle:AjaxDataWindPrevGetData:test }
   pattern: /admin/ajax/dataWindPrev/test/{id}
-
-_ajax_dataWindPrev_test_step1:
-  defaults: { _controller: LaPoizWindBundle:AjaxDataWindPrevGetData:testStep1 }
-  pattern: /admin/ajax/dataWindPrev/test/step1/{id}
-
-_ajax_dataWindPrev_test_step2:
-  defaults: { _controller: LaPoizWindBundle:AjaxDataWindPrevGetData:testStep2 }
-  pattern: /admin/ajax/dataWindPrev/test/step2/{id}
-
-_ajax_dataWindPrev_test_step3:
-  defaults: { _controller: LaPoizWindBundle:AjaxDataWindPrevGetData:testStep3 }
-  pattern: /admin/ajax/dataWindPrev/test/step3/{id}
-
-_ajax_dataWindPrev_test_save:
-  defaults: { _controller: LaPoizWindBundle:AjaxDataWindPrevGetData:testSave }
-  pattern: /admin/ajax/dataWindPrev/test/save/{id}
 
 _ajax_dataWindPrev_test_remove_previsionDate:
   defaults: { _controller: LaPoizWindBundle:AjaxDataWindPrevGetData:removePrevisionDate }

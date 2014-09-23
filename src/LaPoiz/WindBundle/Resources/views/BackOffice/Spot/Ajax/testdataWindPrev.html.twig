@@ -1,0 +1,78 @@
+
+{% if typeDisplay == "code" %}
+
+        <code>
+            {% for line in info %}
+                {{ line }}<br />
+            {% endfor %}
+        </code>
+
+{% elseif typeDisplay == "arrayOfArray" %}
+    <table class="table table-bordered table-hover">
+        {% for key,array in info %}
+            <tr>
+                <td><b>{{ key }}</b></td>
+                {% for elem in array %}
+                    <td>
+                        {{ elem }}
+                    </td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </table>
+{% elseif typeDisplay == "arrayOfArrayOfArray" %}
+    <table class="table table-bordered table-hover">
+        {% for key,array in info %}
+            <tr>
+                <td><b>{{ key }}</b></td>
+                {% for elem in array %}
+                    <td>
+                        {% for key2,elem2 in elem %}
+                            {{ key2 }}: {{ elem2 }}<br/>
+                        {% endfor %}
+                    </td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </table>
+{% elseif typeDisplay == "prevDate" %}
+    {# info is an array of previsionDate  #}
+    <div id="removeLaunching"></div>
+
+    {% from "LaPoizWindBundle:PrevisionDate:blockDisplayListPrevDate.html.twig" import view %}
+    {{ view(info) }}
+
+    <button class="button_remove"  onClick="removeData();" >
+        <span class="test">{{ "admin.dataWindPrev.button.test.remove.listPrevDate" | trans }}</span>
+    </button>
+
+
+    <script>
+        function removeData(){
+            arraElem="{% for prevDate in info %}{{ prevDate.id }},{% endfor %}";
+
+            var tabId = new Array();
+            tabId = arraElem.split(',');
+            var asset_url="{{ path('_ajax_dataWindPrev_test_remove_previsionDate', {'id':'1'})}}";
+            var url= asset_url.substring(0,asset_url.lastIndexOf('/')+1);
+            for (var i=0; i < tabId.length-1; ++i) {
+                sendRemoveRequestAjax(tabId[i],url);
+            }
+            $('#removeLaunching').html('');
+        };
+        function sendRemoveRequestAjax(previsionDateId,url) {
+            $.ajax({
+                type: "POST",
+                url: url+previsionDateId,
+                id: previsionDateId,
+                cache: false,
+                success: function(id){
+                    $('#'+id).html("{{ "admin.dataWindPrev.label.success.remove.prevDate" | trans }}");
+                }
+            });
+            return false;
+        };
+    </script>
+{% else %}
+    {{ info }}
+{% endif %}

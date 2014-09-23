@@ -28,9 +28,9 @@
                         <li class="disabled"><a href="#"><span class="glyphicon glyphicon-plus"></span> Créer un spot</a></li>
                     </ul>
                 </li>
-                <li> <a href="#">Où naviguer ce we ?</a> </li>
+                <li class="disabled"> <a href="#">Où naviguer ce we ?</a> </li>
                 <li class=" {% if app.request.attributes.get('_route') starts with '_fo_concept' %}active{% endif %}"> <a href="{{ path('_fo_concept') }}">Le concept du site</a> </li>
-                <li> <a href="parametrage.html">Les paramètres</a> </li>
+                <li class="disabled"> <a href="#">Les paramètres</a> </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
