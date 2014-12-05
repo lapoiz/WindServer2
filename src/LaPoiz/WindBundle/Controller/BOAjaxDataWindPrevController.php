@@ -48,7 +48,7 @@ class BOAjaxDataWindPrevController extends Controller
 					array(	'chrono' => $data[2],
 							'step' => $data[0],
 							'info' => $data[1],
-        					'typeDisplay' => AjaxDataWindPrevGetDataController::typeDisplay($data[0]),
+        					'typeDisplay' => BOAjaxDataWindPrevController::typeDisplay($data[0]),
 							'dataWindPrev' => $dataWindPrev ));
 			} else {
 				$result="No find DataWindPrev.id=".$id;
@@ -64,7 +64,7 @@ class BOAjaxDataWindPrevController extends Controller
         		array(	'chrono' => 0,
         				'step' => 10,
         				'info' => $result,
-        				'typeDisplay' => AjaxDataWindPrevGetDataController::typeDisplay(-1),
+        				'typeDisplay' => BOAjaxDataWindPrevController::typeDisplay(-1),
         				'dataWindPrev' => $dataWindPrev ));
 	}
 
@@ -102,7 +102,7 @@ class BOAjaxDataWindPrevController extends Controller
 					'LaPoizWindBundle:BackOffice/Spot/Ajax:testdataWindPrev.html.twig',
 					array(	'chrono' => $data[1],
 							'info' => $data[0],
-        					'typeDisplay' => AjaxDataWindPrevGetDataController::typeDisplay(1),
+        					'typeDisplay' => BOAjaxDataWindPrevController::typeDisplay(1),
         					'step' => 1,
         					'dataWindPrev' => $dataWindPrev));
 			} else {
@@ -118,7 +118,7 @@ class BOAjaxDataWindPrevController extends Controller
         		array(	'chrono' => 0,
         				'step' => 10,
         				'info' => $result,
-        				'typeDisplay' => AjaxDataWindPrevGetDataController::typeDisplay(-1),
+        				'typeDisplay' => BOAjaxDataWindPrevController::typeDisplay(-1),
         				'dataWindPrev' => $dataWindPrev ));
 	}
 	
@@ -146,7 +146,7 @@ class BOAjaxDataWindPrevController extends Controller
 							array(	
 								'chrono' => $analyse[1],
 								'info' => $analyse[0],
-	        					'typeDisplay' => AjaxDataWindPrevGetDataController::typeDisplay($step),
+	        					'typeDisplay' => BOAjaxDataWindPrevController::typeDisplay($step),
 								'step' => $step,
 								'dataWindPrev' => $dataWindPrev));
 			} else {
@@ -162,7 +162,7 @@ class BOAjaxDataWindPrevController extends Controller
 					array(	'chrono' => 0,
 	        				'step' => 10,
 	        				'info' => $result,
-							'typeDisplay' => AjaxDataWindPrevGetDataController::typeDisplay(-1),
+							'typeDisplay' => BOAjaxDataWindPrevController::typeDisplay(-1),
 							'dataWindPrev' => $dataWindPrev ));
 	}
 	
@@ -191,7 +191,7 @@ class BOAjaxDataWindPrevController extends Controller
 								array(
 									'chrono' => $transformData[1],
 									'info' => $transformData[0],
-									'typeDisplay' => AjaxDataWindPrevGetDataController::typeDisplay($step),
+									'typeDisplay' => BOAjaxDataWindPrevController::typeDisplay($step),
 									'step' => $step,
 									'dataWindPrev' => $dataWindPrev));
 			} else {
@@ -207,7 +207,7 @@ class BOAjaxDataWindPrevController extends Controller
 							array(	'chrono' => 0,
 		        				'step' => 10,
 		        				'info' => $result,
-								'typeDisplay' => AjaxDataWindPrevGetDataController::typeDisplay(-1),
+								'typeDisplay' => BOAjaxDataWindPrevController::typeDisplay(-1),
 								'dataWindPrev' => $dataWindPrev ));
 	}
 	
@@ -237,7 +237,7 @@ class BOAjaxDataWindPrevController extends Controller
 								array(
 										'chrono' => $saveData[1],
 										'info' => $saveData[0],
-										'typeDisplay' => AjaxDataWindPrevGetDataController::typeDisplay($step),
+										'typeDisplay' => BOAjaxDataWindPrevController::typeDisplay($step),
 										'step' => $step,
 										'dataWindPrev' => $dataWindPrev));
 			} else {
@@ -253,7 +253,7 @@ class BOAjaxDataWindPrevController extends Controller
 								array(	'chrono' => 0,
 			        				'step' => 10,
 									'info' => $result,
-									'typeDisplay' => AjaxDataWindPrevGetDataController::typeDisplay(-1),
+									'typeDisplay' => BOAjaxDataWindPrevController::typeDisplay(-1),
 									'dataWindPrev' => $dataWindPrev ));
 	}
 
@@ -292,4 +292,5 @@ class BOAjaxDataWindPrevController extends Controller
 					        		'LaPoizWindBundle:BackOffice/Spot/Ajax:errorText.html.twig',
 									array('text' => $message ));
 	}
+
 }
