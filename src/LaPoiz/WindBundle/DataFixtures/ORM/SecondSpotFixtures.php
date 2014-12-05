@@ -3,13 +3,13 @@
 namespace  LaPoiz\WindBundle\DataFixtures\ORM;
  
 use LaPoiz\WindBundle\Entity\SpotParameter;
-use LaPoiz\WindBundle\Entity\WebSite;
+//use LaPoiz\WindBundle\Entity\WebSite;
 use LaPoiz\WindBundle\Entity\Spot;
-use LaPoiz\WindBundle\Entity\WindCondition;
-use LaPoiz\WindBundle\Entity\MareeCondition;
-use LaPoiz\WindBundle\Entity\Balise;
-use LaPoiz\WindBundle\Entity\DataWindPrev;
-use LaPoiz\WindBundle\core\websiteDataManage\WebsiteGetData;
+//use LaPoiz\WindBundle\Entity\WindCondition;
+//use LaPoiz\WindBundle\Entity\MareeCondition;
+//use LaPoiz\WindBundle\Entity\Balise;
+//use LaPoiz\WindBundle\Entity\DataWindPrev;
+//use LaPoiz\WindBundle\core\websiteDataManage\WebsiteGetData;
 
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
