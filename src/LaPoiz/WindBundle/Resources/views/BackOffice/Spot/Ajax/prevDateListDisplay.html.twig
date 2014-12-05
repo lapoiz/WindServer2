@@ -1,0 +1,23 @@
+{% macro view(arrayPrevDate) %}
+
+<div>	
+		{% for prevDate in arrayPrevDate %}
+		<div id="{{ prevDate.id }}">
+		{{ "admin.previsionDate.label.datePrev" | trans }}: {{ prevDate.datePrev | date('d/m/Y') }} 
+		({{ "admin.previsionDate.label.created" | trans }}: {{ prevDate.created | date('H:i:s d/m/Y') }})
+		
+			<table>
+		    	<tr>
+		    	{% for prevision in prevDate.listPrevision %}
+		    		<td>
+		    			{{ prevision.time | date('H') }}: {{ prevision.wind }}
+		    		</td>
+		    	{% endfor %}
+		    	</tr>
+			</table>
+			
+		</div>
+		{% endfor %}		
+</div>
+
+{% endmacro %}
