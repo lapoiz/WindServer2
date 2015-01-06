@@ -130,6 +130,23 @@ _bo_ajax_spot_maree_delete:
   pattern: /admin/BO/ajax/spot/{id}/maree/delete
 
 
+
+_json_spot_list:
+  defaults: { _controller: LaPoizWindBundle:JSon:listSpots }
+  pattern: /json/spot/list
+
+
+
+
+
+
+
+
+
+
+
+
+
 _json_spot_data:
   defaults: { _controller: LaPoizWindBundle:JsonSpot:get, renderTo: null }
   pattern: /json/spot/data/{id}/{renderTo}
@@ -142,9 +159,6 @@ _json_spot_datatest:
   defaults: { _controller: LaPoizWindBundle:JsonSpot:getTest }
   pattern: /json/spot/dataTest/{id}
 
-_json_spot_list:
-  defaults: { _controller: LaPoizWindBundle:JsonSpot:list }
-  pattern: /json/spot/list
 
 _spot_display:
   defaults: { _controller: LaPoizWindBundle:Spot:display }
