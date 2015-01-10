@@ -9,6 +9,10 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
+use LaPoiz\WindBundle\Controller\FOJsonController;
+
+use LaPoiz\WindBundle\core\graph\TransformeToHighchartsDataTabForJson;
+
 class JSonController extends Controller {
 
 
@@ -25,9 +29,17 @@ class JSonController extends Controller {
             $data= array('name' => $spot->getNom(), "id" => $spot->getId());
             $listSpot[]=$data;
         }
+        return new JsonResponse($listSpot);
 
-        return new JsonResponse(array(
-            'success' => true,
-            'list' => $listSpot));
     }
-} 
+
+    /**
+     * @Template()
+     */
+    public function detailSpotAction($id=null, $renderTo=null)
+    {
+        //return $this->forward('FOJsonController:getAction', array('id' => $id));
+        return $this->redirect($this->generateUrl('_fo_json_spot_data', array('id' => $id)));
+    }
+
+}

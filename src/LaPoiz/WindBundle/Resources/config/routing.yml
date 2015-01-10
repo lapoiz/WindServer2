@@ -135,6 +135,9 @@ _json_spot_list:
   defaults: { _controller: LaPoizWindBundle:JSon:listSpots }
   pattern: /json/spot/list
 
+_json_spot_detail:
+  defaults: { _controller: LaPoizWindBundle:JSon:detailSpot }
+  pattern: /json/spot/{id}
 
 
 
