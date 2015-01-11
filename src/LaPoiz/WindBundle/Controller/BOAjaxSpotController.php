@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\Validator\Constraints\Url;
 
-class BOAjaxController extends Controller
+class BOAjaxSpotController extends Controller
 
 {
 
