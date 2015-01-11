@@ -1,13 +1,12 @@
 security:
 
     providers:
-        in_memory:
-             memory:
-                users:
-                    admin: { password: liberte, roles: 'ROLE_ADMIN' }
+        administrators:
+            entity: { class: LaPoizWindBundle:User, property: username }
 
     encoders:
         Symfony\Component\Security\Core\User\User: plaintext
+        LaPoiz\WindBundle\Entity\User: plaintext
 
     firewalls:
         secured_area:
