@@ -13,7 +13,7 @@ abstract class WindData {
 				
 				break;
 			case "Windguru":
-				WindguruGetData->parseURL($dataWindPrev->getUrl());
+
 				break;			
 		}
 	}

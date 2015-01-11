@@ -20,7 +20,7 @@ class UserFixtures implements FixtureInterface
     	// encode the password
     	//$encoder = new MessageDigestPasswordEncoder('sha512', false, 1);
     	//$password = $encoder->encodePassword('admin', $user->getSalt());
-    	$password = "admin";
+    	$password = "liberte";
     	
     	$user->setPassword($password);
     	$manager->persist($user);

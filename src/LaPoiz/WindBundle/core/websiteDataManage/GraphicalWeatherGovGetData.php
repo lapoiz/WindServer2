@@ -5,10 +5,9 @@ use LaPoiz\WindBundle\Entity\PrevisionDate;
 use LaPoiz\WindBundle\Entity\Prevision;
 
 
-class GraphicalWeatherGovGetData
+class GraphicalWeatherGovGetData extends WebsiteGetData
 {
-	
-	static buildURL($latitude, $longitude) {
+    static function buildURL($latitude, $longitude) {
 		$today=new \DateTime("now");
 		$url = "http://graphical.weather.gov/xml/SOAP_server/ndfdXMLclient.php?whichClient=NDFDgen&";
 		$url .= "lat=".$latitude;
@@ -20,7 +19,7 @@ class GraphicalWeatherGovGetData
 		$url .= "T00%3A00%3A00&Unit=e&wspd=wspd&wdir=wdir&wx=wx&waveh=waveh&appt=appt&wgust=wgust&Submit=Submit";
 	}
 	
-	static function getDataURL($url) 
+	function getDataURL($url)
 	{         
 	    $tableauData = array();
 		$file = fopen($url,"r");		
@@ -42,9 +41,9 @@ class GraphicalWeatherGovGetData
 		}
 		$tableauData = array();
 		$windSpeed = $dom->getElementsByTagName("wind-speed");
-		$listWindSpeed = $windSpeed->getElementsByTagName('value')
-		foreach ($listWindSpeed as windSpeedValue) {
-			$tableauData[]=windSpeedValue->nodeValue;
+		$listWindSpeed = $windSpeed->getElementsByTagName('value');
+		foreach ($listWindSpeed as $windSpeedValue) {
+			$tableauData[]=$windSpeedValue->nodeValue;
 		}
 	}
 	
@@ -60,18 +59,7 @@ class GraphicalWeatherGovGetData
 		while (!feof($file)) 
 		{ // line per line			
   			$line = fgets($file); // read a line
-  			
-  			if (WindguruGetData::isGoodLine($line)) {  // choose good line where every data is			    
-  				$windPart=WindguruGetData::getPart(WindguruGetData::exprWindPart,$line); // get wind part in line				
-  				$tableauData['wind']=WindguruGetData::getElemeInPart($windPart);// transforme to tab		 		
-  				
-  				$hourePart=WindguruGetData::getHourePart($line);				
-  				$tableauData['heure']=WindguruGetData::getElemeInPart($hourePart);// transforme to tab
-  				
-  				$datePart=WindguruGetData::getDatePart($line);				
-  				$tableauData['date']=WindguruGetData::getElemeInPart($datePart);// transforme to tab		 		
-  				
-  			}
+  			//......................................................................
 		}		
 		fclose($file);
 		return $tableauData;
@@ -84,25 +72,7 @@ class GraphicalWeatherGovGetData
 		// date  -> 04   | 04 | 04 | 05   | 05
 		
 		$tableauWindData = array();
-		$currentDate = '';
-		$firstElem=true;
-		$currenteLine;
-		//$indexCol=0;
-		
-		foreach ($tableauData['date'] as $key=>$date) {
-			if ($currentDate!=$date) {
-				if ($firstElem) {
-					$firstElem=false;
-				} else {
-					$tableauWindData[WindguruGetData::getCompleteDate($date)]=$currenteLine;
-				}
-				$currenteLine=array();
-			}
-			$currenteLine[$tableauData['heure'][$key]]=$tableauData['wind'][$key];
-			$currentDate=$date;
-			//$indexCol++;
-		}
-		$tableauWindData[WindguruGetData::getCompleteDate($currentDate)]=$currenteLine;
+
 		return $tableauWindData;
 	}
 	
