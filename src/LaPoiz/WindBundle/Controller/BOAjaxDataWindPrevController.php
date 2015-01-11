@@ -285,9 +285,13 @@ class BOAjaxDataWindPrevController extends Controller
 										'LaPoizWindBundle:BackOffice/Spot/Ajax:simpleText.html.twig',
 										array('text' => $result));
 	}
-	
-	
-	function errorReturn($message) {
+
+
+
+    /**
+     * @Template()
+     */
+	public function errorReturn($message) {
 		return $this->container->get('templating')->renderResponse(
 					        		'LaPoizWindBundle:BackOffice/Spot/Ajax:errorText.html.twig',
 									array('text' => $message ));
