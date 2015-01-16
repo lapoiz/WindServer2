@@ -32,7 +32,7 @@ class WindFinderGetData extends WebsiteGetData
 			"orientation"=>3
 		);
 		$nbCol=count($htmlTabData);
-		if ((($nbCol)/$result1["nbLineTabPerLineWeb"])==4) 
+		if ((($nbCol)/$result1["nbLineTabPerLineWeb"])<5)
 			return $result1;
 		else
 			return $result2; 
@@ -71,7 +71,8 @@ class WindFinderGetData extends WebsiteGetData
 				$tables = $div->getElementsByTagName('table'); // get all tables of the div
 				foreach ($tables as $table){
 					// for each table of the div
-					if ($table->getAttribute('class')==WindFinderGetData::dataClassName || $table->getAttribute('class')==WindFinderGetData::dataClassName2) {
+					if (($table->getAttribute('class')==WindFinderGetData::dataClassName || $table->getAttribute('class')==WindFinderGetData::dataClassName2)
+                        && $table->getAttribute('summary')<>"advertising") {
 						$rows = $table->getElementsByTagName('tr');
 						foreach ($rows as $row){
 							// for each col of the table
@@ -97,7 +98,9 @@ class WindFinderGetData extends WebsiteGetData
 		$nbLineTabPerLineWeb = $whichColumn["nbLineTabPerLineWeb"];
 		$timeCol = $whichColumn["time"];
 
+        // Page WindFinder construit sur 4 blocks de 22 lignes. Chaques blocs représentant 2 jours
 		for ($numLine=0;$numLine<(WindFinderGetData::nbLine);$numLine++) {
+
 			$nbCol=count($htmlTabData[$numLine*$nbLineTabPerLineWeb+$timeCol])-1;
 			$prevHoure=WindFinderGetData::getTimePrevFromHTML($htmlTabData[$numLine*$nbLineTabPerLineWeb+$timeCol][1]);
 			$datePrev = WindFinderGetData::getDatePrevFromHTML($htmlTabData[$numLine*$nbLineTabPerLineWeb][1]);
