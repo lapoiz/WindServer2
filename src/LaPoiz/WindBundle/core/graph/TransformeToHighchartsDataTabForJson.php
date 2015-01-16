@@ -22,20 +22,22 @@ class TransformeToHighchartsDataTabForJson   {
     // For same WebSite
 	static function transformePrevisionDateList($previsionDateList) {
 		$forecastArray=array();
-		foreach ($previsionDateList as $previsionDate) {
-			foreach ($previsionDate->getListPrevision() as $prevision) {
-				$date=$previsionDate->getDatePrev();
+        if ($previsionDateList!=null) {
+            foreach ($previsionDateList as $previsionDate) {
+                foreach ($previsionDate->getListPrevision() as $prevision) {
+                    $date=$previsionDate->getDatePrev();
 
-				$date->setTime($prevision->getTime()->format('H'),0);
-                //$forecastArray[] = new JsonWindPrevision($date->getTimestamp()*1000,$prevision->getWind()); // not need m-1 because jan=0, feb=1 ... dec=11
-                $forecastElem=array("date"=>($date->getTimestamp()*1000));
-                $forecastElem[$previsionDate->getDataWindPrev()->getWebSite()->getNom()]=$prevision->getWind(); // not need m-1 because jan=0, feb=1 ... dec=11
-                if ($prevision->getOrientation()!='?') {
-                    $forecastElem["orientation"]= new WindOrientation($prevision->getOrientation());
-                }
-                $forecastArray[] = $forecastElem;
-            };
-		}
+                    $date->setTime($prevision->getTime()->format('H'),0);
+                    //$forecastArray[] = new JsonWindPrevision($date->getTimestamp()*1000,$prevision->getWind()); // not need m-1 because jan=0, feb=1 ... dec=11
+                    $forecastElem=array("date"=>($date->getTimestamp()*1000));
+                    $forecastElem[$previsionDate->getDataWindPrev()->getWebSite()->getNom()]=$prevision->getWind(); // not need m-1 because jan=0, feb=1 ... dec=11
+                    if ($prevision->getOrientation()!='?') {
+                        $forecastElem["orientation"]= new WindOrientation($prevision->getOrientation());
+                    }
+                    $forecastArray[] = $forecastElem;
+                };
+            }
+        }
 		return $forecastArray;
 	}
 

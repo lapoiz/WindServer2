@@ -105,14 +105,18 @@ class PrevisionDateRepository extends EntityRepository
 	public function getLastCreated($dataWindPrev)
 	{
 		$theLastPrevisionDate=$this->getTheLastCreated($dataWindPrev->getId());
-		$queryBuilder = $this->createQueryBuilder('previsionDate');
-		$queryBuilder
-			->leftJoin('previsionDate.dataWindPrev', 'dataWindPrev')
-			->where($queryBuilder->expr()->andx(
-				$queryBuilder->expr()->eq('dataWindPrev.id',$dataWindPrev->getId()),
-				$queryBuilder->expr()->gte('previsionDate.created',"'".$theLastPrevisionDate->getCreated()->format('Y-m-d H:i:s')."'")))
-			->orderBy('previsionDate.created');
-
+        if ($theLastPrevisionDate == null) {
+            return null;
+        } else {
+            $queryBuilder = $this->createQueryBuilder('previsionDate');
+            $queryBuilder
+                ->leftJoin('previsionDate.dataWindPrev', 'dataWindPrev')
+                ->where($queryBuilder->expr()->andx(
+                    $queryBuilder->expr()->eq('dataWindPrev.id',$dataWindPrev->getId()),
+                    $queryBuilder->expr()->gte('previsionDate.created',"'".$theLastPrevisionDate->getCreated()->format('Y-m-d H:i:s')."'")))
+                ->orderBy('previsionDate.created', 'ASC')
+                ->orderBy('previsionDate.datePrev', 'ASC');
+        }
 		try {
 			return $queryBuilder->getQuery()->getResult();
 		} catch (\Doctrine\ORM\NoResultException $e) {

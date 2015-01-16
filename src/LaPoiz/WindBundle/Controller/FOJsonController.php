@@ -37,6 +37,7 @@ class FOJsonController extends Controller
 			foreach ($spot->getDataWindPrev() as $dataWindPrev) {
 			    // Pour chaque site du spot
                 // Récupére toutes les prévisions réalisées la même date que de création de la derniere prévision
+                $name=$dataWindPrev->getWebsite()->getNom();
 				$previsionDateList = $this->getDoctrine()->getRepository('LaPoizWindBundle:PrevisionDate')->getLastCreated($dataWindPrev);
 				$tabJson->addForecast(TransformeToHighchartsDataTabForJson::transformePrevisionDateList($previsionDateList));
 			}
