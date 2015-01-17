@@ -572,6 +572,13 @@ Meteogram.prototype.parseYrData = function () {
             });
         }
 
+        if (typeof(time.MeteoFrance) != 'undefined') {
+            meteogram.meteoFrance.push({
+                x: datePrev,
+                y: parseFloat(time.MeteoFrance)
+            });
+        }
+
         if (typeof(time.Windguru) != 'undefined') {
             meteogram.windGuru.push({
                 x: datePrev,
