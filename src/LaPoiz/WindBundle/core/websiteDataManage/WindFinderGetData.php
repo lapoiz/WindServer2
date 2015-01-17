@@ -32,7 +32,7 @@ class WindFinderGetData extends WebsiteGetData
 			"orientation"=>3
 		);
 		$nbCol=count($htmlTabData);
-		if ((($nbCol)/$result1["nbLineTabPerLineWeb"])<5)
+		if ((($nbCol)/$result1["nbLineTabPerLineWeb"])>=4)
 			return $result1;
 		else
 			return $result2; 
