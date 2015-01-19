@@ -4,6 +4,8 @@ namespace LaPoiz\WindBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 
+use LaPoiz\WindBundle\Entity\Spot;
+
 /**
  * MareeDateRepository
  *
@@ -12,11 +14,14 @@ use Doctrine\ORM\EntityRepository;
  */
 class MareeDateRepository extends EntityRepository
 {
-    public function findLast()
+    public function findLast($spot)
     {
         $queryBuilder = $this->createQueryBuilder('mareeDate');
         $queryBuilder
                 ->select('mareeDate')
+                ->leftJoin('mareeDate.spot', 'spot')
+                ->where("spot.id = :spotId")
+                ->setParameter('spotId', $spot->getId())
                 ->addOrderBy('mareeDate.datePrev', 'DESC')
                 ->setMaxResults(1);
         try {
@@ -26,11 +31,14 @@ class MareeDateRepository extends EntityRepository
         }
     }
 
-    public function findLastPrev($number)
+    public function findLastPrev($number, $spot)
     {
         $queryBuilder = $this->createQueryBuilder('mareeDate');
         $queryBuilder
             ->select('mareeDate')
+            ->leftJoin('mareeDate.spot', 'spot')
+            ->where("spot.id = :spotId")
+                ->setParameter('spotId', $spot->getId())
             ->addOrderBy('mareeDate.datePrev', 'ASC')
             ->setMaxResults($number);
         try {
@@ -43,13 +51,17 @@ class MareeDateRepository extends EntityRepository
 
     // Return future marrée from today
     // previsionMareeDateList
-    public function getFuturMaree()
+    public function getFuturMaree($spot)
     {
         $queryBuilder = $this->createQueryBuilder('mareeDate');
         $queryBuilder
             ->select('mareeDate')
-            ->where("mareeDate.datePrev >= :datecourant")
-                ->setParameter('datecourant', new \Datetime(date('d-m-Y')))
+            ->leftJoin('mareeDate.spot', 'spot')
+            ->where("mareeDate.datePrev >= :datecourant and spot.id = :spotId")
+                ->setParameters(array(
+                    'datecourant'=> new \Datetime(date('d-m-Y')),
+                    'spotId' => $spot->getId()
+                ))
             ->addOrderBy('mareeDate.datePrev', 'ASC');
         //$queryBuilder->expr()->gte("mareeDate.datePrev", ":currentDate");
         //$queryBuilder->setParameter('currentDate', new \DateTime());

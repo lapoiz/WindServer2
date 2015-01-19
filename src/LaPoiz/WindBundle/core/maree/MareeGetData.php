@@ -54,7 +54,7 @@ class MareeGetData {
         $regExGetHoure = '#h#';
         $regExGetHauteur = '#m#';
 
-        $lastMareeDate = $entityManager->getRepository('LaPoizWindBundle:MareeDate')->findLast();
+        $lastMareeDate = $entityManager->getRepository('LaPoizWindBundle:MareeDate')->findLast($spot);
         $beginDate = null;
         if ($lastMareeDate != null) {
             $beginDate = date_add($lastMareeDate->getDatePrev(), new \DateInterval('P1D'));// DatePrev est à 00h00m00s -> jour +1 pour comparaison

@@ -92,7 +92,7 @@ class BOTestController extends Controller
             MareeGetData::saveMaree($spot,$prevMaree,$em,new NullOutput());
         }
 
-        $mareeDateDB = $em->getRepository('LaPoizWindBundle:MareeDate')->findLastPrev(10);
+        $mareeDateDB = $em->getRepository('LaPoizWindBundle:MareeDate')->findLastPrev(10, $spot);
 
         return $this->container->get('templating')->renderResponse('LaPoizWindBundle:BackOffice/Test:maree.html.twig',
             array(
