@@ -138,6 +138,13 @@ class WebsiteGetData
 					$hour->setTime("01", "00");
 				}
 				$prev->setTime($hour);
+
+                if (isset($dataPrev["meteo"])) {
+                    $prev->setMeteo($dataPrev["meteo"]);
+                }
+                if (isset($dataPrev["precipitation"])) {
+                    $prev->setPrecipitation($dataPrev["precipitation"]);
+                }
 				
 				WindFinderGetData::calculateWind($windCalculate,$prev);
 				

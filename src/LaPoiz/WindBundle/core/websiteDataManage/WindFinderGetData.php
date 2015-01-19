@@ -21,7 +21,8 @@ class WindFinderGetData extends WebsiteGetData
 			"wind"=>5,
 			"maxWind"=>7,
 			"temp"=>21,
-			"orientation"=>3
+			"orientation"=>3,
+            "precipitation"=>17
 		);
 		$result2 = array(
 			"nbLineTabPerLineWeb"=>16,
@@ -29,7 +30,8 @@ class WindFinderGetData extends WebsiteGetData
 			"wind"=>5,
 			"maxWind"=>7,
 			"temp"=>15,
-			"orientation"=>3
+			"orientation"=>3,
+            "precipitation"=>11
 		);
 		$nbCol=count($htmlTabData);
 		if ((($nbCol)/$result1["nbLineTabPerLineWeb"])>=4)
@@ -104,6 +106,7 @@ class WindFinderGetData extends WebsiteGetData
 			$nbCol=count($htmlTabData[$numLine*$nbLineTabPerLineWeb+$timeCol])-1;
 			$prevHoure=WindFinderGetData::getTimePrevFromHTML($htmlTabData[$numLine*$nbLineTabPerLineWeb+$timeCol][1]);
 			$datePrev = WindFinderGetData::getDatePrevFromHTML($htmlTabData[$numLine*$nbLineTabPerLineWeb][1]);
+            // Boucle sur toutes les colonnes du block (2 jours)
 			for ($numCol=0;$numCol<$nbCol;$numCol++) {
 				$timePrev = WindFinderGetData::getTimePrevFromHTML($htmlTabData[$numLine*$nbLineTabPerLineWeb+$timeCol][$numCol+1]);
 				//echo '<br/>$timePrev:'.$timePrev.'  $prevHoure:'.$prevHoure.'  $datePrev:'.$datePrev.'  $numLine'.$numLine.'   $numCol:'.$numCol;
@@ -111,6 +114,7 @@ class WindFinderGetData extends WebsiteGetData
 					// new day
 					$datePrev = WindFinderGetData::getDatePrevFromHTML($htmlTabData[$numLine*$nbLineTabPerLineWeb][2]);
 				}
+                // Récupere toutes les infos du block
 				$lineData = WindFinderGetData::getWindFinderHtmlData($htmlTabData,$whichColumn,$numLine,$numCol,$today,$datePrev,$timePrev);
 				//$prevHoure=$lineData['timePrev'];
 				$prevHoure=$lineData['heure'];
@@ -159,6 +163,7 @@ class WindFinderGetData extends WebsiteGetData
 		$colClean['maxWind'] = WindFinderGetData::getMaxWindPrevFromHTML($htmlTabData[$numLine*$nbLineTabPerLineWeb+$whichColumn["maxWind"]][$numCol]);
 		$colClean['temp'] = WindFinderGetData::getTempPrevFromHTML($htmlTabData[$numLine*$nbLineTabPerLineWeb+$whichColumn["temp"]][$numCol]);
 		$colClean['orientation'] = WindFinderGetData::getOrientationPrevFromHTML($htmlTabData[$numLine*$nbLineTabPerLineWeb+$whichColumn["orientation"]][$numCol]);
+        $colClean['precipitation'] = WindFinderGetData::getPrecipitationPrevFromHTML($htmlTabData[$numLine*$nbLineTabPerLineWeb+$whichColumn["precipitation"]][$numCol]);
 		return $colClean;
 	}
 	
@@ -208,7 +213,14 @@ class WindFinderGetData extends WebsiteGetData
 			return "?";
 		}
 	}
-	
+
+    static private function getPrecipitationPrevFromHTML($htmlData) {
+        if (preg_match('#[0-9]+#',$htmlData,$data)>0) {
+            return $data[0];
+        } else {
+            return "?";
+        }
+    }
 	static private function getOrientationPrevFromHTML($htmlData) {
 		if (preg_match('#[nsew]+#',$htmlData,$data)>0) {
 			return $data[0];

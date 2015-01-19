@@ -13,6 +13,7 @@ class MeteoFranceGetData extends WebsiteGetData
 	const detailDateHoureDivClass= 'bloc-day-summary';
 	const tempDivClass= 'day-summary-temperature';
 	const windDivClass= 'day-summary-wind-info';
+    const meteoDivClass= 'day-summary-image';
 	const windSpanClass= 'vent-detail-vitesse';
 	const windMaxSpanClass= 'vent-detail-type';
 	const orientationSpanClass= 'picVent *';
@@ -132,6 +133,7 @@ class MeteoFranceGetData extends WebsiteGetData
 								$wind='';
 								$windMax='';
 								$orientation='';
+                                $meteo='';
 
 								$time = MeteoFranceGetData::getTime($detailDateHoureDiv);
 								$divs = $detailDateHoureDiv->getElementsByTagName('div');					
@@ -140,9 +142,11 @@ class MeteoFranceGetData extends WebsiteGetData
 										$temp=$div->nodeValue;
 									} elseif ($div -> getAttribute('class')==MeteoFranceGetData::windDivClass) {
 										$orientation=$div->getElementsByTagName('span')->item(0)->nodeValue;
-									} 
+									}  elseif ($div -> getAttribute('class')==MeteoFranceGetData::meteoDivClass) {
+                                        $meteo=$div->getElementsByTagName('span')->item(0)->nodeValue;
+                                    }
 
-								} 
+                                }
 								$spans = $detailDateHoureDiv->getElementsByTagName('span');					
 								foreach ($spans as $span) {
 									if ($span -> getAttribute('class')==MeteoFranceGetData::windSpanClass) {
@@ -158,6 +162,7 @@ class MeteoFranceGetData extends WebsiteGetData
 								$previsionTab['wind'] = $wind;
 								$previsionTab['windMax'] = $windMax;
 								$previsionTab['orientation'] = $orientation;
+                                $previsionTab['meteo'] = $meteo;
 								$tableauDataResult[] = $previsionTab;
 							}//if
 					}//for		
@@ -191,6 +196,7 @@ class MeteoFranceGetData extends WebsiteGetData
 			$cleanElemTab['maxWind'] = MeteoFranceGetData::getMaxWindClean($lineData['windMax']);
 			$cleanElemTab['temp'] = MeteoFranceGetData::getTempClean($lineData['temp']);
 			$cleanElemTab['orientation'] = MeteoFranceGetData::getOrientationClean($lineData['orientation']);
+            $cleanElemTab['meteo'] = MeteoFranceGetData::getMeteoClean($lineData['meteo']);
 			$cleanLineTab[] = $cleanElemTab;
 
 			if ($isFirstElem) {
@@ -341,6 +347,50 @@ class MeteoFranceGetData extends WebsiteGetData
 		}		
 	}
 
+    // input: Pluies orageuses
+    // return: p-o
+    static private function getMeteoClean($htmlValue) {
+
+        $result = "?";
+        switch ($htmlValue) {
+            case "Ensoleillé" :
+                $result = "en";
+                break;
+            case "Éclaircies" :
+                $result = "ec";
+                break;
+            case "Ciel voilé" :
+                $result = "c-v";
+                break;
+            case "Brume" :
+                $result = "b";
+                break;
+            case "Très nuageux" :
+                $result = "t-n";
+                break;
+            case "Rares averses" :
+                $result = "r-a";
+                break;
+            case "Pluies éparses" :
+                $result = "p-e";
+                break;
+            case "Averses" :
+                $result = "a";
+                break;
+            case "Pluie" :
+                $result = "p";
+                break;
+            case "Averses orageuses" :
+                $result = "a-o";
+                break;
+            case "Pluies orageuses" :
+                $result = "p-o";
+                break;
+
+        }
+        return $result;
+    }
+
 	// input: Rafales 65 km/h
 	// return: 21
 	static private function getMaxWindClean($htmlValue) {
@@ -350,35 +400,6 @@ class MeteoFranceGetData extends WebsiteGetData
 		} else {
 			return "?";
 		}
-	}
-
-
-
-
-
-
-
-
-
-
-
-	// Delete ???
-	function getDataURL2($url) 
-	{
-		MeteoFranceGetData::getDataURL2($url);
-		$ch = \curl_init();
-	    curl_setopt($ch, CURLOPT_URL, $url);
-	    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-	    curl_setopt($ch, CURLOPT_USERAGENT, 'LaPoiz Application');
-	    $cookies = "foo=bar";
-	    curl_setopt($ch, CURLOPT_COOKIE, $cookies);
-	    $html = curl_exec($ch);
-	    curl_close($ch);
-	      
-		$dom = new \DomDocument();
-		@$dom->loadHTML($html);
-		//$dom->save('/tmp/meteoFrancePage.txt');
-		return $html; 		
 	}
 
 }

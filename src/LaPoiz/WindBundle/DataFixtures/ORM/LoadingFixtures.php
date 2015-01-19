@@ -38,8 +38,13 @@ class LoadingFixtures implements FixtureInterface
         $webSiteWF->setLogo("logo");
         $manager->persist($webSiteWF);
         $manager->flush();
-        
 
+        $webSiteMF = new WebSite();
+        $webSiteMF->setNom(WebsiteGetData::meteoFranceName);
+        $webSiteMF->setUrl("http://france.meteofrance.com/");
+        $webSiteMF->setLogo("logo");
+        $manager->persist($webSiteMF);
+        $manager->flush();
         
         $balise=new Balise();
         $balise->setNom('Balise FFVL de St Aubin');
@@ -52,14 +57,20 @@ class LoadingFixtures implements FixtureInterface
         $dataWindPrevWG->setSlotTime(7);
         $dataWindPrevWG->setCreated(new \DateTime("now"));
         
-        
-        
         $dataWindPrevWF = new DataWindPrev();
         $dataWindPrevWF->setUrl('http://www.windfinder.com/forecast/saint_aubin_sur_mer');
 		$dataWindPrevWF->setWebsite($webSiteWF);
         $dataWindPrevWF->setSlotTime(8);
         $dataWindPrevWF->setCreated(new \DateTime("now"));
-        
+
+
+        $dataWindPrevMF = new DataWindPrev();
+        $dataWindPrevMF->setUrl('http://www.meteofrance.com/previsions-meteo-france/saint-aubin-sur-mer/76740');
+        $dataWindPrevMF->setWebsite($webSiteMF);
+        $dataWindPrevMF->setSlotTime(8);
+        $dataWindPrevMF->setCreated(new \DateTime("now"));
+
+
         $spot=new Spot();
         $spot->setNom("Saint Aubin");
         $spot->setDescription("Spot avec grande plage, sans risque.");
@@ -74,6 +85,8 @@ class LoadingFixtures implements FixtureInterface
         
         $dataWindPrevWG->setSpot($spot);
         $dataWindPrevWF->setSpot($spot);
+        $dataWindPrevMF->setSpot($spot);
+        $spot->addDataWindPrev($dataWindPrevMF);
         $spot->addDataWindPrev($dataWindPrevWG);        
         $spot->addDataWindPrev($dataWindPrevWF);
 
@@ -85,6 +98,7 @@ class LoadingFixtures implements FixtureInterface
 
         $manager->persist($dataWindPrevWG);
         $manager->persist($dataWindPrevWF);
+        $manager->persist($dataWindPrevMF);
         $manager->persist($spotParameter);
         $manager->persist($spot);
         $manager->persist($balise);

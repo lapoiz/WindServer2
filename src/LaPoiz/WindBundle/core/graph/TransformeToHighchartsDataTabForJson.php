@@ -34,6 +34,13 @@ class TransformeToHighchartsDataTabForJson   {
                     if ($prevision->getOrientation()!='?') {
                         $forecastElem["orientation"]= new WindOrientation($prevision->getOrientation());
                     }
+                    if ($prevision->getMeteo()!=null && $prevision->getMeteo()!='?') {
+                        $forecastElem["meteo"]= $prevision->getMeteo();
+                    }
+                    if ($prevision->getPrecipitation()!=null && $prevision->getPrecipitation()!='?') {
+                        $forecastElem["precipitation"]= $prevision->getPrecipitation();
+                    }
+
                     $forecastArray[] = $forecastElem;
                 };
             }

@@ -23,6 +23,16 @@ class Prevision
     private $orientation;
 
     /**
+     * @ORM\Column(type="string",length=255, nullable=true)
+     */
+    private $meteo;
+
+    /**
+     * @ORM\Column(type="string",length=255, nullable=true)
+     */
+    private $precipitation;
+
+    /**
      * @ORM\Column(type="integer")
      */
     private $wind;
@@ -129,5 +139,51 @@ class Prevision
     public function getPrevisionDate()
     {
         return $this->previsionDate;
+    }
+
+    /**
+     * Set meteo
+     *
+     * @param string $meteo
+     * @return Prevision
+     */
+    public function setMeteo($meteo)
+    {
+        $this->meteo = $meteo;
+
+        return $this;
+    }
+
+    /**
+     * Get meteo
+     *
+     * @return string 
+     */
+    public function getMeteo()
+    {
+        return $this->meteo;
+    }
+
+    /**
+     * Set precipitation
+     *
+     * @param string $precipitation
+     * @return Prevision
+     */
+    public function setPrecipitation($precipitation)
+    {
+        $this->precipitation = $precipitation;
+
+        return $this;
+    }
+
+    /**
+     * Get precipitation
+     *
+     * @return string 
+     */
+    public function getPrecipitation()
+    {
+        return $this->precipitation;
     }
 }
