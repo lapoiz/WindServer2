@@ -1,6 +1,6 @@
 {% macro graph(spot) %}
 
-<div id="meteoGraph" style="width: 800px; height: 310px; margin: 0 auto"></div>
+<div id="meteoGraph"></div>
 <div id="Loading"></div>
 <div id="jsonData" style="visibility: hidden"></div>
 
@@ -15,8 +15,8 @@
         $(function () { // On DOM ready...
             $.getJSON(
                     '{{ path('_fo_json_spot_data',{'id':spot.id}) }}',
-                    function (xml) {
-                        var meteogram = new Meteogram(xml, 'meteoGraph');
+                    function (jsonSpotData) {
+                        var meteogram = new Meteogram(jsonSpotData, 'meteoGraph');
                     });
         });
     </script>
