@@ -130,7 +130,10 @@ class WindguruGetData extends WebsiteGetData
 		$today= new \DateTime("now");
 		if ($today->format('d') > $date) {
 			//next month
-			$today->modify( '+1 month' );			
+            $today->modify( '-2 day' );// if we do that late, and prevision of yesterday still here...
+            if ($today->format('d') > $date) {
+			    $today->modify( '+1 month' );
+            }
 		}
 		$result=$today->format('Y-m-').$date;
 		return $result;
