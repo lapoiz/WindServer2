@@ -16,7 +16,7 @@ class DataWindPrevType extends AbstractType
     {
         $builder
             ->add('url')
-            ->add('slotTime','integer',array('label' => 'Nombre de prevision par jour'))
+//            ->add('slotTime','integer',array('label' => 'Nombre de prevision par jour'))
             ->add('website','entity', 
                 array('class' => 'LaPoizWindBundle:WebSite',
                   'property' => 'nom',
@@ -33,7 +33,7 @@ class DataWindPrevType extends AbstractType
     {
         $resolver->setDefaults(array(
                 'data_class' => 'LaPoiz\WindBundle\Entity\DataWindPrev',
-                'attr' => array('id' => 'addSite_form'),
+                'attr' => array('id' => 'dataWindPrev_form'),
                 'csrf_protection' => false
         ));
     }

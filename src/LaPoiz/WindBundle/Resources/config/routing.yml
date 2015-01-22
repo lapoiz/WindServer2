@@ -128,6 +128,10 @@ _bo_ajax_spot_webSite_delete:
   defaults: { _controller: LaPoizWindBundle:BOAjaxSite:spotSiteDelete }
   pattern: /admin/BO/ajax/spot/site/delete/{id}
 
+_bo_ajax_spot_edit_site:
+  defaults: { _controller: LaPoizWindBundle:BOAjaxSite:spotSiteEdit }
+  pattern: /admin/BO/ajax/spot/site/edit/{id}
+
 _bo_ajax_spot_dataWindPrev:
   defaults: { _controller: LaPoizWindBundle:BOAjaxSite:spotWebSite }
   pattern: /admin/BO/ajax/spot/webSite/{id}

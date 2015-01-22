@@ -1,0 +1,40 @@
+{% if dataWindPrev is defined and dataWindPrev is not null %}
+    <h2>Modification de <b>{{ dataWindPrev.website.nom }}</b> du spot <b>{{ dataWindPrev.spot.nom }}</b></h2>
+
+        <div class="row">
+            <div class="col-sm-12">
+                {{ form_start(form, {
+                'style': 'horizontal',
+                'label_col': 2,
+                'widget_col': 8,
+                'methode' : 'POST',
+                'action' : path('_bo_ajax_spot_edit_site', {'id':dataWindPrev.id})
+                })}}
+
+                {{ form_errors(form, { 'global_errors': true }) }}
+
+                {{ form_end(form) }}
+
+            </div>
+
+        </div>
+
+        <script>
+            $("#dataWindPrev_form").on('submit', function(e){
+                $('#resultAjax').html('<img src="{{ asset('bundles/lapoizwind/images/loading.gif') }}" alt="Loading Ajax data" />');
+
+                e.preventDefault();
+                var $this = $(this);
+
+                $.ajax({
+                    url: $this.attr('action'),
+                    type: $this.attr('method'),
+                    data: $this.serialize(),
+                    success: function(html) {
+                        $('#resultAjax').html(html);
+                    }
+                });
+            });
+        </script>
+
+    {% endif %}

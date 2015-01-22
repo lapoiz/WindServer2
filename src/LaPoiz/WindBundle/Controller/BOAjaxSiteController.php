@@ -22,7 +22,7 @@ class BOAjaxSiteController extends Controller
     /**
      * @Template()
      *
-     * http://localhost/WindServer/web/app_dev.php/admin/BO/ajax/spot/1/addSite
+     * http://localhost/Wind/web/app_dev.php/admin/BO/ajax/spot/1/addSite
      */
     public function spotAddSiteAction($id=null, Request $request)
     {
@@ -86,7 +86,7 @@ class BOAjaxSiteController extends Controller
     /**
      * @Template()
      *
-     * http://localhost/WindServer/web/app_dev.php/admin/BO/ajax/spot/webSite/1
+     * http://localhost/Wind/web/app_dev.php/admin/BO/ajax/spot/webSite/1
      */
     public function spotWebSiteAction($id=null)
     {
@@ -116,7 +116,7 @@ class BOAjaxSiteController extends Controller
     /**
      * @Template()
      *
-     * http://localhost/WindServer/web/app_dev.php/admin/BO/ajax/spot/site/delete/1
+     * http://localhost/Wind/web/app_dev.php/admin/BO/ajax/spot/site/delete/1
      */
     public function spotSiteDeleteAction($id=null)
     {
@@ -148,4 +148,48 @@ class BOAjaxSiteController extends Controller
         }
     }
 
+    /**
+     * @Template()
+     *
+     * http://localhost/Wind/web/app_dev.php/admin/BO/ajax/spot/site/edit/1
+     */
+    public function spotSiteEditAction($id=null, Request $request)
+    {
+        $em = $this->container->get('doctrine.orm.entity_manager');
+
+        if (isset($id) && $id!=-1)
+        {
+            $dataWindPrev = $em->find('LaPoizWindBundle:DataWindPrev', $id);
+            if (!$dataWindPrev)
+            {
+                return $this->container->get('templating')->renderResponse(
+                    'LaPoizWindBundle:BackOffice:errorPage.html.twig',
+                    array('errMessage' => "DataWindPrev not find !"));
+            }
+            $form = $this->createForm('dataWindPrevForm',$dataWindPrev)
+                ->add('save','submit');
+
+            if ('POST' == $request->getMethod()) {
+                $form->handleRequest($request);
+
+                if ($form->isValid()) {
+                    // form submit
+                    $dataWindPrev = $form->getData();
+                    $em->persist($dataWindPrev);
+                    $em->flush();
+                }
+            }
+
+            return $this->render('LaPoizWindBundle:BackOffice/Spot/Ajax:editSite.html.twig', array(
+                    'dataWindPrev' => $dataWindPrev,
+                    'form' => $form->createView()
+                )
+            );
+
+        } else {
+            return $this->container->get('templating')->renderResponse(
+                'LaPoizWindBundle:BackOffice:errorPage.html.twig',
+                array('errMessage' => "Miss id of dataWindPrev... !"));
+        }
+    }
 }

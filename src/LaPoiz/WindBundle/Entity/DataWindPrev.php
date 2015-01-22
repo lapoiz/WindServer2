@@ -44,13 +44,7 @@ class DataWindPrev
      * @ORM\JoinColumn(name="spot_id", referencedColumnName="id")
      */
     private $spot;   
-    
-    /**
-     * nb of prevision per day
-     * @ORM\Column(type="integer")
-     * @Assert\NotBlank()
-     */    
-    private $slotTime;
+
     
 
     public function __construct()
@@ -109,26 +103,6 @@ class DataWindPrev
     public function getCreated()
     {
         return $this->created;
-    }
-
-    /**
-     * Set slotTime
-     *
-     * @param integer $slotTime
-     */
-    public function setSlotTime($slotTime)
-    {
-        $this->slotTime = $slotTime;
-    }
-
-    /**
-     * Get slotTime
-     *
-     * @return integer $slotTime
-     */
-    public function getSlotTime()
-    {
-        return $this->slotTime;
     }
 
     /**
