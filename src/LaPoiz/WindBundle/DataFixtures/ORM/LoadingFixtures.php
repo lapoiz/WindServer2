@@ -54,20 +54,17 @@ class LoadingFixtures implements FixtureInterface
         $dataWindPrevWG = new DataWindPrev();
         $dataWindPrevWG->setUrl('http://www.windguru.cz/fr/index.php?sc=3627');
         $dataWindPrevWG->setWebsite($webSiteWG);
-        $dataWindPrevWG->setSlotTime(7);
         $dataWindPrevWG->setCreated(new \DateTime("now"));
         
         $dataWindPrevWF = new DataWindPrev();
         $dataWindPrevWF->setUrl('http://www.windfinder.com/forecast/saint_aubin_sur_mer');
 		$dataWindPrevWF->setWebsite($webSiteWF);
-        $dataWindPrevWF->setSlotTime(8);
         $dataWindPrevWF->setCreated(new \DateTime("now"));
 
 
         $dataWindPrevMF = new DataWindPrev();
         $dataWindPrevMF->setUrl('http://www.meteofrance.com/previsions-meteo-france/saint-aubin-sur-mer/76740');
         $dataWindPrevMF->setWebsite($webSiteMF);
-        $dataWindPrevMF->setSlotTime(8);
         $dataWindPrevMF->setCreated(new \DateTime("now"));
 
 
