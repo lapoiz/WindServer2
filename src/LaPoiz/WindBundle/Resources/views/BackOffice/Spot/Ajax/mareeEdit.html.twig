@@ -37,4 +37,12 @@
                 }
             });
         })
+
+
+        function effacerMaree() {
+            if (confirm("Voulez vous vraiment effacer cet élément ?")) {
+                window.location.replace("{{ path('_bo_ajax_spot_maree_delete', {'id':spot.id})}}");
+            }
+        }
+
     </script>

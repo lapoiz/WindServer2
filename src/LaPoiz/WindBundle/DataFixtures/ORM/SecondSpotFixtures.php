@@ -44,11 +44,6 @@ class SecondSpotFixtures implements FixtureInterface
         $spot->setGpsLong('43.056244');
         $spot->setGpsLat('6.133105');
 
-        $spotParameter = new SpotParameter();
-        $spotParameter->setSpot($spot);
-        $spot->setParameter($spotParameter);
-
-        $manager->persist($spotParameter);
         $manager->persist($spot);
         //$manager->persist($balise);
         

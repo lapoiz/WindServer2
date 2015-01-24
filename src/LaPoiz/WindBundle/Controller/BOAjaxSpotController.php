@@ -23,6 +23,7 @@ class BOAjaxSpotController extends Controller
      *
      * http://localhost/WindServer/web/app_dev.php/admin/BO/ajax/spot/display/1
      */
+
     public function spotDisplayAction($id=null)
     {
         $em = $this->container->get('doctrine.orm.entity_manager');
@@ -53,7 +54,7 @@ class BOAjaxSpotController extends Controller
     /**
      * @Template()
      *
-     * http://localhost/WindServer/web/app_dev.php/admin/BO/ajax/spot/edit/1
+     * http://localhost/Wind/web/app_dev.php/admin/BO/ajax/spot/edit/1
      */
     public function spotEditAction($id=null, Request $request)
     {
@@ -69,7 +70,13 @@ class BOAjaxSpotController extends Controller
                     array('errMessage' => "No spot find !"));
             }
             $form = $this->createForm('spot',$spot)
-                ->add('save','submit');
+                ->add('save','submit')
+                ->add('effacer','button',array(
+                        'attr' => array(
+                            'onclick' => 'effacerSpot()',
+                            'class' => 'btn btn-danger'
+                        ),
+                    ));
 
             /*$form->add('actions', 'form_actions', [
                 'buttons' => [

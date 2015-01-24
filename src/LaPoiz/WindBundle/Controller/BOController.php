@@ -35,7 +35,7 @@ class BOController extends Controller
      * if no dataWindPrev in spot -> here
      * else -> dataWindPrevAction
      */
-    public function displaySpotAction($id=null)
+    public function editSpotAction($id=null)
     {
         $em = $this->container->get('doctrine.orm.entity_manager');
 

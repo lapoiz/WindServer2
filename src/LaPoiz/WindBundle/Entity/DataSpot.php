@@ -39,7 +39,7 @@ class DataSpot
     public function __construct()
     {
         $this->listDataWindSpot = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->listMaree = new \Doctrine\Common\Collections\ArrayCollection();        
+//        $this->listMaree = new \Doctrine\Common\Collections\ArrayCollection();
         $this->created = new \Datetime();
     }
     

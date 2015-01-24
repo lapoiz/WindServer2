@@ -5,8 +5,45 @@
 {% endblock %}
 
 {% block bodyPage %}
-    {% from "LaPoizWindBundle:FrontOffice/spot:graph.html.twig" import graph %}
-    {{ graph(spot) }}
+
+<div class="row">
+    <div class="col-sm-12">
+        {% from "LaPoizWindBundle:FrontOffice/spot:graph.html.twig" import graph %}
+        {{ graph(spot) }}
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12 centered">
+        {% from "LaPoizWindBundle:BackOffice/Spot/Ajax:rosaceWind.html.twig" import displayRosace %}
+        {{ displayRosace() }}
+
+
+        <script>
+
+            // **************************************
+            // ** Gestion de l'orientation du vent **
+            // **************************************
+            var tabOrientationState = new Array(); // Array with orientation => state, used for rosace wind
+
+            getOrientationDataFromSpot();
+
+            // Récupére les données de l'objet spot et les pousse dans la rosace
+
+            function getOrientationDataFromSpot() {
+
+                // Parcour la liste des WindOrientation
+                {% for windOrientation in spot.windOrientation %}
+                tabOrientationState["{{ windOrientation.orientation }}"]="{{ windOrientation.state?windOrientation.state:"?" }}";
+                {% endfor %}
+
+                svgLoad(tabOrientationState);
+            }
+        </script>
+
+    </div>
+</div>
+
 {% endblock %}
 
 

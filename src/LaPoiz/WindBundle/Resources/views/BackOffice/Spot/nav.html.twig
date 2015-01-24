@@ -3,9 +3,7 @@
         <div class="col-sm-12">
             <h3>{{ spot.nom }}</h3>
             <ul class="nav nav-pills nav-stacked">
-                <li class="active toto" id="menuAfficher"><a onclick="afficherSpot(this)" id="afficherSpotLink"><i class="icon-white icon-eye-open"></i> Afficher</a></li>
-                <li class="" id="menuEditer"><a onclick="editerSpot(this)"><i class="icon-pencil icon-white"></i> Editer</a></li>
-                <li class="" id="menuEditer"><a onclick="effacerSpot(this)"><i class="icon-trash icon-white"></i> Effacer</a></li>
+                <li class="" id="menuEditer"><a onclick="editerSpot(this)" id="editSpotLink"><i class="icon-pencil icon-white"></i> Editer</a></li>
             </ul>
         </div>
     </div>
@@ -31,35 +29,22 @@
         <div class="col-sm-12">
             <h3>La marée</h3>
             <ul class="nav nav-pills nav-stacked">
-                {% if spot.parameter is defined and spot.parameter.mareeURL is defined and spot.parameter.mareeURL is  null %}
-                    <li class="" id="menuMareeCreate"> <a  onclick="addMaree(this)"><i class="icon-white icon-plus"></i> Ajouter</a></li>
+                {% if spot.mareeURL is defined %}
+                    {% if spot.mareeURL is  null %}
+                        <li class="" id="menuMareeCreate"> <a  onclick="addMaree(this)"><i class="icon-white icon-plus"></i> Ajouter</a></li>
+                    {% else %}
+                        <li class="" id="menuMareeEditer"><a onclick="mareeEditer(this)"><i class="icon-pencil icon-white"></i> Editer</a></li>
+                        <li class="" id="menuMareeGetData"><a onclick="getMareeData(this)"> Get Data</a></li>
+                    {% endif %}
                 {% else %}
-                    <li class="" id="menuMareeEditer"><a onclick="mareeEditer(this)"><i class="icon-pencil icon-white"></i> Editer</a></li>
-                    <li id="menuMareeEffacer"><a onclick="mareeEffacer(this)"><i class="icon-trash icon-white"></i> Effacer</a></li>
-                    <li class="" id="menuMareeGetData"><a onclick="getMareeData(this)"> Get Data</a></li>
-                {%  endif %}
+                    <li class="" id="menuMareeCreate"> <a  onclick="addMaree(this)"><i class="icon-white icon-plus"></i> Ajouter</a></li>
+                {% endif %}
             </ul>
         </div>
     </div>
 
 
     <script>
-        function afficherSpot(elemLink) {
-            deselectAllMenu();
-            elemLink.parentNode.className = elemLink.parentNode.className+" active";
-            $('#result').html('<img src="{{ asset('bundles/lapoizwind/images/loading.gif') }}" alt="Loading Ajax data" />');
-            var id = {{ spot.id }};
-            $.ajax({
-                type: "POST",
-                url: "{{ path('_bo_ajax_spot_display', {'id':spot.id})}}",
-                id: id,
-                cache: false,
-                success: function(data){
-                    $('#result').html(data);
-                }
-            });
-            return false;
-        }
 
         function editerSpot(elemLink) {
             deselectAllMenu();
@@ -95,12 +80,6 @@
             return false;
         }
 
-        function effacerSpot(elemLink) {
-            if (confirm("Voulez vous vraiment effacer le spot {{ spot.nom }} ? ")) {
-                window.location.replace("{{ path('_bo_ajax_spot_delete', {'id':spot.id})}}");
-            }
-        }
-
         function dataWindPrev(elemLink, dataWindPrevId) {
             deselectAllMenu();
             elemLink.parentNode.className = elemLink.parentNode.className+" active";
@@ -117,7 +96,7 @@
             return false;
         }
 
-        {% if spot.parameter is defined and spot.parameter.mareeURL is defined and spot.parameter.mareeURL is not null %}
+        {% if spot.mareeURL is defined and spot.mareeURL is not null %}
         function mareeEditer(elemLink){
             deselectAllMenu();
             elemLink.parentNode.className = elemLink.parentNode.className+" active";
@@ -189,15 +168,18 @@
 
         function deselectAllMenu() {
             // liste des menu fixe et connu
-            idMenuArray = new Array ("menuAfficher", "menuEditer", "menuEditer", "menuAddSite");
+            idMenuArray = new Array ("menuEditer", "menuAddSite");
             // ajouter les menu des webSites
 
-            {% if spot.parameter is defined and spot.parameter.mareeURL is defined and spot.parameter.mareeURL is null %}
-                idMenuArray.push("menuMareeCreate");
+            {% if spot.mareeURL is defined %}
+                {% if spot.mareeURL is null %}
+                    idMenuArray.push("menuMareeCreate");
+                {% else %}
+                    idMenuArray.push("menuMareeEditer");
+                    idMenuArray.push("menuMareeGetData");
+                {% endif %}
             {% else %}
-                idMenuArray.push("menuMareeEditer");
-                idMenuArray.push("menuMareeEffacer");
-                idMenuArray.push("menuMareeGetData");
+                idMenuArray.push("menuMareeCreate");
             {% endif %}
 
             $( "li[id^='menuSpot']" ).each(function() {
@@ -206,7 +188,9 @@
 
             for (i=0; i<idMenuArray.length; i++) {
                 menuElem = document.getElementById(idMenuArray[i]);
-                menuElem.className = menuElem.className.replace("active","");
+                if (menuElem) {
+                    menuElem.className = menuElem.className.replace("active","");
+                }
             }
 
             $('#navAjax').html('');

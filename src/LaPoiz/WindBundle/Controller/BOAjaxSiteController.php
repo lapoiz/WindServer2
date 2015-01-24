@@ -38,6 +38,7 @@ class BOAjaxSiteController extends Controller
                     array('errMessage' => "No spot find !"));
             }
             $dataWindPrev = new DataWindPrev();
+            $dataWindPrev->setSpot($spot);
             $form = $this->createForm('dataWindPrevForm',$dataWindPrev)
             ->add('add to spot','submit');
 
@@ -58,12 +59,16 @@ class BOAjaxSiteController extends Controller
                     $em->persist($spot);
                     $em->flush();
 
+                    return $this->forward('LaPoizWindBundle:BO:editSpot', array(
+                            'id'  => $spot->getId()
+                        ));
+                    /*
                     return $this->render('LaPoizWindBundle:BackOffice/Spot/Ajax:addSite.html.twig', array(
                             'spot' => $spot,
                             'form' => $form->createView(),
                             'create' => true
                         )
-                    );
+                    );*/
                 }
                 /*else {
                     return new Response($request);

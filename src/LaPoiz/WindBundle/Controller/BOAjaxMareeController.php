@@ -36,11 +36,11 @@ class BOAjaxMareeController extends Controller
                     'LaPoizWindBundle:BackOffice:errorPage.html.twig',
                     array('errMessage' => "No spot find !"));
             }
-            $prevMaree=MareeGetData::getMaree($spot->getParameter()->getMareeURL());
+            $prevMaree=MareeGetData::getMaree($spot->getMareeURL());
 
             return $this->render('LaPoizWindBundle:BackOffice/Spot/Ajax:prevMaree.html.twig', array(
                     'prevMaree' => $prevMaree,
-                    'mareeURL' => $spot->getParameter()->getMareeURL(),
+                    'mareeURL' => $spot->getMareeURL(),
                     'spot' => $spot
                 )
             );
@@ -55,7 +55,7 @@ class BOAjaxMareeController extends Controller
     /**
      * @Template()
      *
-     * http://localhost/WindServer/web/app_dev.php/admin/BO/ajax/spot/2/maree/create
+     * http://localhost/Wind/web/app_dev.php/admin/BO/ajax/spot/2/maree/create
      */
     public function mareeCreateAction($id=null, Request $request)
     {
@@ -70,12 +70,12 @@ class BOAjaxMareeController extends Controller
                     'LaPoizWindBundle:BackOffice:errorPage.html.twig',
                     array('errMessage' => "No spot find !"));
             }
-
-            if ($spot->getParameter()->getMareeURL()==null) {
-                $spot->getParameter()->setMareeURL(new Url());
+/*
+            if ($spot->getMareeURL()==null) {
+                $spot->setMareeURL(new Url());
             }
-
-            $defaultData = array('message' => 'Type your message here');
+*/
+            //$defaultData = array('message' => 'Type your message here');
             $form = $this->createFormBuilder(['attr' => ['id' => 'maree_form']])
                 ->add('URL', 'url',
                     array('label' => "URL (du type: http://maree.info/X): "))
@@ -87,12 +87,12 @@ class BOAjaxMareeController extends Controller
 
                 if ($form->isValid()) {
                     $URL = $form->getData()['URL'];
-                    $spot->getParameter()->setMareeURL($URL);
+                    $spot->setMareeURL($URL);
 
                     $em->persist($spot);
                     $em->flush();
 
-                    return $this->forward('LaPoizWindBundle:BO:displaySpot', array(
+                    return $this->forward('LaPoizWindBundle:BO:editSpot', array(
                             'id'  => $spot->getId()
                         ));
                 }
@@ -133,10 +133,15 @@ class BOAjaxMareeController extends Controller
                 ->add('URL', 'url',
                     array(
                         'label' => "URL (du type: http://maree.info/X): ",
-                        'attr' => array('value' => $spot->getParameter()->getMareeURL())))
+                        'attr' => array('value' => $spot->getMareeURL())))
 
                 ->add('Save','submit')
-
+                ->add('effacer','button',array(
+                        'attr' => array(
+                            'onclick' => 'effacerMaree()',
+                            'class' => 'btn btn-danger'
+                        ),
+                    ))
                 ->getForm();
 
 
@@ -147,7 +152,7 @@ class BOAjaxMareeController extends Controller
                 if ($form->isValid()) {
                     // form submit
                     $data = $form->getData();
-                    $spot->getParameter()->setMareeURL($data["URL"]);
+                    $spot->setMareeURL($data["URL"]);
                     $em->persist($spot);
                     $em->flush();
                 }
@@ -183,7 +188,7 @@ class BOAjaxMareeController extends Controller
                 array('errMessage' => "Spot not find !"));
         }
 
-        $mareeURL = $spot->getParameter()->getMareeURL();
+        $mareeURL = $spot->getMareeURL();
         if (!empty($mareeURL)) {
             $prevMaree = MareeGetData::getMaree($mareeURL);
             MareeGetData::saveMaree($spot,$prevMaree,$em,new NullOutput());
@@ -218,11 +223,11 @@ class BOAjaxMareeController extends Controller
                     array('errMessage' => "No spot find !"));
             }
 
-            $spot->getParameter()->setMareeURL(null);
+            $spot->setMareeURL(null);
             $em->persist($spot);
             $em->flush();
 
-            return $this->forward('LaPoizWindBundle:BO:displaySpot', array(
+            return $this->forward('LaPoizWindBundle:BO:editSpot', array(
                     'id'  => $spot->getId()
                 ));
 

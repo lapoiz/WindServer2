@@ -4,3 +4,6 @@ body {
 nav {
     text-align: center;
 }
+#spot_windOrientation {
+    display: none;
+}

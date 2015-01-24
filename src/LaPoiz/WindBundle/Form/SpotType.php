@@ -23,6 +23,9 @@ class SpotType extends AbstractType
     $builder->add('localisationDescription','textarea',array('label'=>'Description','attr' => array('class' => 'ckeditor',)));
     $builder->add('gpsLong','number',array('label'=>'GPS long'));
     $builder->add('gpsLat','number',array('label'=>'GPS lat'));
+
+    $builder->add('windOrientation', 'collection', array('type' => new OrientationWindType(), 'label'=>' '));
+
   }
 
   public function setDefaultOptions(OptionsResolverInterface $resolver)

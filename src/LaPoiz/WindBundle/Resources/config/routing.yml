@@ -40,7 +40,7 @@ _bo_index:
   pattern: /admin/BO
 
 _bo_spot:
-  defaults: { _controller: LaPoizWindBundle:BO:displaySpot }
+  defaults: { _controller: LaPoizWindBundle:BO:editSpot }
   pattern: /admin/spot/display/{id}
 
 _bo_spot_create:
@@ -106,10 +106,9 @@ _bo_ajax_spot_maree_delete:
   defaults: { _controller: LaPoizWindBundle:BOAjaxMaree:spotMareeDelete }
   pattern: /admin/BO/ajax/spot/{id}/maree/delete
 
-
-_bo_ajax_spot_display:
-  defaults: { _controller: LaPoizWindBundle:BOAjaxSpot:spotDisplay }
-  pattern: /admin/BO/ajax/spot/display/{id}
+#_bo_ajax_spot_display:
+#  defaults: { _controller: LaPoizWindBundle:BOAjaxSpot:spotDisplay }
+#  pattern: /admin/BO/ajax/spot/display/{id}
 
 _bo_ajax_spot_edit:
   defaults: { _controller: LaPoizWindBundle:BOAjaxSpot:spotEdit }

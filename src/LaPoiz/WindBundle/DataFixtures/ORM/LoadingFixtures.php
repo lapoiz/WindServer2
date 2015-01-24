@@ -90,16 +90,11 @@ class LoadingFixtures implements FixtureInterface
         $spot->addDataWindPrev($dataWindPrevWG);        
         $spot->addDataWindPrev($dataWindPrevWF);
 
-        $spotParameter = new SpotParameter();
-        $spotParameter->setMareeURL("http://maree.info/16");
-        $spotParameter->setSpot($spot);
-        $spot->setParameter($spotParameter);
-
+        $spot->setMareeURL("http://maree.info/16");
 
         $manager->persist($dataWindPrevWG);
         $manager->persist($dataWindPrevWF);
         $manager->persist($dataWindPrevMF);
-        $manager->persist($spotParameter);
         $manager->persist($spot);
         $manager->persist($balise);
         

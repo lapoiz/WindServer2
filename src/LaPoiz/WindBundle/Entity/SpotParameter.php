@@ -22,24 +22,6 @@ class SpotParameter
      */
     private $spot;
 
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $mareeURL;
-
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $maree;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $windOrientation;
-
-
     /**
      * @ORM\Column(type="string",length=255, nullable=true)
      */
@@ -57,75 +39,6 @@ class SpotParameter
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set mareeURL
-     *
-     * @param string $mareeURL
-     * @return SpotParameter
-     */
-    public function setMareeURL($mareeURL)
-    {
-        $this->mareeURL = $mareeURL;
-
-        return $this;
-    }
-
-    /**
-     * Get mareeURL
-     *
-     * @return string 
-     */
-    public function getMareeURL()
-    {
-        return $this->mareeURL;
-    }
-
-    /**
-     * Set maree
-     *
-     * @param string $maree
-     * @return SpotParameter
-     */
-    public function setMaree($maree)
-    {
-        $this->maree = $maree;
-
-        return $this;
-    }
-
-    /**
-     * Get maree
-     *
-     * @return string 
-     */
-    public function getMaree()
-    {
-        return $this->maree;
-    }
-
-    /**
-     * Set windOrientation
-     *
-     * @param string $windOrientation
-     * @return SpotParameter
-     */
-    public function setWindOrientation($windOrientation)
-    {
-        $this->windOrientation = $windOrientation;
-
-        return $this;
-    }
-
-    /**
-     * Get windOrientation
-     *
-     * @return string 
-     */
-    public function getWindOrientation()
-    {
-        return $this->windOrientation;
     }
 
     /**

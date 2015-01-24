@@ -72,8 +72,12 @@ class Spot
     /**
      * @ORM\OneToMany(targetEntity="DataWindPrev", mappedBy="spot", cascade={"remove", "persist"} , orphanRemoval=true)
      */
-    private $dataWindPrev;      
-    
+    private $dataWindPrev;
+
+    /**
+     * @ORM\OneToMany(targetEntity="WindOrientation", mappedBy="spot", cascade={"remove", "persist"} , orphanRemoval=true)
+     */
+    private $windOrientation;
     
     /**
      * @ORM\OneToOne(targetEntity="SpotParameter", cascade={"remove", "persist"})
@@ -88,6 +92,17 @@ class Spot
     private $listMareeDate;
 
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $mareeURL;
+
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $maree;
+
 
     /**
      * Constructor
@@ -96,6 +111,87 @@ class Spot
     {
         $this->dataWindPrev = new \Doctrine\Common\Collections\ArrayCollection();
         $this->listMareeDate = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->windOrientation = new \Doctrine\Common\Collections\ArrayCollection();
+
+        $windOrientation = new WindOrientation();
+        $windOrientation->setSpot($this);
+        $windOrientation->setOrientation("nord");
+        $this->windOrientation->add($windOrientation);
+
+        $windOrientation = new WindOrientation();
+        $windOrientation->setSpot($this);
+        $windOrientation->setOrientation("nord-nord-est");
+        $this->windOrientation->add($windOrientation);
+
+        $windOrientation = new WindOrientation();
+        $windOrientation->setSpot($this);
+        $windOrientation->setOrientation("nord-est");
+        $this->windOrientation->add($windOrientation);
+
+        $windOrientation = new WindOrientation();
+        $windOrientation->setSpot($this);
+        $windOrientation->setOrientation("est-nord-est");
+        $this->windOrientation->add($windOrientation);
+
+        $windOrientation = new WindOrientation();
+        $windOrientation->setSpot($this);
+        $windOrientation->setOrientation("est");
+        $this->windOrientation->add($windOrientation);
+
+        $windOrientation = new WindOrientation();
+        $windOrientation->setSpot($this);
+        $windOrientation->setOrientation("est-sud-est");
+        $this->windOrientation->add($windOrientation);
+
+        $windOrientation = new WindOrientation();
+        $windOrientation->setSpot($this);
+        $windOrientation->setOrientation("sud-est");
+        $this->windOrientation->add($windOrientation);
+
+        $windOrientation = new WindOrientation();
+        $windOrientation->setSpot($this);
+        $windOrientation->setOrientation("sud-sud-est");
+        $this->windOrientation->add($windOrientation);
+
+        $windOrientation = new WindOrientation();
+        $windOrientation->setSpot($this);
+        $windOrientation->setOrientation("sud");
+        $this->windOrientation->add($windOrientation);
+
+        $windOrientation = new WindOrientation();
+        $windOrientation->setSpot($this);
+        $windOrientation->setOrientation("sud-sud-west");
+        $this->windOrientation->add($windOrientation);
+
+        $windOrientation = new WindOrientation();
+        $windOrientation->setSpot($this);
+        $windOrientation->setOrientation("sud-west");
+        $this->windOrientation->add($windOrientation);
+
+        $windOrientation = new WindOrientation();
+        $windOrientation->setSpot($this);
+        $windOrientation->setOrientation("west-sud-west");
+        $this->windOrientation->add($windOrientation);
+
+        $windOrientation = new WindOrientation();
+        $windOrientation->setSpot($this);
+        $windOrientation->setOrientation("west");
+        $this->windOrientation->add($windOrientation);
+
+        $windOrientation = new WindOrientation();
+        $windOrientation->setSpot($this);
+        $windOrientation->setOrientation("west-nord-west");
+        $this->windOrientation->add($windOrientation);
+
+        $windOrientation = new WindOrientation();
+        $windOrientation->setSpot($this);
+        $windOrientation->setOrientation("nord-west");
+        $this->windOrientation->add($windOrientation);
+
+        $windOrientation = new WindOrientation();
+        $windOrientation->setSpot($this);
+        $windOrientation->setOrientation("nord-nord-west");
+        $this->windOrientation->add($windOrientation);
     }
 
     /**
@@ -402,5 +498,84 @@ class Spot
     public function getListMareeDate()
     {
         return $this->listMareeDate;
+    }
+
+    /**
+     * Add windOrientation
+     *
+     * @param \LaPoiz\WindBundle\Entity\WindOrientation $windOrientation
+     * @return Spot
+     */
+    public function addWindOrientation(\LaPoiz\WindBundle\Entity\WindOrientation $windOrientation)
+    {
+        $this->windOrientation[] = $windOrientation;
+
+        return $this;
+    }
+
+    /**
+     * Remove windOrientation
+     *
+     * @param \LaPoiz\WindBundle\Entity\WindOrientation $windOrientation
+     */
+    public function removeWindOrientation(\LaPoiz\WindBundle\Entity\WindOrientation $windOrientation)
+    {
+        $this->windOrientation->removeElement($windOrientation);
+    }
+
+    /**
+     * Get windOrientation
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getWindOrientation()
+    {
+        return $this->windOrientation;
+    }
+
+    /**
+     * Set mareeURL
+     *
+     * @param string $mareeURL
+     * @return Spot
+     */
+    public function setMareeURL($mareeURL)
+    {
+        $this->mareeURL = $mareeURL;
+
+        return $this;
+    }
+
+    /**
+     * Get mareeURL
+     *
+     * @return string 
+     */
+    public function getMareeURL()
+    {
+        return $this->mareeURL;
+    }
+
+    /**
+     * Set maree
+     *
+     * @param string $maree
+     * @return Spot
+     */
+    public function setMaree($maree)
+    {
+        $this->maree = $maree;
+
+        return $this;
+    }
+
+    /**
+     * Get maree
+     *
+     * @return string 
+     */
+    public function getMaree()
+    {
+        return $this->maree;
     }
 }
