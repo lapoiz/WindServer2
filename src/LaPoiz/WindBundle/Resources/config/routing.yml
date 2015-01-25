@@ -106,10 +106,6 @@ _bo_ajax_spot_maree_delete:
   defaults: { _controller: LaPoizWindBundle:BOAjaxMaree:spotMareeDelete }
   pattern: /admin/BO/ajax/spot/{id}/maree/delete
 
-#_bo_ajax_spot_display:
-#  defaults: { _controller: LaPoizWindBundle:BOAjaxSpot:spotDisplay }
-#  pattern: /admin/BO/ajax/spot/display/{id}
-
 _bo_ajax_spot_edit:
   defaults: { _controller: LaPoizWindBundle:BOAjaxSpot:spotEdit }
   pattern: /admin/BO/ajax/spot/edit/{id}

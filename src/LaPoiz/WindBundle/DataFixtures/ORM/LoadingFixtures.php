@@ -94,8 +94,53 @@ class LoadingFixtures implements FixtureInterface
         $manager->persist($dataWindPrevMF);
         $manager->persist($spot);
         $manager->persist($balise);
-        
-        
+
+
+
+        // ************************
+        // **** Alamanarre  *******
+        // ************************
+
+        $spot=new Spot();
+        $spot->setNom("Almanarre");
+        $spot->setDescription("Spot mythique proche de Hyeres.");
+        $spot->setIsKitePractice(true);
+        $spot->setIsWindsurfPractice(true);
+        $spot->setGoogleMapURL('http://maps.google.fr/maps?ll=43.056244,6.133105&spn=0.019989,0.049567&z=15&msa=0&msid=205227836204694166614.0004a72c27fbff9038758');
+        $spot->setLocalisationDescription('A Hyères suivre Giens (D559), puis prendre Route du sel. Le spot est balisé.');
+        $spot->setGpsLong('43.056244');
+        $spot->setGpsLat('6.133105');
+
+
+        $dataWindPrevWG = new DataWindPrev();
+        $dataWindPrevWG->setUrl('http://www.windguru.cz/fr/index.php?sc=14&sty=m_spot');
+        $dataWindPrevWG->setWebsite($webSiteWG);
+        $dataWindPrevWG->setCreated(new \DateTime("now"));
+
+        $dataWindPrevWF = new DataWindPrev();
+        $dataWindPrevWF->setUrl('http://fr.windfinder.com/forecast/l_almanarre');
+        $dataWindPrevWF->setWebsite($webSiteWF);
+        $dataWindPrevWF->setCreated(new \DateTime("now"));
+
+
+        $dataWindPrevMF = new DataWindPrev();
+        $dataWindPrevMF->setUrl('http://www.meteofrance.com/previsions-meteo-france/hyeres/83400');
+        $dataWindPrevMF->setWebsite($webSiteMF);
+        $dataWindPrevMF->setCreated(new \DateTime("now"));
+
+
+        $dataWindPrevWG->setSpot($spot);
+        $dataWindPrevWF->setSpot($spot);
+        $dataWindPrevMF->setSpot($spot);
+        $spot->addDataWindPrev($dataWindPrevMF);
+        $spot->addDataWindPrev($dataWindPrevWG);
+        $spot->addDataWindPrev($dataWindPrevWF);
+
+        $manager->persist($dataWindPrevWG);
+        $manager->persist($dataWindPrevWF);
+        $manager->persist($dataWindPrevMF);
+        $manager->persist($spot);
+
         $manager->flush();
         
     }         

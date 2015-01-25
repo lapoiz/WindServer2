@@ -21,39 +21,6 @@ class BOAjaxSpotController extends Controller
     /**
      * @Template()
      *
-     * http://localhost/WindServer/web/app_dev.php/admin/BO/ajax/spot/display/1
-     */
-
-    public function spotDisplayAction($id=null)
-    {
-        $em = $this->container->get('doctrine.orm.entity_manager');
-
-        if (isset($id) && $id!=-1)
-        {
-            $spot = $em->find('LaPoizWindBundle:Spot', $id);
-            if (!$spot)
-            {
-                return $this->container->get('templating')->renderResponse(
-                    'LaPoizWindBundle:BackOffice:errorPage.html.twig',
-                    array('errMessage' => "No spot find !"));
-            }
-            $form = $this->createForm('spot',$spot, array('read_only' => true));
-
-            return $this->render('LaPoizWindBundle:BackOffice/Spot/Ajax:spotDisplay.html.twig', array(
-                    'spot' => $spot,
-                    'form' => $form->createView()
-                )
-            );
-        } else {
-            return $this->container->get('templating')->renderResponse(
-                'LaPoizWindBundle:BackOffice:errorPage.html.twig',
-                array('errMessage' => "Miss id of dataWindPrev... !"));
-        }
-    }
-
-    /**
-     * @Template()
-     *
      * http://localhost/Wind/web/app_dev.php/admin/BO/ajax/spot/edit/1
      */
     public function spotEditAction($id=null, Request $request)

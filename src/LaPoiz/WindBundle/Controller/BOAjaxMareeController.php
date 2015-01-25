@@ -3,6 +3,7 @@ namespace LaPoiz\WindBundle\Controller;
 
 use LaPoiz\WindBundle\Entity\DataWindPrev;
 use LaPoiz\WindBundle\Entity\WebSite;
+use LaPoiz\WindBundle\Form\MareeType;
 use LaPoiz\WindBundle\Form\SpotType;
 use LaPoiz\WindBundle\Form\DataWindPrevType;
 use LaPoiz\WindBundle\core\maree\MareeGetData;
@@ -38,7 +39,7 @@ class BOAjaxMareeController extends Controller
             }
             $prevMaree=MareeGetData::getMaree($spot->getMareeURL());
 
-            return $this->render('LaPoizWindBundle:BackOffice/Spot/Ajax:prevMaree.html.twig', array(
+            return $this->render('LaPoizWindBundle:BackOffice/Spot/Ajax/Maree:prevMaree.html.twig', array(
                     'prevMaree' => $prevMaree,
                     'mareeURL' => $spot->getMareeURL(),
                     'spot' => $spot
@@ -98,7 +99,7 @@ class BOAjaxMareeController extends Controller
                 }
             }
 
-            return $this->render('LaPoizWindBundle:BackOffice/Spot/Ajax:mareeCreate.html.twig', array(
+            return $this->render('LaPoizWindBundle:BackOffice/Spot/Ajax/Maree:mareeCreate.html.twig', array(
                     'form' => $form->createView(),
                     'spot' => $spot
                 )
@@ -128,36 +129,27 @@ class BOAjaxMareeController extends Controller
                     'LaPoizWindBundle:BackOffice:errorPage.html.twig',
                     array('errMessage' => "No spot find !"));
             }
-            $defaultData = array('message' => 'Type your message here');
-            $form = $this->createFormBuilder($defaultData,['attr' => ['id' => 'maree_form']])
-                ->add('URL', 'url',
-                    array(
-                        'label' => "URL (du type: http://maree.info/X): ",
-                        'attr' => array('value' => $spot->getMareeURL())))
 
-                ->add('Save','submit')
-                ->add('effacer','button',array(
-                        'attr' => array(
-                            'onclick' => 'effacerMaree()',
-                            'class' => 'btn btn-danger'
-                        ),
-                    ))
-                ->getForm();
+            $form = $this->createForm(new MareeType(), $spot)
+                ->add('Save','submit');
 
-
-            if ('POST' == $request->getMethod()) {
-                //$form->submit($request);
+            if ($request->isMethod('POST')) {
+                // envoie du formulaire pour modification des données marées
                 $form->handleRequest($request);
 
                 if ($form->isValid()) {
-                    // form submit
-                    $data = $form->getData();
-                    $spot->setMareeURL($data["URL"]);
+                    $spot = $form->getData();
+                    $mareeRestrictions = $spot->getMareeRestriction();
+                    foreach ($mareeRestrictions as $restriction) {
+                        $restriction->setSpot($spot);
+                        $em->persist($restriction);
+                    }
                     $em->persist($spot);
                     $em->flush();
                 }
             }
-            return $this->render('LaPoizWindBundle:BackOffice/Spot/Ajax:mareeEdit.html.twig', array(
+
+            return $this->render('LaPoizWindBundle:BackOffice/Spot/Ajax/Maree:mareeEdit.html.twig', array(
                     'form' => $form->createView(),
                     'spot' => $spot
                 ));
@@ -168,7 +160,6 @@ class BOAjaxMareeController extends Controller
                 array('errMessage' => "Miss id of spot... !"));
         }
     }
-
 
 
     /**
@@ -196,7 +187,7 @@ class BOAjaxMareeController extends Controller
 
         $mareeDateDB = $em->getRepository('LaPoizWindBundle:MareeDate')->findLastPrev(10, $spot);
 
-        return $this->container->get('templating')->renderResponse('LaPoizWindBundle:BackOffice/Spot/Ajax:mareeSaveResult.html.twig',
+        return $this->container->get('templating')->renderResponse('LaPoizWindBundle:BackOffice/Spot/Ajax/Maree:mareeSaveResult.html.twig',
             array(
                 'mareeDateDB' => $mareeDateDB,
                 'message' => "",

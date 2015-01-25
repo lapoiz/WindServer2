@@ -144,6 +144,7 @@
             global: {
                 useUTC: false
             },
+            colors: ['#E3001E', 'red'],
             chart: {
                 renderTo: this.container,
                 marginBottom: 70,
@@ -151,8 +152,6 @@
                 marginLeft: 50,
                 marginTop: 50,
                 plotBorderWidth: 1,
-                //width: 800,
-                //height: 310,
                 zoomType: 'xy'
             },
 
@@ -233,7 +232,7 @@
                         rotation: 90,
                         style: {
                             fontSize: '10px',
-                            color: Highcharts.getOptions().colors[2]
+                            color: Highcharts.getOptions().colors[0]
                         },
                         textAlign: 'left',
                         x: 5,
@@ -287,6 +286,11 @@
                             'orientation:'+(this.point.orientation);
                 }
             },
+            plotOptions: {
+                areaspline: {
+                    fillOpacity: 0.8
+                }
+            },
 
             series: [{
                 name: 'WindGuru',
@@ -327,13 +331,12 @@
             }, {
                 name: 'Marée',
                 yAxis: 1,
-                color: Highcharts.getOptions().colors[2],
+                color: Highcharts.getOptions().colors[0],
                 data: this.maree,
-                type: 'spline',
+                type: 'areaspline',
                 marker: {
                     enabled: false
-                },
-                dashStyle: 'shortdot'
+                }
             }, {
                 name: 'Precipitation',
                 yAxis: 2,

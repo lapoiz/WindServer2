@@ -1,0 +1,108 @@
+<h3>URL pour récupérer les prévisions de marées</h3>
+
+<div class="row">
+    <div class="col-sm-12">
+
+        <form action="{{ path('_bo_ajax_spot_maree_edit', {'id':spot.id}) }}" method="POST" {{ form_enctype(form) }}
+              id="maree_form">
+
+            {{ form_row(form.mareeURL) }}
+
+            <h3>Restrictions</h3>
+            <div class="restrictions" data-prototype="{{ form_widget(form.mareeRestriction.vars.prototype)|e }}">
+                {# itère sur chaque mareeRestriction existant et affiche ses champs : hauteurMax, hauteurMin et state #}
+                {% for restriction in form.mareeRestriction %}
+                <div class="row">
+                    <div class="col-sm-4">
+                        {{ form_row(restriction.hauteurMax) }}
+                    </div>
+                    <div class="col-sm-4">
+                        {{ form_row(restriction.hauteurMin) }}
+                    </div>
+                    <div class="col-sm-4">
+                        {{ form_row(restriction.state) }}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            {{ form_rest(form) }}
+        </form>
+
+
+    </div>
+</div>
+
+<script>
+    // Récupère le div qui contient la collection de restrictions
+    var collectionHolder = $('div.restrictions');
+
+    // ajoute un lien « add a restriction »
+    var $addRestrictionButton = $('<button class="btn btn-primary" onclick="addRestriction()">Ajouter</button>');
+    var $newButtonDiv = $('<div></div>').append($addRestrictionButton);
+
+    function addRestriction() {
+        addRestrictionForm(collectionHolder, $newButtonDiv);
+    }
+
+    function addRestrictionForm(collectionHolder, $newButtonDiv) {
+        // Récupère l'élément ayant l'attribut data-prototype comme expliqué plus tôt
+        var prototype = collectionHolder.attr('data-prototype');
+
+        // Remplace '__name__' dans le HTML du prototype par un nombre basé sur
+        // la longueur de la collection courante
+        var newForm = prototype.replace(/__name__/g, collectionHolder.children().length);
+
+        // Affiche le formulaire dans la page dans un div, avant le button "ajouter"
+        var $newFormDiv = $('<div></div>').append(newForm);
+        $newButtonDiv.before($newFormDiv);
+
+        addRestrictionFormDeleteButton($newFormDiv);
+    }
+
+    function addRestrictionFormDeleteButton($newFormDiv) {
+        var $removeFormButton = $('<button class="btn uttonbtn-danger">Supprimer</button>');
+        $newFormDiv.append($removeFormButton);
+
+        $removeFormButton.on('click', function(e) {
+            $newFormDiv.remove();
+        });
+    }
+
+
+    jQuery(document).ready(function() {
+        collectionHolder.append($newButtonDiv);
+
+        collectionHolder.find('div.row').each(function() {
+            addRestrictionFormDeleteButton($(this));
+        });
+    });
+
+
+
+        $("#maree_form").on('submit', function(e){
+
+        $('#result').html('<img src="{{ asset('bundles/lapoizwind/images/loading.gif') }}" alt="Loading Ajax data" />');
+
+        e.preventDefault();
+        var $this = $(this);
+
+        $.ajax({
+            url: $this.attr('action'),
+            type: $this.attr('method'),
+            data: $this.serialize(),
+            success: function(html) {
+                $('#result').html(html);
+            }
+        });
+    });
+
+
+
+    function effacerMaree() {
+        if (confirm("Voulez vous vraiment effacer cet élément ?")) {
+            window.location.replace("{{ path('_bo_ajax_spot_maree_delete', {'id':spot.id})}}");
+        }
+    }
+
+</script>

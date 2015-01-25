@@ -95,7 +95,7 @@ class MareeGetData {
     }
 
 
-    static function getMarreInfoUrl($city) {
+    static function getMareeInfoUrl($city) {
 
         $urlResult='http://maree.info/';
         switch ($city) {

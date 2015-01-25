@@ -78,30 +78,21 @@ class Spot
      * @ORM\OneToMany(targetEntity="WindOrientation", mappedBy="spot", cascade={"remove", "persist"} , orphanRemoval=true)
      */
     private $windOrientation;
-    
-    /**
-     * @ORM\OneToOne(targetEntity="SpotParameter", cascade={"remove", "persist"})
-     * @ORM\JoinColumn(name="parameter_id", referencedColumnName="id")
-     */
-    private $parameter;
 
+    /**
+     * @ORM\OneToMany(targetEntity="MareeRestriction", mappedBy="spot", cascade={"remove", "persist"} , orphanRemoval=true)
+     */
+    private $mareeRestriction;
 
     /**
      * @ORM\OneToMany(targetEntity="MareeDate", mappedBy="spot", cascade={"remove", "persist"}, orphanRemoval=true)
      */
     private $listMareeDate;
 
-
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $mareeURL;
-
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $maree;
 
 
     /**
@@ -112,6 +103,7 @@ class Spot
         $this->dataWindPrev = new \Doctrine\Common\Collections\ArrayCollection();
         $this->listMareeDate = new \Doctrine\Common\Collections\ArrayCollection();
         $this->windOrientation = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->mareeRestriction = new \Doctrine\Common\Collections\ArrayCollection();
 
         $windOrientation = new WindOrientation();
         $windOrientation->setSpot($this);
@@ -193,6 +185,7 @@ class Spot
         $windOrientation->setOrientation("nord-nord-west");
         $this->windOrientation->add($windOrientation);
     }
+
 
     /**
      * Get id
@@ -389,6 +382,29 @@ class Spot
     }
 
     /**
+     * Set mareeURL
+     *
+     * @param string $mareeURL
+     * @return Spot
+     */
+    public function setMareeURL($mareeURL)
+    {
+        $this->mareeURL = $mareeURL;
+
+        return $this;
+    }
+
+    /**
+     * Get mareeURL
+     *
+     * @return string 
+     */
+    public function getMareeURL()
+    {
+        return $this->mareeURL;
+    }
+
+    /**
      * Set balise
      *
      * @param \LaPoiz\WindBundle\Entity\Balise $balise
@@ -445,26 +461,36 @@ class Spot
     }
 
     /**
-     * Set parameter
+     * Add windOrientation
      *
-     * @param \LaPoiz\WindBundle\Entity\SpotParameter $parameter
+     * @param \LaPoiz\WindBundle\Entity\WindOrientation $windOrientation
      * @return Spot
      */
-    public function setParameter(\LaPoiz\WindBundle\Entity\SpotParameter $parameter = null)
+    public function addWindOrientation(\LaPoiz\WindBundle\Entity\WindOrientation $windOrientation)
     {
-        $this->parameter = $parameter;
+        $this->windOrientation[] = $windOrientation;
 
         return $this;
     }
 
     /**
-     * Get parameter
+     * Remove windOrientation
      *
-     * @return \LaPoiz\WindBundle\Entity\SpotParameter 
+     * @param \LaPoiz\WindBundle\Entity\WindOrientation $windOrientation
      */
-    public function getParameter()
+    public function removeWindOrientation(\LaPoiz\WindBundle\Entity\WindOrientation $windOrientation)
     {
-        return $this->parameter;
+        $this->windOrientation->removeElement($windOrientation);
+    }
+
+    /**
+     * Get windOrientation
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getWindOrientation()
+    {
+        return $this->windOrientation;
     }
 
     /**
@@ -501,81 +527,35 @@ class Spot
     }
 
     /**
-     * Add windOrientation
+     * Add mareeRestriction
      *
-     * @param \LaPoiz\WindBundle\Entity\WindOrientation $windOrientation
+     * @param \LaPoiz\WindBundle\Entity\MareeRestriction $mareeRestriction
      * @return Spot
      */
-    public function addWindOrientation(\LaPoiz\WindBundle\Entity\WindOrientation $windOrientation)
+    public function addMareeRestriction(\LaPoiz\WindBundle\Entity\MareeRestriction $mareeRestriction)
     {
-        $this->windOrientation[] = $windOrientation;
+        $this->mareeRestriction[] = $mareeRestriction;
 
         return $this;
     }
 
     /**
-     * Remove windOrientation
+     * Remove mareeRestriction
      *
-     * @param \LaPoiz\WindBundle\Entity\WindOrientation $windOrientation
+     * @param \LaPoiz\WindBundle\Entity\MareeRestriction $mareeRestriction
      */
-    public function removeWindOrientation(\LaPoiz\WindBundle\Entity\WindOrientation $windOrientation)
+    public function removeMareeRestriction(\LaPoiz\WindBundle\Entity\MareeRestriction $mareeRestriction)
     {
-        $this->windOrientation->removeElement($windOrientation);
+        $this->mareeRestriction->removeElement($mareeRestriction);
     }
 
     /**
-     * Get windOrientation
+     * Get mareeRestriction
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getWindOrientation()
+    public function getMareeRestriction()
     {
-        return $this->windOrientation;
-    }
-
-    /**
-     * Set mareeURL
-     *
-     * @param string $mareeURL
-     * @return Spot
-     */
-    public function setMareeURL($mareeURL)
-    {
-        $this->mareeURL = $mareeURL;
-
-        return $this;
-    }
-
-    /**
-     * Get mareeURL
-     *
-     * @return string 
-     */
-    public function getMareeURL()
-    {
-        return $this->mareeURL;
-    }
-
-    /**
-     * Set maree
-     *
-     * @param string $maree
-     * @return Spot
-     */
-    public function setMaree($maree)
-    {
-        $this->maree = $maree;
-
-        return $this;
-    }
-
-    /**
-     * Get maree
-     *
-     * @return string 
-     */
-    public function getMaree()
-    {
-        return $this->maree;
+        return $this->mareeRestriction;
     }
 }

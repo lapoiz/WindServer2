@@ -52,7 +52,7 @@ class FOController extends Controller
         if (!$spot)
         {
             return $this->container->get('templating')->renderResponse(
-                'LaPoizWindBundle:FO:errorPage.html.twig',
+                'LaPoizWindBundle:FrontOffice:errorPage.html.twig',
                 array('errMessage' => "No spot find !"));
         }
         return $this->render('LaPoizWindBundle:FrontOffice:spot.html.twig', array(
