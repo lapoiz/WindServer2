@@ -17,11 +17,11 @@ class MareeRestrictionType extends AbstractType
   {
       $builder->add('hauteurMax','integer');
       $builder->add('hauteurMin','integer');
-      $builder->add('state','text');
-      /*$builder->add('state','choice', array(
+      /*$builder->add('state','text');*/
+      $builder->add('state','choice', array(
               'choices' => array('OK'=>'OK', 'warn'=>'warn', 'KO'=>'KO')
           )
-      );*/
+      );
   }
 
   public function setDefaultOptions(OptionsResolverInterface $resolver)

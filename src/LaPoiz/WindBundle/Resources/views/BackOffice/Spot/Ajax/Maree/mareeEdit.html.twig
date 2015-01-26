@@ -1,7 +1,7 @@
 <h3>URL pour récupérer les prévisions de marées</h3>
 
 <div class="row">
-    <div class="col-sm-12">
+    <div class="col-sm-6">
 
         <form action="{{ path('_bo_ajax_spot_maree_edit', {'id':spot.id}) }}" method="POST" {{ form_enctype(form) }}
               id="maree_form">
@@ -9,7 +9,12 @@
             {{ form_row(form.mareeURL) }}
 
             <h3>Restrictions</h3>
-            <div class="restrictions" data-prototype="{{ form_widget(form.mareeRestriction.vars.prototype)|e }}">
+            <div class="restrictions" data-prototype="
+            {% filter escape %}
+                {{ include('LaPoizWindBundle:BackOffice/Spot/Ajax/Maree:prototype.html.twig', { 'form': form.mareeRestriction.vars.prototype }) }}
+            {% endfilter %}">
+
+            {#{{ form_widget(form.mareeRestriction.vars.prototype)|e }}">#}
                 {# itère sur chaque mareeRestriction existant et affiche ses champs : hauteurMax, hauteurMin et state #}
                 {% for restriction in form.mareeRestriction %}
                 <div class="row">
@@ -28,7 +33,8 @@
 
             {{ form_rest(form) }}
         </form>
-
+    </div>
+    <div class="col-sm-6">
 
     </div>
 </div>
@@ -38,7 +44,7 @@
     var collectionHolder = $('div.restrictions');
 
     // ajoute un lien « add a restriction »
-    var $addRestrictionButton = $('<button class="btn btn-primary" onclick="addRestriction()">Ajouter</button>');
+    var $addRestrictionButton = $('<button type="button" class="btn btn-primary" onclick="addRestriction()">Ajouter</button>');
     var $newButtonDiv = $('<div></div>').append($addRestrictionButton);
 
     function addRestriction() {
@@ -61,7 +67,7 @@
     }
 
     function addRestrictionFormDeleteButton($newFormDiv) {
-        var $removeFormButton = $('<button class="btn uttonbtn-danger">Supprimer</button>');
+        var $removeFormButton = $('<button type="button" class="btn btn-danger">Supprimer</button>');
         $newFormDiv.append($removeFormButton);
 
         $removeFormButton.on('click', function(e) {
@@ -78,9 +84,7 @@
         });
     });
 
-
-
-        $("#maree_form").on('submit', function(e){
+    $("#maree_form").on('submit', function(e){
 
         $('#result').html('<img src="{{ asset('bundles/lapoizwind/images/loading.gif') }}" alt="Loading Ajax data" />');
 
@@ -96,8 +100,6 @@
             }
         });
     });
-
-
 
     function effacerMaree() {
         if (confirm("Voulez vous vraiment effacer cet élément ?")) {
