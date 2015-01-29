@@ -98,6 +98,14 @@ _bo_ajax_maree_create:
   defaults: { _controller: LaPoizWindBundle:BOAjaxMaree:mareeCreate }
   pattern: /admin/BO/ajax/spot/{id}/maree/create
 
+_bo_ajax_mareeInfo_getDateCoef:
+  defaults: { _controller: LaPoizWindBundle:BOAjaxMaree:getDateCoef }
+  pattern: /admin/BO/ajax/maree/dateCoef/{idURLInfoMaree}
+
+_bo_ajax_mareeInfo_getMareeForDay:
+  defaults: { _controller: LaPoizWindBundle:BOAjaxMaree:getMareeForDay }
+  pattern: /admin/BO/ajax/maree/{idURLInfoMaree}/forDay/{idDateURLInfoMaree}
+
 _bo_ajax_spot_maree_edit:
   defaults: { _controller: LaPoizWindBundle:BOAjaxMaree:spotMareeEdit }
   pattern: /admin/BO/ajax/spot/{id}/maree/edit

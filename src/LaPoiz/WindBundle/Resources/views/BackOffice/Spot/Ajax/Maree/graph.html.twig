@@ -1,0 +1,141 @@
+{% macro graphMaree() %}
+
+    <div id="mareeGraph" style="width:100%"></div>
+
+
+<script>
+
+
+    $(function () {
+
+        $('#mareeGraph').highcharts({
+
+                chart: {
+                    marginBottom: 110,
+                    renderTo: 'mareeGraph',
+                    reflow: false,
+                    marginLeft: 50,
+                    marginRight: 20,
+                    style: {
+                        position: 'absolute'
+                    }
+                },
+                credits: {
+                    enabled: false
+                },
+                title: {
+                    text: 'Marée du spot'
+                },
+                subtitle: {
+                    text: 'Les différentes zones de navigation'
+                },
+                xAxis: {
+                    title: {
+                        text: "les heures qui s'écoulent..."
+                    },
+                    labels: {
+                        enabled:false//default is true
+                        }
+
+                },
+                yAxis: {
+                    title: {
+                        text: 'Hauteur (m)'
+                    }
+                },
+                tooltip: {
+                    valueSuffix: 'm'
+                },
+                legend: {
+                    enabled: false
+                },
+                tooltip: {
+                    formatter: function() {
+                        return  '<b>' + this.series.name +'</b>:';
+                    }
+                },
+                series: [
+                    {
+                        // marée normal (coef: 80 - Brest)
+                        name: 'Marée normal',
+                        pointInterval: 10 * 60 * 1000,
+                        data: (function () {
+                            // generate sinusoidal data
+                            var data = [],
+                                    i;
+                            var amplitude = 2.48;
+                            var hauteurMilieu = 4.07; // milieu de la sinusoidal
+
+                            for (i = 0; i <= 10; i += 0.2) {
+                                data.push({
+                                    x: i,
+                                    y: amplitude*Math.sin(i) + hauteurMilieu
+                                });
+                            }
+                            return data;
+                        }()),
+                        type: 'areaspline',
+                        color: '#4040ff',
+                        fillColor: {
+                            linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1},
+                            stops: [
+                                [0, 'rgba(100,100,255,0.8)'],
+                                [1, 'rgba(10,60,30,0.2)']
+                            ]
+                        }
+                    }, {
+                        // petite marée (coef: 40 - Brest)
+                        name: 'Petite marée',
+                        pointInterval: 10 * 60 * 1000,
+                        data: (function () {
+                            // generate sinusoidal data
+                            var data = [],
+                                    i;
+                            var amplitude = 1.25;
+                            var hauteurMilieu = 4.07;
+
+                            for (i = 0; i <= 10; i += 0.2) {
+                                data.push({
+                                    x: i,
+                                    y: amplitude*Math.sin(i) + hauteurMilieu
+                                });
+                            }
+                            return data;
+                        }()),
+                        type: 'spline',
+                        color: '#4040ff',
+                        dashStyle: 'ShortDot'
+                    }, {
+                        // grande marée (coef: 118 - Brest)
+                        name: 'Grande marée',
+                        pointInterval: 10 * 60 * 1000,
+                        data: (function () {
+                            // generate sinusoidal data
+                            var data = [],
+                                    i;
+                            var amplitude = 3.73;
+                            var hauteurMilieu = 4.07;
+
+                            for (i = 0; i <= 10; i += 0.2) {
+                                data.push({
+                                    x: i,
+                                    y: amplitude*Math.sin(i) + hauteurMilieu
+                                });
+                            }
+                            return data;
+                        }()),
+                        type: 'spline',
+                        color: '#4040ff',
+                        dashStyle: 'ShortDot'
+                    }
+                ],
+                exporting: {
+                    enabled: true
+                }
+
+            });
+    });
+
+</script>
+
+{% endmacro %}

@@ -8,6 +8,7 @@ use LaPoiz\WindBundle\Form\SpotType;
 use LaPoiz\WindBundle\Form\DataWindPrevType;
 use LaPoiz\WindBundle\core\maree\MareeGetData;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\SecurityContext;
 use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\HttpFoundation\Request;
@@ -60,7 +61,8 @@ class BOAjaxMareeController extends Controller
      */
     public function mareeCreateAction($id=null, Request $request)
     {
-        $em = $this->container->get('doctrine.orm.entity_manager');
+        return spotMareeEditAction($id,$request);
+/*        $em = $this->container->get('doctrine.orm.entity_manager');
 
         if (isset($id) && $id!=-1)
         {
@@ -71,11 +73,7 @@ class BOAjaxMareeController extends Controller
                     'LaPoizWindBundle:BackOffice:errorPage.html.twig',
                     array('errMessage' => "No spot find !"));
             }
-/*
-            if ($spot->getMareeURL()==null) {
-                $spot->setMareeURL(new Url());
-            }
-*/
+
             //$defaultData = array('message' => 'Type your message here');
             $form = $this->createFormBuilder(['attr' => ['id' => 'maree_form']])
                 ->add('URL', 'url',
@@ -109,7 +107,7 @@ class BOAjaxMareeController extends Controller
                 'LaPoizWindBundle:BackOffice:errorPage.html.twig',
                 array('errMessage' => "Miss id of dataWindPrev... !"));
         }
-    }
+ */ }
 
     /**
      * @Template()
@@ -229,5 +227,43 @@ class BOAjaxMareeController extends Controller
         }
     }
 
+    /**
+     * @Template()
+     *
+     * http://localhost/Wind/web/app_dev.php/admin/BO/ajax/maree/dateCoef/idURLInfoMaree
+     */
+    public function getDateCoefAction($idURLInfoMaree=null, Request $request)
+    {
+        // Récupere la liste des amplitudes de marée: http://maree.info/$idURLInfoMaree/calendrier
+        // Parse le tableau et récupére URL de la marée à coef le plus haut, de la marée le coef le plus bas, et de la marée à coef 80
+        // sur la base de :
+        // Tous les Table classe="CalendrierMois"
+        //  Pour chaque TR
+        //      récupére les TD class="coef"
+        //          compare avec max, min et 80
+        //          si OK
+        //              get id de TD class="event" (en enlevant le D du début)
+        //              get title de TD class="DW"
+
+        // envoie les jours en JSON
+
+        return new JsonResponse(MareeGetData::getExtremMaree($idURLInfoMaree));
+
+    }
+
+
+    /**
+     * @Template()
+     *
+     * http://localhost/Wind/web/app_dev.php/admin/BO/ajax/maree/{idURLInfoMaree}/forDay/{idDateURLInfoMaree}
+     * dateMaree = 20150106
+     */
+    public function getMareeForDayAction($idURLInfoMaree=null,$idDateURLInfoMaree=null, Request $request)
+    {
+        // Récupere la page: http://maree.info/$idURLInfoMaree?d=$idDateURLInfoMaree
+        // Parse avec ce qui est déjà fait dans core -> MareeGetData
+        // envoie la hauteur marée haute et marée basse en JSON
+        return new JsonResponse(MareeGetData::getHauteurMaree($idURLInfoMaree, $idDateURLInfoMaree));
+    }
 
 }

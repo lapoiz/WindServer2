@@ -214,26 +214,6 @@ class DataSpot
     }
 
     /**
-     * Add listMaree
-     *
-     * @param LaPoiz\WindBundle\Entity\Maree $listMaree
-     */
-    public function addListMaree(\LaPoiz\WindBundle\Entity\Maree $listMaree)
-    {
-        $this->listMaree[] = $listMaree;
-    }
-
-    /**
-     * Get listMaree
-     *
-     * @return Doctrine\Common\Collections\Collection $listMaree
-     */
-    public function getListMaree()
-    {
-        return $this->listMaree;
-    }
-
-    /**
      * Set spot
      *
      * @param LaPoiz\WindBundle\Entity\Spot $spot

@@ -2,7 +2,6 @@
 
 <div class="row">
     <div class="col-sm-6">
-
         <form action="{{ path('_bo_ajax_spot_maree_edit', {'id':spot.id}) }}" method="POST" {{ form_enctype(form) }}
               id="maree_form">
 
@@ -18,13 +17,13 @@
                 {# itère sur chaque mareeRestriction existant et affiche ses champs : hauteurMax, hauteurMin et state #}
                 {% for restriction in form.mareeRestriction %}
                 <div class="row">
-                    <div class="col-sm-4">
+                    <div class="col-sm-3">
                         {{ form_row(restriction.hauteurMax) }}
                     </div>
-                    <div class="col-sm-4">
+                    <div class="col-sm-3">
                         {{ form_row(restriction.hauteurMin) }}
                     </div>
-                    <div class="col-sm-4">
+                    <div class="col-sm-3">
                         {{ form_row(restriction.state) }}
                     </div>
                 </div>
@@ -35,7 +34,14 @@
         </form>
     </div>
     <div class="col-sm-6">
-
+        {% from "LaPoizWindBundle:BackOffice/Spot/Ajax/Maree:graph.html.twig" import graphMaree %}
+        {{ graphMaree() }}
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12 margin-top-05">
+        {% from "LaPoizWindBundle:BackOffice/Spot/Ajax/Maree:infoMaree.html.twig" import getInfoMaree %}
+        {{ getInfoMaree() }}
     </div>
 </div>
 
@@ -44,7 +50,7 @@
     var collectionHolder = $('div.restrictions');
 
     // ajoute un lien « add a restriction »
-    var $addRestrictionButton = $('<button type="button" class="btn btn-primary" onclick="addRestriction()">Ajouter</button>');
+    var $addRestrictionButton = $('<button type="button" class="btn btn-primary" onclick="addRestriction()">Ajouter</button><br><br>');
     var $newButtonDiv = $('<div></div>').append($addRestrictionButton);
 
     function addRestriction() {
@@ -67,7 +73,7 @@
     }
 
     function addRestrictionFormDeleteButton($newFormDiv) {
-        var $removeFormButton = $('<button type="button" class="btn btn-danger">Supprimer</button>');
+        var $removeFormButton = $('<div class="col-sm-3"><button type="button" class="btn btn-danger">Supprimer</button></div>');
         $newFormDiv.append($removeFormButton);
 
         $removeFormButton.on('click', function(e) {
