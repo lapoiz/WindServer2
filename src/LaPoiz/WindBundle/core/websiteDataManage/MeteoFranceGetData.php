@@ -281,7 +281,12 @@ class MeteoFranceGetData extends WebsiteGetData
 
 			if ($today->format('d') > $date) {
 				//next month
-				$today->modify( '+1 month' );			
+                // Never tested for MeteoFrance (come from WindGuruGetData line 133)
+                $today->modify( '-2 day' );// if we do that late, and prevision of yesterday still here...
+                if ($today->format('d') > $date) {
+                    $today->modify( '+1 month' );
+                }
+
 			}
 			return $today->format('Y-m-').$date;
 

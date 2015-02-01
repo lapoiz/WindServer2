@@ -176,8 +176,7 @@ class WindFinderGetData extends WebsiteGetData
 		//$this->get('logger')->err('htmlDate:'+$htmlData);
         $htmlData = trim($htmlData);
 		preg_match('#([0-9]{2})$#',$htmlData,$data);
-		$test=date('d');
-		$test='';
+
 		if ($data[1]>=date('d'))
 			return date("Y-m-").$data[1];
 		elseif (date('m')<=11)
