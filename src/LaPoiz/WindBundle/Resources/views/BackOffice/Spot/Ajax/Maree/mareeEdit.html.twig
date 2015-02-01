@@ -114,10 +114,26 @@
 
     });
 
+
+    // Récupere des Ipunt Hidden les valeurs et les pousses dans le graph
+    function reloadGraphMaree() {
+        var graph = getChart();
+
+        updateSerieGraph(graph.get("serieGM"),
+                parseFloat($("#laPoiz_windBundle_maree_hauteurMHGrandeMaree").val()),
+                parseFloat($("#laPoiz_windBundle_maree_hauteurMBGrandeMaree").val()));
+        updateSerieGraph(graph.get("seriePM"),
+                parseFloat($("#laPoiz_windBundle_maree_hauteurMHPetiteMaree").val()),
+                parseFloat($("#laPoiz_windBundle_maree_hauteurMBPetiteMaree").val()));
+        updateSerieGraph(graph.get("serieMM"),
+                parseFloat($("#laPoiz_windBundle_maree_hauteurMHMoyenneMaree").val()),
+                parseFloat($("#laPoiz_windBundle_maree_hauteurMBMoyenneMaree").val()));
+    }
+
     // Ajoute PlotBand au graph en fonction des input
     function addPlotBandOnGraph($formDiv) {
         var tabRestriction = getRestrictionFormDiv($formDiv);
-        darwPlotBand(tabRestriction["hMin"],tabRestriction["hMax"],tabRestriction["state"]);
+        drawPlotBand(tabRestriction["hMin"],tabRestriction["hMax"],tabRestriction["state"]);
     }
 
     function getRestrictionFormDiv($formDiv) {

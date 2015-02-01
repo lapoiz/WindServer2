@@ -14,7 +14,7 @@
 </div>
 
 <div class="row">
-    <div class="col-sm-12 centered">
+    <div class="col-sm-6 centered">
         {% from "LaPoizWindBundle:BackOffice/Spot/Ajax:rosaceWind.html.twig" import displayRosace %}
         {{ displayRosace() }}
 
@@ -31,7 +31,6 @@
             // Récupére les données de l'objet spot et les pousse dans la rosace
 
             function getOrientationDataFromSpot() {
-
                 // Parcour la liste des WindOrientation
                 {% for windOrientation in spot.windOrientation %}
                 tabOrientationState["{{ windOrientation.orientation }}"]="{{ windOrientation.state?windOrientation.state:"?" }}";
@@ -42,6 +41,31 @@
         </script>
 
     </div>
+
+
+    <div class="col-sm-6 centered">
+        {% if spot.mareeURL|default is not empty %}
+
+            {% from "LaPoizWindBundle:BackOffice/Spot/Ajax/Maree:graph.html.twig" import graphMaree %}
+            {{ graphMaree(spot) }}
+
+            <script>
+
+                // **************************************
+                // ** Charge les restrictions de marée **
+                // **************************************
+
+                jQuery(document).ready(function() {
+                    // Parcour la liste des MareeRestriction
+                    {% for mareeRestriction in spot.mareeRestriction %}
+                        drawPlotBand({{ mareeRestriction.hauteurMin }},{{ mareeRestriction.hauteurMax }},"{{ mareeRestriction.state }}");
+                    {% endfor %}
+                });
+            </script>
+
+        {% endif %}
+    </div>
+
 </div>
 
 {% endblock %}

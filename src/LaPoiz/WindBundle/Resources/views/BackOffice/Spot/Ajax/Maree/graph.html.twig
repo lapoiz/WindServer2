@@ -19,6 +19,8 @@
         var hMaxPM = {{ (spot.hauteurMHPetiteMaree is empty)?'5.32':spot.hauteurMHPetiteMaree }};
 
 
+
+
         $('#mareeGraph').highcharts({
 
                 chart: {
@@ -70,6 +72,9 @@
                         // marée normal (coef: 80 - Brest)
                         name: 'Marée normal',
                         id: 'serieMM',
+                        marker: {
+                            enabled: false
+                        },
                         pointInterval: 10 * 60 * 1000,
                         data: (function () {
                             // generate sinusoidal data
@@ -88,6 +93,9 @@
                         // petite marée (coef: 40 - Brest)
                         name: 'Petite marée',
                         id: 'seriePM',
+                        marker: {
+                            enabled: false
+                        },
                         pointInterval: 10 * 60 * 1000,
                         data: (function () {
                             // generate sinusoidal data
@@ -100,6 +108,9 @@
                         // grande marée (coef: 118 - Brest)
                         name: 'Grande marée',
                         id: 'serieGM',
+                        marker: {
+                            enabled: false
+                        },
                         pointInterval: 10 * 60 * 1000,
                         data: (function () {
                             // generate sinusoidal data
@@ -117,20 +128,6 @@
             });
     });
 
-    // Récupere des Ipunt Hidden les valeurs et les pousses dans le graph
-    function reloadGraphMaree() {
-        var graph = getChart();
-
-        updateSerieGraph(graph.get("serieGM"),
-                parseFloat($("#laPoiz_windBundle_maree_hauteurMHGrandeMaree").val()),
-                parseFloat($("#laPoiz_windBundle_maree_hauteurMBGrandeMaree").val()));
-        updateSerieGraph(graph.get("seriePM"),
-                parseFloat($("#laPoiz_windBundle_maree_hauteurMHPetiteMaree").val()),
-                parseFloat($("#laPoiz_windBundle_maree_hauteurMBPetiteMaree").val()));
-        updateSerieGraph(graph.get("serieMM"),
-                parseFloat($("#laPoiz_windBundle_maree_hauteurMHMoyenneMaree").val()),
-                parseFloat($("#laPoiz_windBundle_maree_hauteurMBMoyenneMaree").val()));
-    }
 
     function getChart() {
         return $('#mareeGraph').highcharts();
@@ -174,7 +171,7 @@
         }
     }
 
-    function darwPlotBand(hMin, hMax, state) {
+    function drawPlotBand(hMin, hMax, state) {
         //alert("darwPlotBand("+hMin+", "+hMax+", "+state+")");
         getChart().yAxis[0].addPlotBand({
                     color: getColorPlotBandForState(state),
