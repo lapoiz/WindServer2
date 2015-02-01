@@ -15,7 +15,14 @@ class MareeType extends AbstractType
   
   public function buildForm(FormBuilderInterface $builder, array $options)
   {
-    $builder->add('mareeURL');
+      $builder->add('mareeURL');
+      $builder->add('hauteurMBGrandeMaree','hidden');
+      $builder->add('hauteurMHGrandeMaree','hidden');
+      $builder->add('hauteurMBMoyenneMaree','hidden');
+      $builder->add('hauteurMHMoyenneMaree','hidden');
+      $builder->add('hauteurMBPetiteMaree','hidden');
+      $builder->add('hauteurMHPetiteMaree','hidden');
+
 
     $builder->add('mareeRestriction', 'collection', array(
             'type' => new MareeRestrictionType(),

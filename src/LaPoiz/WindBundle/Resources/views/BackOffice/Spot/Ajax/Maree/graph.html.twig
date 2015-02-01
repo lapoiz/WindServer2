@@ -1,4 +1,4 @@
-{% macro graphMaree() %}
+{% macro graphMaree(spot) %}
 
     <div id="mareeGraph" style="width:100%"></div>
 
@@ -7,6 +7,17 @@
 
 
     $(function () {
+
+        // Gande Marée
+        var hMinGM = {{ (spot.hauteurMBGrandeMaree is empty)?'0.34':spot.hauteurMBGrandeMaree }};
+        var hMaxGM = {{ (spot.hauteurMHGrandeMaree is empty)?'7.80':spot.hauteurMHGrandeMaree }};
+
+        var hMinMM = {{ (spot.hauteurMBMoyenneMaree is empty)?'1.59':spot.hauteurMBMoyenneMaree }};
+        var hMaxMM = {{ (spot.hauteurMHMoyenneMaree is empty)?'6.55':spot.hauteurMHMoyenneMaree }};
+
+        var hMinPM = {{ (spot.hauteurMBPetiteMaree is empty)?'2.82':spot.hauteurMBPetiteMaree }};
+        var hMaxPM = {{ (spot.hauteurMHPetiteMaree is empty)?'5.32':spot.hauteurMHPetiteMaree }};
+
 
         $('#mareeGraph').highcharts({
 
@@ -58,21 +69,11 @@
                     {
                         // marée normal (coef: 80 - Brest)
                         name: 'Marée normal',
+                        id: 'serieMM',
                         pointInterval: 10 * 60 * 1000,
                         data: (function () {
                             // generate sinusoidal data
-                            var data = [],
-                                    i;
-                            var amplitude = 2.48;
-                            var hauteurMilieu = 4.07; // milieu de la sinusoidal
-
-                            for (i = 0; i <= 10; i += 0.2) {
-                                data.push({
-                                    x: i,
-                                    y: amplitude*Math.sin(i) + hauteurMilieu
-                                });
-                            }
-                            return data;
+                            return getSinuPoint(hMaxMM,hMinMM);
                         }()),
                         type: 'areaspline',
                         color: '#4040ff',
@@ -86,21 +87,11 @@
                     }, {
                         // petite marée (coef: 40 - Brest)
                         name: 'Petite marée',
+                        id: 'seriePM',
                         pointInterval: 10 * 60 * 1000,
                         data: (function () {
                             // generate sinusoidal data
-                            var data = [],
-                                    i;
-                            var amplitude = 1.25;
-                            var hauteurMilieu = 4.07;
-
-                            for (i = 0; i <= 10; i += 0.2) {
-                                data.push({
-                                    x: i,
-                                    y: amplitude*Math.sin(i) + hauteurMilieu
-                                });
-                            }
-                            return data;
+                            return getSinuPoint(hMaxPM,hMinPM);
                         }()),
                         type: 'spline',
                         color: '#4040ff',
@@ -108,21 +99,11 @@
                     }, {
                         // grande marée (coef: 118 - Brest)
                         name: 'Grande marée',
+                        id: 'serieGM',
                         pointInterval: 10 * 60 * 1000,
                         data: (function () {
                             // generate sinusoidal data
-                            var data = [],
-                                    i;
-                            var amplitude = 3.73;
-                            var hauteurMilieu = 4.07;
-
-                            for (i = 0; i <= 10; i += 0.2) {
-                                data.push({
-                                    x: i,
-                                    y: amplitude*Math.sin(i) + hauteurMilieu
-                                });
-                            }
-                            return data;
+                            return getSinuPoint(hMaxGM,hMinGM);
                         }()),
                         type: 'spline',
                         color: '#4040ff',
@@ -135,6 +116,89 @@
 
             });
     });
+
+    // Récupere des Ipunt Hidden les valeurs et les pousses dans le graph
+    function reloadGraphMaree() {
+        var graph = getChart();
+
+        updateSerieGraph(graph.get("serieGM"),
+                parseFloat($("#laPoiz_windBundle_maree_hauteurMHGrandeMaree").val()),
+                parseFloat($("#laPoiz_windBundle_maree_hauteurMBGrandeMaree").val()));
+        updateSerieGraph(graph.get("seriePM"),
+                parseFloat($("#laPoiz_windBundle_maree_hauteurMHPetiteMaree").val()),
+                parseFloat($("#laPoiz_windBundle_maree_hauteurMBPetiteMaree").val()));
+        updateSerieGraph(graph.get("serieMM"),
+                parseFloat($("#laPoiz_windBundle_maree_hauteurMHMoyenneMaree").val()),
+                parseFloat($("#laPoiz_windBundle_maree_hauteurMBMoyenneMaree").val()));
+    }
+
+    function getChart() {
+        return $('#mareeGraph').highcharts();
+    }
+
+    function getAmplitudeSinu(hMax,hMin) {
+        return ((hMax+hMin)/2 - hMin);
+    }
+    function getMilieuSinu(hMax,hMin) {
+        //alert("   hMax: "+hMax+"  hMin: "+hMin+"  somme: "+(hMax+hMin));
+        return ((hMax+hMin)/2);
+    }
+    function getSinuPoint(hMax,hMin) {
+        var hauteurMilieu = getMilieuSinu(hMax,hMin);
+        var amplitude = getAmplitudeSinu(hMax,hMin);
+
+        var data = [],
+                i;
+
+        for (i = 0; i <= 10; i += 0.2) {
+            data.push({
+                x: i,
+                y: amplitude*Math.sin(i) + hauteurMilieu
+            });
+        }
+        return data;
+    }
+
+    function updateSerieGraph(serie, hMax,hMin) {
+        var hauteurMilieu = getMilieuSinu(hMax,hMin);
+        var amplitude = getAmplitudeSinu(hMax,hMin);
+        var x;
+        var y;
+        //alert(serie.name+" hauteurMilieu: "+hauteurMilieu+"  amplitude: "+amplitude+"   hMax: "+hMax+"  hMin: "+hMin);
+        var i=0; // var de data
+        for (x = 0; x <= 10; x += 0.2) {
+            //chart.series[0].data[0].update(y)
+            y = amplitude*Math.sin(x) + hauteurMilieu;
+            serie.data[i].update(y);// met à jour la valeur y du point x=i
+            i++;
+        }
+    }
+
+    function darwPlotBand(hMin, hMax, state) {
+        //alert("darwPlotBand("+hMin+", "+hMax+", "+state+")");
+        getChart().yAxis[0].addPlotBand({
+                    color: getColorPlotBandForState(state),
+                    from: hMin,
+                    to: hMax
+                }
+        )
+    }
+
+    function getColorPlotBandForState(state) {
+        var color = "white";
+        switch (state) {
+            case "OK":
+                color="rgba(0,128,0,0.4)";
+                break;
+            case "KO":
+                color="rgba(255,0,0,0.3)";
+                break;
+            case "warn":
+                color="rgba(255,165,0,0.2)";
+                break;
+        }
+        return color;
+    }
 
 </script>
 

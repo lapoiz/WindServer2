@@ -130,6 +130,7 @@
                     // *** Lance la requête suivante: récupérer les hauteurs de la marée basse et de la marée haute
                     // Pour tester : http://localhost/Wind/web/app_dev.php/admin/BO/ajax/maree/16/forDay/20150128
                     setHauteur(hauteurJson,typeHauteur);
+                    reloadGraphMaree();
                 } ,
                 error: function(data){
                     alert("URL ("+url+") ne semble pas valide.");
@@ -164,6 +165,11 @@
             if (typeHauteur=="max") { // -> on a déjà les valeurs
                 hMaréeHaute=hMax;
                 hMaréeBasse=hMin;
+                // On les pousse dans le Input du formulaire, en vue de l'enregistrement
+                $("#laPoiz_windBundle_maree_hauteurMHGrandeMaree").val(hMaréeHaute);
+                $("#laPoiz_windBundle_maree_hauteurMBGrandeMaree").val(hMaréeBasse);
+
+
             } else if (typeHauteur=="min") {
                 // on récupére la plus haute des plus basses et la plus basse des plus hautes ...
                 hMaréeHaute=hMax;
@@ -183,6 +189,8 @@
                             hMaréeBasse = hauteur;
                         }
                     }
+                    $("#laPoiz_windBundle_maree_hauteurMHPetiteMaree").val(hMaréeHaute);
+                    $("#laPoiz_windBundle_maree_hauteurMBPetiteMaree").val(hMaréeBasse);
                 }
             } else if (typeHauteur=="norm") {
                 // on récupére les moyennes
@@ -202,8 +210,10 @@
                         nbMaréeBasse++;
                     }
                 }
-                hMaréeBasse = hMaréeBasse/nbMaréeBasse;
-                hMaréeHaute = hMaréeHaute/nbMaréeHaute;
+                hMaréeBasse = Math.round((hMaréeBasse/nbMaréeBasse)*100)/100; // arrondi à 2 decimal
+                hMaréeHaute = Math.round((hMaréeHaute/nbMaréeHaute)*100)/100;
+                $("#laPoiz_windBundle_maree_hauteurMHMoyenneMaree").val(hMaréeHaute);
+                $("#laPoiz_windBundle_maree_hauteurMBMoyenneMaree").val(hMaréeBasse);
             };
 
             //alert(typeHauteur+"->   hMaréeHaute: "+hMaréeHaute+"  hMaréeBasse:"+hMaréeBasse);

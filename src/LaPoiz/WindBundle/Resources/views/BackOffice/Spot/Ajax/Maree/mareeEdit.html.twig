@@ -18,10 +18,10 @@
                 {% for restriction in form.mareeRestriction %}
                 <div class="row">
                     <div class="col-sm-3">
-                        {{ form_row(restriction.hauteurMax) }}
+                        {{ form_row(restriction.hauteurMin) }}
                     </div>
                     <div class="col-sm-3">
-                        {{ form_row(restriction.hauteurMin) }}
+                        {{ form_row(restriction.hauteurMax) }}
                     </div>
                     <div class="col-sm-3">
                         {{ form_row(restriction.state) }}
@@ -35,7 +35,7 @@
     </div>
     <div class="col-sm-6">
         {% from "LaPoizWindBundle:BackOffice/Spot/Ajax/Maree:graph.html.twig" import graphMaree %}
-        {{ graphMaree() }}
+        {{ graphMaree(spot) }}
     </div>
 </div>
 <div class="row">
@@ -77,6 +77,7 @@
         $newFormDiv.append($removeFormButton);
 
         $removeFormButton.on('click', function(e) {
+            // Todo: remove PlotBand
             $newFormDiv.remove();
         });
     }
@@ -87,30 +88,109 @@
 
         collectionHolder.find('div.row').each(function() {
             addRestrictionFormDeleteButton($(this));
+            addPlotBandOnGraph($(this));
         });
+
     });
 
     $("#maree_form").on('submit', function(e){
-
-        $('#result').html('<img src="{{ asset('bundles/lapoizwind/images/loading.gif') }}" alt="Loading Ajax data" />');
-
         e.preventDefault();
-        var $this = $(this);
+        if (checkRestriction()) {
 
-        $.ajax({
-            url: $this.attr('action'),
-            type: $this.attr('method'),
-            data: $this.serialize(),
-            success: function(html) {
-                $('#result').html(html);
+            $('#result').html('<img src="{{ asset('bundles/lapoizwind/images/loading.gif') }}" alt="Loading Ajax data" />');
+            var $this = $(this);
+
+            $.ajax({
+                url: $this.attr('action'),
+                type: $this.attr('method'),
+                data: $this.serialize(),
+                success: function(html) {
+                    $('#result').html(html);
+                }
+            });
+        } else {
+            alert("Vérifiez l'entrecroisement des restrictions");
+        }
+
+    });
+
+    // Ajoute PlotBand au graph en fonction des input
+    function addPlotBandOnGraph($formDiv) {
+        var tabRestriction = getRestrictionFormDiv($formDiv);
+        darwPlotBand(tabRestriction["hMin"],tabRestriction["hMax"],tabRestriction["state"]);
+    }
+
+    function getRestrictionFormDiv($formDiv) {
+        var hMin, hMax,state;
+
+        var regHautMin=new RegExp("hauteurMin$", "g");
+        var regHautMax=new RegExp("hauteurMax$", "g");
+        var regState=new RegExp("state$", "g");
+
+        //alert("addPlotBandOnGraph("+$formDiv+")");
+        $formDiv.find('input').each(function() {
+            //alert("  $(this): "+$(this));
+            var idInput = $(this).attr('id')+"";
+
+            // récupére input hMin
+            if (idInput.match(regHautMin)!=null) {
+                hMin=parseFloat($(this).val());
+            }
+            // récupére input fin
+            if (idInput.match(regHautMax)!=null) {
+                hMax=parseFloat($(this).val());
             }
         });
-    });
+
+        $formDiv.find('select').each(function() {
+        // récupére l'état (warn, Ok, KO
+            var idSelect = $(this).attr('id')+"";
+            if (idSelect.match(regState)) {
+                state=$(this).val();
+            }
+        });
+
+        //alert("hMin: "+hMin+"  hMax: "+hMax+"  state: "+state);
+        return {"hMin":hMin,"hMax":hMax,"state":state};
+    }
 
     function effacerMaree() {
         if (confirm("Voulez vous vraiment effacer cet élément ?")) {
             window.location.replace("{{ path('_bo_ajax_spot_maree_delete', {'id':spot.id})}}");
         }
+    }
+
+    // Verifie qu'il n'y a pas un pb entre les hMin et hMax des différentes restrictions
+    function checkRestriction() {
+        var tabRestriction = [];
+        var index=0;
+        var error=false;
+
+        var hMin, hMax;
+
+        collectionHolder.find('div.row').each(function() {
+            tabRestriction[index]=getRestrictionFormDiv($(this));
+            index++;
+        });
+
+        for (var i=0; i<index; i++) {
+            hMin = tabRestriction[i]["hMin"];
+            hMax = tabRestriction[i]["hMax"];
+            if (hMin>hMax) {
+                error = true;
+            } else {
+                for (var j=i+1; j<index; j++) {
+                    if (hMin>tabRestriction[j]["hMin"]) {
+                        if (hMin<tabRestriction[j]["hMax"]) {
+                            error = true;
+                        }
+                    } else if (hMax>tabRestriction[j]["hMin"]) {
+                        error = true;
+                    }
+                }
+            }
+        }
+        return !error;
     }
 
 </script>

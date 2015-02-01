@@ -94,6 +94,42 @@ class Spot
      */
     private $mareeURL;
 
+    /**
+     * @ORM\Column(type="decimal",nullable=true,scale=2)
+     * hauteur de la marée basse - pour les grandes marées
+     */
+    private $hauteurMBGrandeMaree;
+
+    /**
+     * @ORM\Column(type="decimal",nullable=true,scale=2)
+     * hauteur de la marée haute - pour la haute marée
+     */
+    private $hauteurMHGrandeMaree;
+
+    /**
+     * @ORM\Column(type="decimal",nullable=true,scale=2)
+     * hauteur de la marée basse - pour les moyennes marées (coef 80)
+     */
+    private $hauteurMBMoyenneMaree;
+
+    /**
+     * @ORM\Column(type="decimal",nullable=true,scale=2)
+     * hauteur de la marée haute - pour les moyennes marées (coef 80)
+     */
+    private $hauteurMHMoyenneMaree;
+
+    /**
+     * @ORM\Column(type="decimal",nullable=true,scale=2)
+     * hauteur de la marée basse - pour les petites marées
+     */
+    private $hauteurMBPetiteMaree;
+
+    /**
+     * @ORM\Column(type="decimal",nullable=true,scale=2)
+     * hauteur de la marée haute - pour les petites marées
+     */
+    private $hauteurMHPetiteMaree;
+
 
     /**
      * Constructor
@@ -557,5 +593,143 @@ class Spot
     public function getMareeRestriction()
     {
         return $this->mareeRestriction;
+    }
+
+    /**
+     * Set hauteurMBGrandeMaree
+     *
+     * @param string $hauteurMBGrandeMaree
+     * @return Spot
+     */
+    public function setHauteurMBGrandeMaree($hauteurMBGrandeMaree)
+    {
+        $this->hauteurMBGrandeMaree = $hauteurMBGrandeMaree;
+
+        return $this;
+    }
+
+    /**
+     * Get hauteurMBGrandeMaree
+     *
+     * @return string 
+     */
+    public function getHauteurMBGrandeMaree()
+    {
+        return $this->hauteurMBGrandeMaree;
+    }
+
+    /**
+     * Set hauteurMHGrandeMaree
+     *
+     * @param string $hauteurMHGrandeMaree
+     * @return Spot
+     */
+    public function setHauteurMHGrandeMaree($hauteurMHGrandeMaree)
+    {
+        $this->hauteurMHGrandeMaree = $hauteurMHGrandeMaree;
+
+        return $this;
+    }
+
+    /**
+     * Get hauteurMHGrandeMaree
+     *
+     * @return string 
+     */
+    public function getHauteurMHGrandeMaree()
+    {
+        return $this->hauteurMHGrandeMaree;
+    }
+
+    /**
+     * Set hauteurMBMoyenneMaree
+     *
+     * @param string $hauteurMBMoyenneMaree
+     * @return Spot
+     */
+    public function setHauteurMBMoyenneMaree($hauteurMBMoyenneMaree)
+    {
+        $this->hauteurMBMoyenneMaree = $hauteurMBMoyenneMaree;
+
+        return $this;
+    }
+
+    /**
+     * Get hauteurMBMoyenneMaree
+     *
+     * @return string 
+     */
+    public function getHauteurMBMoyenneMaree()
+    {
+        return $this->hauteurMBMoyenneMaree;
+    }
+
+    /**
+     * Set hauteurMHMoyenneMaree
+     *
+     * @param string $hauteurMHMoyenneMaree
+     * @return Spot
+     */
+    public function setHauteurMHMoyenneMaree($hauteurMHMoyenneMaree)
+    {
+        $this->hauteurMHMoyenneMaree = $hauteurMHMoyenneMaree;
+
+        return $this;
+    }
+
+    /**
+     * Get hauteurMHMoyenneMaree
+     *
+     * @return string 
+     */
+    public function getHauteurMHMoyenneMaree()
+    {
+        return $this->hauteurMHMoyenneMaree;
+    }
+
+    /**
+     * Set hauteurMBPetiteMaree
+     *
+     * @param string $hauteurMBPetiteMaree
+     * @return Spot
+     */
+    public function setHauteurMBPetiteMaree($hauteurMBPetiteMaree)
+    {
+        $this->hauteurMBPetiteMaree = $hauteurMBPetiteMaree;
+
+        return $this;
+    }
+
+    /**
+     * Get hauteurMBPetiteMaree
+     *
+     * @return string 
+     */
+    public function getHauteurMBPetiteMaree()
+    {
+        return $this->hauteurMBPetiteMaree;
+    }
+
+    /**
+     * Set hauteurMHPetiteMaree
+     *
+     * @param string $hauteurMHPetiteMaree
+     * @return Spot
+     */
+    public function setHauteurMHPetiteMaree($hauteurMHPetiteMaree)
+    {
+        $this->hauteurMHPetiteMaree = $hauteurMHPetiteMaree;
+
+        return $this;
+    }
+
+    /**
+     * Get hauteurMHPetiteMaree
+     *
+     * @return string 
+     */
+    public function getHauteurMHPetiteMaree()
+    {
+        return $this->hauteurMHPetiteMaree;
     }
 }
