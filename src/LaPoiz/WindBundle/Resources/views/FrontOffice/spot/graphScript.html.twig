@@ -100,13 +100,15 @@
                 });
             }
 
-            if (typeof(time.orientation) != 'undefined') {
-                meteogram.windDirections.push({
-                    date: datePrev,
-                    orientation: parseFloat(time.orientation.deg),
-                    state: time.orientation.state,
-                    name: time.orientation.nom
-                });
+            if (typeof(time.orientation) != 'undefined'
+                    && typeof(time.orientation.nom) != 'undefined'
+                    && time.orientation.nom != '') {
+                    meteogram.windDirections.push({
+                        date: datePrev,
+                        orientation: parseFloat(time.orientation.deg),
+                        state: time.orientation.state,
+                        name: time.orientation.nom
+                    });
             }
 
             if (typeof(time.meteo) != 'undefined') {
@@ -273,9 +275,9 @@
             ],
 
             legend: {
-                useHTML: true,
-                labelFormatter: function() { return this.name + (this.name!='Marée'?' <span style="font-size: xx-small; font-weight: lighter">(update 14h00)</span>':'') },
-                y: 15
+//                useHTML: true,
+//                labelFormatter: function() { return this.name + (this.name!='Marée'?' <span style="font-size: xx-small; font-weight: lighter">(update 14h00)</span>':'') },
+                y: 12
             },
 
             tooltip: {
@@ -380,6 +382,13 @@
         //console.log("drawWindArrows shiftLeft:"+shiftLeft+"  shiftRight "+shiftRight);
         var yArrow = chart.chartHeight - 55;
 
+        var tabOrientationState = [];
+        {% for windOrientation in spot.windOrientation %}
+            tabOrientationState["{{ windOrientation.orientation }}"]="{{ windOrientation.state?windOrientation.state:"?" }}";
+            //console.log("{{ windOrientation.orientation }}->{{ windOrientation.state?windOrientation.state:"?" }}");
+        {% endfor %}
+
+
         $.each(chart.series[0].data, function (i, point) {
             var sprite, arrow, x, y;
             //x = point.plotX + chart.plotLeft + 7;
@@ -389,13 +398,13 @@
             arrow = chart.renderer.path(
                             meteogram.windArrow(meteogram.windDirections[i].name)
                     ).attr({
-                        rotation: parseInt(meteogram.windDirections[i].orientation, 10),
+                        rotation: parseInt(meteogram.windDirections[i].orientation, 10)+180,
                         translateX: meteogram.abscisseFromDate(meteogram.windDirections[i].date, graphWidth,shiftLeft),
                         translateY: yArrow
                     });
 
             arrow.attr({
-                stroke: meteogram.colorWindArrowState(meteogram.windDirections[i].state) || 'black',// couleur
+                stroke: meteogram.colorWindArrowState(meteogram.windDirections[i].name, tabOrientationState) || 'black',// couleur
                 'stroke-width': 1.5,
                 zIndex: 5
             }).add();
@@ -425,20 +434,22 @@
     /**
      * Couleur de la fleche en fonction de l'état (good, warning, bad)
      */
-    Meteogram.prototype.colorWindArrowState = function (state) {
+    Meteogram.prototype.colorWindArrowState = function (name, tabOrientationState) {
         var color = null;
+        var state = getStateOfWindOrientation(name, tabOrientationState);
 
         switch (state) {
-            case "good":
+            case "OK":
                 color="green";
                 break;
-            case "warning":
+            case "warn":
                 color="orange";
                 break;
-            case "bad":
+            case "KO":
                 color="red";
                 break;
         }
+        //console.log(name+"->"+color);
         return color;
     };
 
@@ -648,7 +659,70 @@
         };
     };
 
-
     // End of the Meteogram protype
+
+
+    /**
+     *
+     * @param name: 'n', 'nne' ...
+     * @param tabOrientationState: ["nord":"OK", "nord-nord-est":"warn" ....
+     * return the state ("OK", "warn" or "KO"
+     */
+    function getStateOfWindOrientation(name, tabOrientationState) {
+        var nameLong = "?";
+        switch (name) {
+            case "n":
+                nameLong = "nord";
+                break;
+            case "nne":
+                nameLong = "nord-nord-est";
+                break;
+            case "ne":
+                nameLong = "nord-est";
+                break;
+            case "ene":
+                nameLong = "est-nord-est";
+                break;
+            case "e":
+                nameLong = "est";
+                break;
+            case "ese":
+                nameLong = "est-sud-est";
+                break;
+            case "se":
+                nameLong = "sud-est";
+                break;
+            case "sse":
+                nameLong = "sud-sud-est";
+                break;
+            case "s":
+                nameLong = "sud";
+                break;
+            case "ssw":
+                nameLong = "sud-sud-west";
+                break;
+            case "sw":
+                nameLong = "sud-west";
+                break;
+            case "wsw":
+                nameLong = "west-sud-west";
+                break;
+            case "w":
+                nameLong = "west";
+                break;
+            case "wnw":
+                nameLong = "west-nord-west";
+                break;
+            case "nw":
+                nameLong = "nord-west";
+                break;
+            case "nnw":
+                nameLong = "nord-nord-west";
+                break;
+        }
+        return tabOrientationState[nameLong];
+    }
+
+
     </script>
 {% endmacro %}

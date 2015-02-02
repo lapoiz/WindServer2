@@ -12,11 +12,15 @@
 
     <script>
         /** Load Json and create Meteogram */
+        var meteogram;
         $(function () { // On DOM ready...
             $.getJSON(
                     '{{ path('_fo_json_spot_data',{'id':spot.id}) }}',
                     function (jsonSpotData) {
-                        var meteogram = new Meteogram(jsonSpotData, 'meteoGraph');
+                        meteogram = new Meteogram(jsonSpotData, 'meteoGraph');
+                        {% if spot.mareeURL|default is not empty %}
+                            drawPlotBandMareeGraphSpot();
+                        {% endif %}
                     });
         });
     </script>

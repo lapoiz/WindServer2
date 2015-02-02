@@ -16,7 +16,7 @@ class FOJsonController extends Controller
 	/**
 	 * @Template()
 	*/
-    // http://localhost/WindServer/web/app_dev.php/fo/json/spot/data/1
+    // http://localhost/Wind/web/app_dev.php/fo/json/spot/data/1
 	public function getAction($id=null)
 	{
 		$em = $this->container->get('doctrine.orm.entity_manager');
@@ -37,7 +37,7 @@ class FOJsonController extends Controller
 			foreach ($spot->getDataWindPrev() as $dataWindPrev) {
 			    // Pour chaque site du spot
                 // Récupére toutes les prévisions réalisées la même date que de création de la derniere prévision
-                $name=$dataWindPrev->getWebsite()->getNom();
+                //DELETE this line ?? $name=$dataWindPrev->getWebsite()->getNom();
 				$previsionDateList = $this->getDoctrine()->getRepository('LaPoizWindBundle:PrevisionDate')->getLastCreated($dataWindPrev);
 				$tabJson->addForecast(TransformeToHighchartsDataTabForJson::transformePrevisionDateList($previsionDateList));
 			}

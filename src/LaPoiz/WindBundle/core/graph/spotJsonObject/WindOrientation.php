@@ -20,7 +20,7 @@ class WindOrientation {
     }
 
     private function setDeg($name) {
-        $result = 0;
+        $result = -1;
         switch ($name) {
             case 'n' :
                 $result = 0;

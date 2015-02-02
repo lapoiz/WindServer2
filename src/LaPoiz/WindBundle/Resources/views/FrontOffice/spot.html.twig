@@ -14,7 +14,8 @@
 </div>
 
 <div class="row">
-    <div class="col-sm-6 centered">
+    <div class="col-sm-6 center-block text-center">
+        <h3 style="color:#333333; font-size: 18px; font-family: 'Lucida Grande', 'Lucida Sans Unicode', Arial;  line-height: normal">Rosace du vent à {{ spot.nom     }}</h3>
         {% from "LaPoizWindBundle:BackOffice/Spot/Ajax:rosaceWind.html.twig" import displayRosace %}
         {{ displayRosace() }}
 
@@ -58,9 +59,27 @@
                 jQuery(document).ready(function() {
                     // Parcour la liste des MareeRestriction
                     {% for mareeRestriction in spot.mareeRestriction %}
-                        drawPlotBand({{ mareeRestriction.hauteurMin }},{{ mareeRestriction.hauteurMax }},"{{ mareeRestriction.state }}");
+                        drawPlotBandGraphMaree({{ mareeRestriction.hauteurMin }},{{ mareeRestriction.hauteurMax }},"{{ mareeRestriction.state }}");
                     {% endfor %}
                 });
+
+                function drawPlotBandMareeGraphSpot() {
+                    {% for mareeRestriction in spot.mareeRestriction %}
+                        drawOnePlotBandMareeGraphSpot({{ mareeRestriction.hauteurMin }},{{ mareeRestriction.hauteurMax }},"{{ mareeRestriction.state }}");
+                    {% endfor %}
+                }
+
+                // dessine sur le graph princiapl du spot, une restriction de marée
+                function drawOnePlotBandMareeGraphSpot(hMin, hMax, state) {
+                    $('#meteoGraph').highcharts().yAxis[1].addPlotBand({
+                                color: getColorPlotBandForState(state),
+                                from: hMin,
+                                to: hMax
+                            }
+                    )
+                }
+
+
             </script>
 
         {% endif %}

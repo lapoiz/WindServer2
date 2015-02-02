@@ -37,10 +37,10 @@
                     enabled: false
                 },
                 title: {
-                    text: 'Marée du spot'
+                    text: 'La marée'
                 },
                 subtitle: {
-                    text: 'Les différentes zones de navigation'
+                    text: 'Quand peut on naviguer'
                 },
                 xAxis: {
                     title: {
@@ -129,7 +129,7 @@
     });
 
 
-    function getChart() {
+    function getChartMaree() {
         return $('#mareeGraph').highcharts();
     }
 
@@ -171,9 +171,9 @@
         }
     }
 
-    function drawPlotBand(hMin, hMax, state) {
+    function drawPlotBandGraphMaree(hMin, hMax, state) {
         //alert("darwPlotBand("+hMin+", "+hMax+", "+state+")");
-        getChart().yAxis[0].addPlotBand({
+        getChartMaree().yAxis[0].addPlotBand({
                     color: getColorPlotBandForState(state),
                     from: hMin,
                     to: hMax
@@ -185,13 +185,13 @@
         var color = "white";
         switch (state) {
             case "OK":
-                color="rgba(0,128,0,0.4)";
+                color="rgba(0,128,0,1)";
                 break;
             case "KO":
-                color="rgba(255,0,0,0.3)";
+                color="rgba(255,0,0,1)";
                 break;
             case "warn":
-                color="rgba(255,165,0,0.2)";
+                color="rgba(255,165,0,1)";
                 break;
         }
         return color;

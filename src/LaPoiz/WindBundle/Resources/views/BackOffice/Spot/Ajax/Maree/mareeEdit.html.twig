@@ -117,7 +117,7 @@
 
     // Récupere des Ipunt Hidden les valeurs et les pousses dans le graph
     function reloadGraphMaree() {
-        var graph = getChart();
+        var graph = getChartMaree();
 
         updateSerieGraph(graph.get("serieGM"),
                 parseFloat($("#laPoiz_windBundle_maree_hauteurMHGrandeMaree").val()),
@@ -133,7 +133,7 @@
     // Ajoute PlotBand au graph en fonction des input
     function addPlotBandOnGraph($formDiv) {
         var tabRestriction = getRestrictionFormDiv($formDiv);
-        drawPlotBand(tabRestriction["hMin"],tabRestriction["hMax"],tabRestriction["state"]);
+        drawPlotBandGraphMaree(tabRestriction["hMin"],tabRestriction["hMax"],tabRestriction["state"]);
     }
 
     function getRestrictionFormDiv($formDiv) {
