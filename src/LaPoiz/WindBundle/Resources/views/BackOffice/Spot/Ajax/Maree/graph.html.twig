@@ -1,6 +1,7 @@
-{% macro graphMaree(spot) %}
+{% macro graphMaree(spot, widthGraph, widthGraph, heightGraph) %}
 
-    <div id="mareeGraph" style="width:100%"></div>
+    <div id="mareeGraph" style="width:{{ (widthGraph is defined and widthGraph is not null)?widthGraph:"100%" }};
+            height:{{ (heightGraph is defined and heightGraph is not null)?heightGraph:"100%"  }}"></div>
 
 
 <script>
@@ -40,11 +41,11 @@
                     text: 'La marée'
                 },
                 subtitle: {
-                    text: 'Quand peut on naviguer'
+                    text: 'Quand peut-on naviguer ?'
                 },
                 xAxis: {
                     title: {
-                        text: "les heures qui s'écoulent..."
+                        text: "Période des marées: 12 h 25 min"
                     },
                     labels: {
                         enabled:false//default is true
@@ -53,7 +54,7 @@
                 },
                 yAxis: {
                     title: {
-                        text: 'Hauteur (m)'
+                        text: 'Hauteur de la marée (m)'
                     }
                 },
                 tooltip: {

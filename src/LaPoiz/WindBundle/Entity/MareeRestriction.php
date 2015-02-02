@@ -17,12 +17,12 @@ class MareeRestriction
     private $id;
     
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="decimal", scale=2, nullable=true)
      */    
     private $hauteurMax;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="decimal", scale=2, nullable=true)
      */
     private $hauteurMin;
 

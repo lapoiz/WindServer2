@@ -80,6 +80,11 @@ class Spot
     private $windOrientation;
 
     /**
+     * @ORM\OneToMany(targetEntity="NotesDate", mappedBy="spot", cascade={"remove", "persist"} , orphanRemoval=true)
+     */
+    private $notesDate;
+
+    /**
      * @ORM\OneToMany(targetEntity="MareeRestriction", mappedBy="spot", cascade={"remove", "persist"} , orphanRemoval=true)
      */
     private $mareeRestriction;
@@ -731,5 +736,38 @@ class Spot
     public function getHauteurMHPetiteMaree()
     {
         return $this->hauteurMHPetiteMaree;
+    }
+
+    /**
+     * Add notesDate
+     *
+     * @param \LaPoiz\WindBundle\Entity\NotesDate $notesDate
+     * @return Spot
+     */
+    public function addNotesDate(\LaPoiz\WindBundle\Entity\NotesDate $notesDate)
+    {
+        $this->notesDate[] = $notesDate;
+
+        return $this;
+    }
+
+    /**
+     * Remove notesDate
+     *
+     * @param \LaPoiz\WindBundle\Entity\NotesDate $notesDate
+     */
+    public function removeNotesDate(\LaPoiz\WindBundle\Entity\NotesDate $notesDate)
+    {
+        $this->notesDate->removeElement($notesDate);
+    }
+
+    /**
+     * Get notesDate
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getNotesDate()
+    {
+        return $this->notesDate;
     }
 }

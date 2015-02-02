@@ -55,8 +55,8 @@ class GetDataCommand extends ContainerAwareCommand  {
 
         $output->writeln('<info>************** GET MAREE ****************</info>');
         foreach ($spotList as $spot) {
-            if ($spot->getParameter()->getMareeURL()!=null) {
-                $prevMaree = MareeGetData::getMaree($spot->getParameter()->getMareeURL());
+            if ($spot->getMareeURL()!=null) {
+                $prevMaree = MareeGetData::getMaree($spot->getMareeURL());
                 MareeGetData::saveMaree($spot, $prevMaree, $em, $output);
             }
         }

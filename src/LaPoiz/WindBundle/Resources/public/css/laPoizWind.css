@@ -7,3 +7,10 @@ nav {
 #spot_windOrientation {
     display: none;
 }
+
+.titreSVG {
+    color:#333333;
+    font-size: 18px;
+    font-family: 'Lucida Grande', 'Lucida Sans Unicode', Arial;
+    line-height: normal
+}

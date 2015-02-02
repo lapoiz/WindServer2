@@ -102,11 +102,11 @@
 
             if (typeof(time.orientation) != 'undefined'
                     && typeof(time.orientation.nom) != 'undefined'
-                    && time.orientation.nom != '') {
+                    && time.orientation.nom != "") {
                     meteogram.windDirections.push({
                         date: datePrev,
                         orientation: parseFloat(time.orientation.deg),
-                        state: time.orientation.state,
+                        //state: time.orientation.state,
                         name: time.orientation.nom
                     });
             }
@@ -348,6 +348,12 @@
                     enabled: false
                 },
                 color: 'blue'
+            }, {
+                name: 'Météo',
+                data: this.meteo,
+                marker: {
+                    symbol: false
+                }
             }],
             lang: {
                 weekdays: ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam']
@@ -395,20 +401,22 @@
             //y = yArrow;
             //console.log("point.plotX:"+point.plotX+" chart.plotLeft:" + chart.plotLeft );
             //console.log("Meteogram - drawWindArrows i:"+i+"    orientation: "+meteogram.windDirections[i].orientation +"    x: "+x+"  date:"+meteogram.windDirections[i].date);
-            arrow = chart.renderer.path(
-                            meteogram.windArrow(meteogram.windDirections[i].name)
-                    ).attr({
-                        rotation: parseInt(meteogram.windDirections[i].orientation, 10)+180,
-                        translateX: meteogram.abscisseFromDate(meteogram.windDirections[i].date, graphWidth,shiftLeft),
-                        translateY: yArrow
-                    });
 
-            arrow.attr({
-                stroke: meteogram.colorWindArrowState(meteogram.windDirections[i].name, tabOrientationState) || 'black',// couleur
-                'stroke-width': 1.5,
-                zIndex: 5
-            }).add();
+            if (meteogram.windDirections[i] != null && meteogram.windDirections[i].name != null) {
+                arrow = chart.renderer.path(
+                                meteogram.windArrow(meteogram.windDirections[i].name)
+                        ).attr({
+                            rotation: parseInt(meteogram.windDirections[i].orientation, 10),
+                            translateX: meteogram.abscisseFromDate(meteogram.windDirections[i].date, graphWidth,shiftLeft),
+                            translateY: yArrow
+                        });
 
+                arrow.attr({
+                    stroke: meteogram.colorWindArrowState(meteogram.windDirections[i].name, tabOrientationState) || 'black',// couleur
+                    'stroke-width': 1.5,
+                    zIndex: 5
+                }).add();
+            }
         });
     };
 

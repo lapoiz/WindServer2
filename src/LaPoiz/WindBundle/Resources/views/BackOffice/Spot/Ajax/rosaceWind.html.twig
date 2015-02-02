@@ -1,11 +1,11 @@
-{% macro displayRosace() %}
+{% macro displayRosace(widthGraph, heightGraph) %}
 
     <style type="text/css">
 
         #rosaceWindSVG {
             /*border:1px dashed #ccc;*/
-            height:340px;
-            width:340px
+            height:{{ (widthGraph is defined and widthGraph is not null)?widthGraph:"340px" }};
+            width:{{ (heightGraph is defined and heightGraph is not null)?heightGraph:"340px"  }};
         }
 
         #rosaceWindSVG path {
@@ -30,50 +30,50 @@
     <svg id="rosaceWindSVG"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns="http://www.w3.org/2000/svg"
-         onload="svgLoad()"   >
+         onload="svgLoad()" >
 
         <defs>
             <symbol id="principal">
-                <path d="M 20 0 L 20 150 40 130 z" />
-                <path d="M 20 0 L 20 150 0 130 z"
+                <path d="M 20 10 L 40 0 20 110 35 100 20 130 z" />
+                <path d="M 20 10 L  0 0 20 110 05 100 20 130 z"
                       fill="black" />
             </symbol>
 
             <symbol id="secondaire">
-                <path d="M 20 10 L 20 150 30 135 z"
+                <path d="M 20 20 L 30 10 20 110 25 100 20 130 z" />
+                <path d="M 20 20 L 10 10 20 110 15 100 20 130 z"
                       fill="black" />
-                <path d="M 20 10 L 20 150 10 135 z" />
             </symbol>
 
             <symbol id="tertiaire">
-                <path d="M 20 30 L 20 150 30 140 z" />
-                <path d="M 20 30 L 20 150 10 140 z"
-                      fill="DimGray" />
+                <path d="M 20 40 L 30 30 20 110 z" />
+                <path d="M 20 40 L 10 30 20 110 z"
+                      fill="black" />
             </symbol>
 
         </defs>
 
-        <text id="nordTxt" x="163" y="18" class="rosace-Lettre-principal">N</text>
-        <text id="estTxt" x="323" y="177" class="rosace-Lettre-principal">E</text>
-        <text id="sudTxt" x="163" y="336" class="rosace-Lettre-principal">S</text>
+        <text id="nordTxt" x="163" y="20" class="rosace-Lettre-principal">N</text>
+        <text id="estTxt" x="320" y="177" class="rosace-Lettre-principal">E</text>
+        <text id="sudTxt" x="163" y="332" class="rosace-Lettre-principal">S</text>
         <text id="westTxt" x="0" y="177" class="rosace-Lettre-principal">W</text>
 
-        <text id="nord-estTxt" x="272" y="70" class="rosace-Lettre-secondaire">NE</text>
-        <text id="sud-estTxt" x="272" y="280" class="rosace-Lettre-secondaire">SE</text>
-        <text id="sud-westTxt" x="45" y="280" class="rosace-Lettre-secondaire">SW</text>
-        <text id="nord-westTxt" x="45" y="70" class="rosace-Lettre-secondaire">NW</text>
+        <text id="nord-estTxt" x="265" y="75" class="rosace-Lettre-secondaire">NE</text>
+        <text id="sud-estTxt" x="265" y="276" class="rosace-Lettre-secondaire">SE</text>
+        <text id="sud-westTxt" x="51" y="276" class="rosace-Lettre-secondaire">SW</text>
+        <text id="nord-westTxt" x="50" y="75" class="rosace-Lettre-secondaire">NW</text>
 
 
-        <text id="nord-nord-estTxt" x="205" y="55" class="rosace-Lettre-tertiaire">NNE</text>
-        <text id="est-nord-estTxt" x="282" y="125" class="rosace-Lettre-tertiaire">ENE</text>
+        <text id="nord-nord-estTxt" x="210" y="60" class="rosace-Lettre-tertiaire">NNE</text>
+        <text id="est-nord-estTxt" x="275" y="123" class="rosace-Lettre-tertiaire">ENE</text>
         <text id="est-sud-estTxt" x="282" y="222" class="rosace-Lettre-tertiaire">ESE</text>
-        <text id="sud-sud-estTxt" x="200" y="294" class="rosace-Lettre-tertiaire">SSE</text>
-        <text id="sud-sud-westTxt" x="110" y="292" class="rosace-Lettre-tertiaire">SSW</text>
-        <text id="west-sud-westTxt" x="30" y="225" class="rosace-Lettre-tertiaire">WSW</text>
-        <text id="west-nord-westTxt" x="30" y="125" class="rosace-Lettre-tertiaire">WNW</text>
-        <text id="nord-nord-westTxt" x="105" y="55" class="rosace-Lettre-tertiaire">NNW</text>
+        <text id="sud-sud-estTxt" x="204" y="290" class="rosace-Lettre-tertiaire">SSE</text>
+        <text id="sud-sud-westTxt" x="106" y="290" class="rosace-Lettre-tertiaire">SSW</text>
+        <text id="west-sud-westTxt" x="36" y="222" class="rosace-Lettre-tertiaire">WSW</text>
+        <text id="west-nord-westTxt" x="32" y="126" class="rosace-Lettre-tertiaire">WNW</text>
+        <text id="nord-nord-westTxt" x="105" y="60" class="rosace-Lettre-tertiaire">NNW</text>
 
-        <circle cx="170" cy="170" r="80" style="stroke:black; stroke-width: 1px;fill:white;" />
+        <circle cx="170" cy="170" r="20" style="stroke:black; stroke-width: 1px;fill:white;" />
 
         <use id="nord-nord-est" xlink:href="#tertiaire" x="150" y="20" fill="Gainsboro" />
         <use id="est-nord-est" xlink:href="#tertiaire" x="150" y="20" fill="Gainsboro" />
