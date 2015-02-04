@@ -30,7 +30,12 @@ class Prevision
     /**
      * @ORM\Column(type="string",length=255, nullable=true)
      */
-    private $precipitation;
+    private $precipitation;// a mettre en integer - aucune valeur decimal, mais sait on jamais ...
+
+    /**
+     * @ORM\Column(type="decimal", nullable=true)
+     */
+    private $temp;
 
     /**
      * @ORM\Column(type="integer")
