@@ -35,6 +35,7 @@
                     {% else %}
                         <li class="" id="menuMareeEditer"><a onclick="mareeEditer(this)"><i class="icon-pencil icon-white"></i> Editer</a></li>
                         <li class="" id="menuMareeGetData"><a onclick="getMareeData(this)"> Get Data</a></li>
+                        <li class="" id="menuMareeNote"><a onclick="noteMaree(this)">Note marée</a></li>
                     {% endif %}
                 {% else %}
                     <li class="" id="menuMareeCreate"> <a  onclick="addMaree(this)"><i class="icon-white icon-plus"></i> Ajouter</a></li>
@@ -165,6 +166,21 @@
             return false;
         };
 
+        function noteMaree(elemLink){
+            deselectAllMenu();
+            elemLink.parentNode.className = elemLink.parentNode.className+" active";
+            $('#result').html('<img src="{{ asset('bundles/lapoizwind/images/loading.gif') }}" alt="Loading Ajax data" />');
+
+            $.ajax({
+                type: "POST",
+                url: "{{ path('_bo_ajax_maree_launch_note', {'id':spot.id})}}",
+                cache: false,
+                success: function(data){
+                    $('#result').html(data);
+                }
+            });
+            return false;
+        };
 
         function deselectAllMenu() {
             // liste des menu fixe et connu

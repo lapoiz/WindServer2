@@ -1,0 +1,63 @@
+
+        {% if  tabNotes is defined and tabNotes!=null %}
+        <h2>Notes des prévision des marées</h2>
+            <div class="row">
+                <div class="col-sm-6 col-sm-offset-2">
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Date Prev</th>
+                                <th>Note</th>
+                                <th>Timing</th>
+                            </tr>
+                        </thead>
+                        {% for key, value in tabNotes %}
+                            <tr>
+                                <td>{{ key }}</td>
+                                <td>
+                                    {% if value is not defined or value is null %}
+                                        {{ "doesn't exist" }}
+                                    {% elseif value.marée is not defined or value.marée is null %}
+                                        {{ "doesn't exist 2" }}
+                                    {% else %}
+                                        {{ value.marée }}
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if value is not defined or value is null %}
+                                        {{ "doesn't exist" }}
+                                    {% else %}
+                                        OK: <br>
+                                        {% if value.maréeTimeOK is not defined or value.maréeTimeOK is null %}
+                                            0 <BR>
+                                        {% else %}
+                                            {% for time in value.maréeTimeOK %}
+                                                {{ time.begin }} -> {{ time.end }} <br>
+                                            {% endfor %}
+                                        {% endif %}
+                                        Warn:<br>
+                                        {% if value.maréeTimeWarn is not defined or value.maréeTimeWarn is null %}
+                                            0 <BR>
+                                        {% else %}
+                                            {% for time in value.maréeTimeWarn %}
+                                                {{ time.begin }} -> {{ time.end }} <br>
+                                            {% endfor %}
+
+                                        {% endif %}
+                                        KO:<br>
+                                        {% if value.maréeTimeKO is not defined or value.maréeTimeKO is null %}
+                                            0 <br>
+                                        {% else %}
+                                            {% for time in value.maréeTimeKO %}
+                                                {{ time.begin }} -> {{ time.end }} <br>
+                                            {% endfor %}
+                                        {% endif %}
+                                    {% endif %}
+                                        </td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+
+        {% endif %}

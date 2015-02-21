@@ -2,6 +2,7 @@
 
 namespace LaPoiz\WindBundle\Command;
 
+use LaPoiz\WindBundle\core\note\NoteMaree;
 use LaPoiz\WindBundle\core\websiteDataManage\WebsiteGetData;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
@@ -11,6 +12,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 
 class CreateNoteCommand extends ContainerAwareCommand  {
+
+    const HEURE_MATIN = 9;
+    const HEURE_SOIR = 19;
 
  	protected function configure()
     {
@@ -43,21 +47,7 @@ class CreateNoteCommand extends ContainerAwareCommand  {
             // Note la marée en fonction des restrictions et entre 9h et 19h
             $listeMareeFuture = $em->getRepository('LaPoizWindBundle:MareeDate')->getFuturMaree($spot);
             foreach ($listeMareeFuture as $mareeDate) {
-                // vérifie que $mareeDate->getDatePrev() soit dans $tabNotes
-                // et si $spot->getMareeRestriction() !=null
-
-                // Si tout est OK
-                // *** Calcul de la formule de la courbe: y = A x sin(x) + B ***
-                // Récupére les 2 premiers points
-                // x=time, h=hauteur
-                // résolution de l'équation
-
-                // *** calcul le temps ou la marée est OK, warn et OK ***
-                // pour chaque $restriction de  $spot->getMareeRestriction()
-                // calcul l'heure (minute) d'intersection pour calculer le temps dans l'etat
-
-                // calcul de la note vis à vis de du temps de navigation / temps etat ok, warn et KO
-                // $tabNotes[$mareeDate->getDatePrev()->format('Y-m-d')]["marée"]=$note;
+                NoteMaree::calculNoteMaree($spot, $tabNotes, $mareeDate);
             }
 
 
@@ -236,5 +226,5 @@ class CreateNoteCommand extends ContainerAwareCommand  {
             }
         }
     }
-    
+
 }

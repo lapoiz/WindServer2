@@ -191,4 +191,27 @@ class Prevision
     {
         return $this->precipitation;
     }
+
+    /**
+     * Set temp
+     *
+     * @param string $temp
+     * @return Prevision
+     */
+    public function setTemp($temp)
+    {
+        $this->temp = $temp;
+
+        return $this;
+    }
+
+    /**
+     * Get temp
+     *
+     * @return string 
+     */
+    public function getTemp()
+    {
+        return $this->temp;
+    }
 }

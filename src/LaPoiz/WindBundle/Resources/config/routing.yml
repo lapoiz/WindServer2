@@ -94,6 +94,10 @@ _bo_ajax_maree_save:
   defaults: { _controller: LaPoizWindBundle:BOAjaxMaree:mareeSave }
   pattern: /admin/BO/ajax/spot/maree/save/{id}
 
+_bo_ajax_maree_launch_note:
+  defaults: { _controller: LaPoizWindBundle:BOAjaxMaree:mareeLaunchNote }
+  pattern: /admin/BO/ajax/spot/maree/note/{id}
+
 _bo_ajax_maree_create:
   defaults: { _controller: LaPoizWindBundle:BOAjaxMaree:mareeCreate }
   pattern: /admin/BO/ajax/spot/{id}/maree/create

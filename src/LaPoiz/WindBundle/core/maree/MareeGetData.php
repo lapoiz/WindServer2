@@ -38,7 +38,8 @@ class MareeGetData {
             $beginDate = date_add($lastMareeDate->getDatePrev(), new \DateInterval('P1D'));// DatePrev est à 00h00m00s -> jour +1 pour comparaison
         }
 
-        foreach ($prevMaree as $jour) {
+        foreach ($prevMaree as $numDay => $jour) {
+            // $jour=0 puis 1 ...
             if ($beginDate ==null || $currentDay>$beginDate) {
                 $mareeDate = new MareeDate();
                 $mareeDate->setDatePrev($currentDay);
@@ -50,6 +51,7 @@ class MareeGetData {
                     list($hauteurPrev) = preg_split( $regExGetHauteur, $hauteur);
                     $previsionMaree->setHauteur(floatval($hauteurPrev));
                     $hour=new \DateTime();
+                    //$hour->modify("+".$numDay." days");
                     $output->writeln('$heure: '.$heure);
                     $output->writeln('$hauteurPrev: '.$hauteurPrev);
                     // $heure = 17h40

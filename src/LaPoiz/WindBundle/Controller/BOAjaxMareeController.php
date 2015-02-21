@@ -7,6 +7,8 @@ use LaPoiz\WindBundle\Form\MareeType;
 use LaPoiz\WindBundle\Form\SpotType;
 use LaPoiz\WindBundle\Form\DataWindPrevType;
 use LaPoiz\WindBundle\core\maree\MareeGetData;
+use LaPoiz\WindBundle\core\note\NoteMaree;
+
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\SecurityContext;
@@ -61,7 +63,7 @@ class BOAjaxMareeController extends Controller
      */
     public function mareeCreateAction($id=null, Request $request)
     {
-        return spotMareeEditAction($id,$request);
+        return $this->spotMareeEditAction($id,$request);
 /*        $em = $this->container->get('doctrine.orm.entity_manager');
 
         if (isset($id) && $id!=-1)
@@ -163,7 +165,7 @@ class BOAjaxMareeController extends Controller
     /**
      * @Template()
      * Sauvegarde les prévisions de marée en prenant en compte ce qui existe déjà dans la BD
-     * http://localhost/WindServer/web/app_dev.php/admin/BO/ajax/maree/save/1
+     * http://localhost/Wind/web/app_dev.php/admin/BO/ajax/spot/maree/save/1
      */
     public function mareeSaveAction($id)
     {
@@ -188,10 +190,58 @@ class BOAjaxMareeController extends Controller
         return $this->container->get('templating')->renderResponse('LaPoizWindBundle:BackOffice/Spot/Ajax/Maree:mareeSaveResult.html.twig',
             array(
                 'mareeDateDB' => $mareeDateDB,
+                'spot' => $spot,
                 'message' => "",
                 'saveSuccess' => true
             ));
     }
+
+
+    /**
+     * @Template()
+     * Note les marées
+     * http://localhost/Wind/web/app_dev.php/admin/BO/ajax/spot/maree/note/1
+     */
+    public function mareeLaunchNoteAction($id)
+    {
+        $em = $this->container->get('doctrine.orm.entity_manager');
+        $spot = $em->find('LaPoizWindBundle:Spot', $id);
+
+        if (!$spot)
+        {
+            return $this->container->get('templating')->renderResponse(
+                'LaPoizWindBundle:Default:errorBlock.html.twig',
+                array('errMessage' => "Spot not find !"));
+        }
+
+
+        $tabNotes = array();
+        // Pour les 7 prochains jours
+        $day= new \DateTime("now");
+        for ($nbPrevision=0; $nbPrevision<7; $nbPrevision++) {
+            $tabNotes[$day->format('Y-m-d')]=array();
+            $day->modify('+1 day');
+        }
+
+        //********** Marée **********
+        // récupére la marée du jour
+        // Note la marée en fonction des restrictions
+        $listeMareeFuture = $em->getRepository('LaPoizWindBundle:MareeDate')->getFuturMaree($spot);
+        foreach ($listeMareeFuture as $mareeDate) {
+            $tabNotes = NoteMaree::calculNoteMaree($spot, $tabNotes, $mareeDate);
+        }
+
+        return $this->container->get('templating')->renderResponse('LaPoizWindBundle:BackOffice/Spot/Ajax/Maree:mareeDisplayNote.html.twig',
+            array(
+                'tabNotes' => $tabNotes,
+                'message' => "",
+                'saveSuccess' => true
+            ));
+    }
+
+
+
+
 
     /**
      * @Template()
