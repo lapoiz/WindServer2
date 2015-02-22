@@ -20,6 +20,7 @@
                     </li>
                     {% endfor %}
                 {% endif %}
+                <li class="" id="menuWindNote"><a onclick="noteWind(this)">Note du vent</a></li>
             </ul>
         </div>
     </div>
@@ -80,6 +81,22 @@
             });
             return false;
         }
+
+        function noteWind(elemLink){
+            deselectAllMenu();
+            elemLink.parentNode.className = elemLink.parentNode.className+" active";
+            $('#result').html('<img src="{{ asset('bundles/lapoizwind/images/loading.gif') }}" alt="Loading Ajax data" />');
+
+            $.ajax({
+                type: "POST",
+                url: "{{ path('_bo_ajax_spot_wind_launch_note', {'id':spot.id})}}",
+                cache: false,
+                success: function(data){
+                    $('#result').html(data);
+                }
+            });
+            return false;
+        };
 
         function dataWindPrev(elemLink, dataWindPrevId) {
             deselectAllMenu();

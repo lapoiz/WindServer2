@@ -5,7 +5,8 @@ use LaPoiz\WindBundle\Entity\DataWindPrev;
 use LaPoiz\WindBundle\Entity\WebSite;
 use LaPoiz\WindBundle\Form\SpotType;
 use LaPoiz\WindBundle\Form\DataWindPrevType;
-use LaPoiz\WindBundle\core\maree\MareeGetData;
+use LaPoiz\WindBundle\core\note\NoteWind;
+
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Security\Core\SecurityContext;
 use Symfony\Component\Console\Output\NullOutput;
@@ -197,4 +198,60 @@ class BOAjaxSiteController extends Controller
                 array('errMessage' => "Miss id of dataWindPrev... !"));
         }
     }
+
+
+    /**
+     * @Template()
+     * Note le vent
+     * http://localhost/Wind/web/app_dev.php/admin/BO/ajax/spot/wind/note/1
+     */
+    public function spotLaunchWindNoteAction($id)
+    {
+        $em = $this->container->get('doctrine.orm.entity_manager');
+        $spot = $em->find('LaPoizWindBundle:Spot', $id);
+
+        if (!$spot)
+        {
+            return $this->container->get('templating')->renderResponse(
+                'LaPoizWindBundle:Default:errorBlock.html.twig',
+                array('errMessage' => "Spot not find !"));
+        }
+
+
+        $tabNotes = array();
+        $tabListePrevisionDate = array(); // tableau des liste des PrevisionDate, cahque cellule correspondant à une dateprev
+
+        // Pour les 7 prochains jours
+        $day= new \DateTime("now");
+        for ($nbPrevision=0; $nbPrevision<7; $nbPrevision++) {
+            $tabNotes[$day->format('Y-m-d')]=-1;
+            $tabListePrevisionDate[$day->format('Y-m-d')]=array();
+            $day->modify('+1 day');
+        }
+
+        //********** Wind **********
+
+        //list des PrevisionDate pour les prochain jour, pour le spot pour tous les websites
+        $listALlPrevisionDate = $this->getDoctrine()->getRepository('LaPoizWindBundle:PrevisionDate')->getPrevDateAllWebSiteNextDays($spot);
+
+        foreach ($listALlPrevisionDate as $previsionDate) {
+            // ajouter au tableau de la cellule du jour de $tabListePrevisionDate
+            $tabListePrevisionDate[$previsionDate->getDatePrev()->format('Y-m-d')][]=$previsionDate;
+        }
+
+        foreach ($tabNotes as $keyDate=>$note) {
+            if ($tabListePrevisionDate[$keyDate] != null && count($tabListePrevisionDate[$keyDate])>0) {
+                $tabNotes[$keyDate] = NoteWind::calculNoteWind($tabListePrevisionDate[$keyDate]);
+            }
+        }
+
+
+        return $this->container->get('templating')->renderResponse('LaPoizWindBundle:BackOffice/Spot/Ajax:windDisplayNote.html.twig',
+            array(
+                'tabNotes' => $tabNotes,
+                'message' => "",
+                'saveSuccess' => true
+            ));
+    }
+
 }

@@ -143,12 +143,9 @@ _bo_ajax_spot_dataWindPrev:
   defaults: { _controller: LaPoizWindBundle:BOAjaxSite:spotWebSite }
   pattern: /admin/BO/ajax/spot/webSite/{id}
 
-
-
-
-_json_spot_list:
-  defaults: { _controller: LaPoizWindBundle:JSon:listSpots }
-  pattern: /json/spot/list
+_bo_ajax_spot_wind_launch_note:
+  defaults: { _controller: LaPoizWindBundle:BOAjaxSite:spotLaunchWindNote }
+  pattern: /admin/BO/ajax/spot/wind/note/{id}
 
 _json_spot_detail:
   defaults: { _controller: LaPoizWindBundle:JSon:detailSpot }

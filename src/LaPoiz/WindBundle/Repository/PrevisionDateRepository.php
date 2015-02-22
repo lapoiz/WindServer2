@@ -150,8 +150,9 @@ class PrevisionDateRepository extends EntityRepository
 		$queryBuilder = $this->createQueryBuilder('previsionDate');
 		$queryBuilder
 		->where($queryBuilder->expr()->andx(
-		$queryBuilder->expr().eq('previsionDate.dataWindPrev_id',$dataWindPrev.id),
-		$queryBuilder->expr().gte('previsionDate.datePrev','NOW')));
+		$queryBuilder->expr()->eq('previsionDate.dataWindPrev_id',$dataWindPrev->getId()),
+		$queryBuilder->expr()->gte('previsionDate.datePrev','NOW')));
+
 		try {
 			return $queryBuilder->getQuery()->getResult();
 		} catch (\Doctrine\ORM\NoResultException $e) {
@@ -165,11 +166,24 @@ class PrevisionDateRepository extends EntityRepository
 	 */
 	public function getPrevDateAllWebSiteNextDays($spot)
 	{
-		$queryBuilder = $this->createQueryBuilder('previsionDate');
-		$queryBuilder
-		->where($queryBuilder->expr()->andx(
-		$queryBuilder->expr().eq('previsionDate.dataWindPrev.spot_id',$spot.id),
-		$queryBuilder->expr().gte('previsionDate.datePrev','NOW')));
+		//$queryBuilder = $this->createQueryBuilder('previsionDate');
+		//$queryBuilder
+		//->where($queryBuilder->expr()->andx(
+		//$queryBuilder->expr()->eq('previsionDate.dataWindPrev.spot_id',$spot->getId())
+		//,$queryBuilder->expr()->gte('previsionDate.datePrev',"'".(new \DateTime('now'))->format('Y-m-d H:i:s')."'")
+        //        ));
+        //$queryBuilder->setParameter('today', new \DateTime("now"));
+
+
+        $queryBuilder = $this->createQueryBuilder('previsionDate');
+        $queryBuilder
+            ->leftJoin('previsionDate.dataWindPrev', 'dataWindPrev')
+            ->leftJoin('dataWindPrev.spot', 'spot')
+            ->where($queryBuilder->expr()->andx(
+                    $queryBuilder->expr()->eq('spot.id',$spot->getId()),
+                    $queryBuilder->expr()->gte('previsionDate.datePrev',"'".(new \DateTime('now'))->format('Y-m-d H:i:s')."'")));
+
+
 		try {
 			return $queryBuilder->getQuery()->getResult();
 		} catch (\Doctrine\ORM\NoResultException $e) {
@@ -187,8 +201,8 @@ class PrevisionDateRepository extends EntityRepository
 		$queryBuilder = $this->createQueryBuilder('previsionDate');
 		$queryBuilder
 		->where($queryBuilder->expr()->andx(
-		$queryBuilder->expr().eq('previsionDate.dataWindPrev.spot_id',$spot.id),
-		$queryBuilder->expr().eq('previsionDate.datePrev',$date)));//TODO:check for houre
+		$queryBuilder->expr()->eq('previsionDate.dataWindPrev.spot_id',$spot->getId()),
+		$queryBuilder->expr()->eq('previsionDate.datePrev',$date)));//TODO:check for houre
 		try {
 			return $queryBuilder->getQuery()->getResult();
 		} catch (\Doctrine\ORM\NoResultException $e) {

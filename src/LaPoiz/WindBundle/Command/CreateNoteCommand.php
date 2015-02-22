@@ -3,6 +3,7 @@
 namespace LaPoiz\WindBundle\Command;
 
 use LaPoiz\WindBundle\core\note\NoteMaree;
+use LaPoiz\WindBundle\core\note\NoteWind;
 use LaPoiz\WindBundle\core\websiteDataManage\WebsiteGetData;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
@@ -109,38 +110,28 @@ class CreateNoteCommand extends ContainerAwareCommand  {
 
 
             //********** Wind **********
-            // récupére toutes les prévisions de tous les sites
-            foreach ($spot->getDataWindPrev() as $dataWindPrev) {
-                $previsionDateListe = $this->getDoctrine()->getRepository('LaPoizWindBundle:PrevisionDate')->findLastCreated($dataWindPrev);
+            //list des PrevisionDate pour les prochain jour, pour le spot pour tous les websites
+            $listALlPrevisionDate = $this->getDoctrine()->getRepository('LaPoizWindBundle:PrevisionDate')->getPrevDateAllWebSiteNextDays($spot);
 
-                // Spécial pour MeteoFrance ?
 
-                // Pour chaque jour
-                foreach ($previsionDateListe as $previsionDate) {
-                    $tabInf12Nds = 0;
-                    $tabSupr12Nds = 0;
-                    $tabSupr15Nds = 0;
+            $tabListePrevisionDate = array(); // tableau des liste des PrevisionDate, cahque cellule correspondant à une dateprev
 
-                    foreach ($previsionDate->getListPrevision() as $prevision) {
+            // Pour les 7 prochains jours
+            $day= new \DateTime("now");
+            for ($nbPrevision=0; $nbPrevision<7; $nbPrevision++) {
+                $tabListePrevisionDate[$day->format('Y-m-d')]=array();
+                $day->modify('+1 day');
+            }
 
-                        // vérifie que $previsionDate->getDatePrev() soit dans $tabNotes
+            foreach ($listALlPrevisionDate as $previsionDate) {
+                // ajouter au tableau de la cellule du jour de $tabListePrevisionDate
+                $tabListePrevisionDate[$previsionDate->getDatePrev()->format('Y-m-d')][]=$previsionDate;
+            }
 
-                        // si dans la tranche horaire de $prevision->getTime()
-                        $wind = $prevision->getWind();
-                        if ($wind < 12 ) {
-                            $tabInf12Nds++;
-                        } else { //($wind >= 12 )
-                            $tabSupr12Nds++;
-                            if ($wind > 15 ) {
-                                $tabSupr15Nds++;
-                            }
-                        }
-                        // calcul la note pour la journée
-                        // $tabNotes[$previsionDate->getDatePrev()->format("Y-m-d")]["wind"]=$note;
-                        // $tabNotes[$previsionDate->getDatePrev()->format("Y-m-d")]["wind"]=$nbHeureOK;
-                    }
+            foreach ($tabNotes as $keyDate=>$note) {
+                if ($tabListePrevisionDate[$keyDate] != null && count($tabListePrevisionDate[$keyDate])>0) {
+                    $tabNotes[$keyDate] = NoteWind::calculNoteWind($tabListePrevisionDate[$keyDate]);
                 }
-
             }
 
             //********** Précipitation **********
