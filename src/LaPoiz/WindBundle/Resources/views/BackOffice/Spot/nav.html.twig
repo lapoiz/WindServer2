@@ -201,7 +201,7 @@
 
         function deselectAllMenu() {
             // liste des menu fixe et connu
-            idMenuArray = new Array ("menuEditer", "menuAddSite");
+            idMenuArray = new Array ("menuEditer", "menuAddSite", "menuWindNote");
             // ajouter les menu des webSites
 
             {% if spot.mareeURL is defined %}
@@ -210,6 +210,7 @@
                 {% else %}
                     idMenuArray.push("menuMareeEditer");
                     idMenuArray.push("menuMareeGetData");
+                    idMenuArray.push("menuMareeNote");
                 {% endif %}
             {% else %}
                 idMenuArray.push("menuMareeCreate");

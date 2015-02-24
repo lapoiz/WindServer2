@@ -11,12 +11,16 @@ class FOController extends Controller
 {
     /**
      * @Template()
+     * Page d'accueil du site, avec la liste des sites et leurs notes
      */
     public function indexAction()
     {
        $em = $this->container->get('doctrine.orm.entity_manager');
         // récupere tous les spots
         $listSpot = $em->getRepository('LaPoizWindBundle:Spot')->findAll();
+
+        // Construire le tableau, pour afficher les notes
+
 
         return $this->container->get('templating')->renderResponse('LaPoizWindBundle:FrontOffice:index.html.twig',
             array(

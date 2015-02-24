@@ -8,6 +8,7 @@ use LaPoiz\WindBundle\Form\SpotType;
 use LaPoiz\WindBundle\Form\DataWindPrevType;
 use LaPoiz\WindBundle\core\maree\MareeGetData;
 use LaPoiz\WindBundle\core\note\NoteMaree;
+use LaPoiz\WindBundle\core\note\ManageNote;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -234,11 +235,61 @@ class BOAjaxMareeController extends Controller
         return $this->container->get('templating')->renderResponse('LaPoizWindBundle:BackOffice/Spot/Ajax/Maree:mareeDisplayNote.html.twig',
             array(
                 'tabNotes' => $tabNotes,
+                'spot' => $spot,
                 'message' => "",
                 'saveSuccess' => true
             ));
     }
 
+
+    /**
+     * @Template()
+     * Note les marées
+     * http://localhost/Wind/web/app_dev.php/admin/BO/ajax/spot/maree/note/save/1
+     */
+    public function mareeSaveNoteAction($id)
+    {
+        $em = $this->container->get('doctrine.orm.entity_manager');
+        $spot = $em->find('LaPoizWindBundle:Spot', $id);
+
+        if (!$spot)
+        {
+            return $this->container->get('templating')->renderResponse(
+                'LaPoizWindBundle:Default:errorBlock.html.twig',
+                array('errMessage' => "Spot not find !"));
+        }
+
+        // On efface les vielles notes (avant aujourd'hui)
+        ManageNote::deleteOldData($spot, $em);
+
+        $tabNotes = array();
+        // Pour les 7 prochains jours
+        $day= new \DateTime("now");
+        for ($nbPrevision=0; $nbPrevision<7; $nbPrevision++) {
+            $tabNotes[$day->format('Y-m-d')]=array();
+            $day->modify('+1 day');
+        }
+
+
+        //********** Marée **********
+        // récupére la marée du jour
+        // Note la marée en fonction des restrictions
+        $listeMareeFuture = $em->getRepository('LaPoizWindBundle:MareeDate')->getFuturMaree($spot);
+        foreach ($listeMareeFuture as $mareeDate) {
+            $noteDate = ManageNote::getNotesDate($spot,$mareeDate->getDatePrev(), $em);
+            $tabNotes = NoteMaree::calculNoteMaree($spot, $tabNotes, $mareeDate);
+            $noteDate->setNoteMaree($tabNotes[$mareeDate->getDatePrev()->format('Y-m-d')]["marée"]);
+            $em->persist($noteDate);
+        }
+        $em->flush();
+
+        return $this->container->get('templating')->renderResponse('LaPoizWindBundle:BackOffice/Spot/Ajax:displayNote.html.twig',
+            array(
+                'spot' => $spot,
+                'message' => "",
+                'saveSuccess' => true
+            ));
+    }
 
 
 

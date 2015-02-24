@@ -60,4 +60,23 @@
                 </div>
             </div>
 
+
+            <a  onclick="saveNoteMaree()" class="btn btn-primary btn-large">Save</a>
+
+            <script>
+                function saveNoteMaree(){
+                    $('#result').html('<img src="{{ asset('bundles/lapoizwind/images/loading.gif') }}" alt="Loading Ajax data" />');
+                    var id = {{ spot.id }};
+                    $.ajax({
+                        type: "POST",
+                        url: "{{ path('_bo_ajax_maree_save_note', {'id':spot.id})}}",
+                        id: id,
+                        cache: false,
+                        success: function(data){
+                            $('#result').html(data);
+                        }
+                    });
+                    return false;
+                };
+            </script>
         {% endif %}

@@ -52,7 +52,7 @@ class NoteWind {
         }
         // calcul la note pour la journée
         if ($nbNote>0) {
-            return ($noteWG+$noteWF+$noteMF)/$nbNote; // moyenne sans pondération par site Internet
+            return round(($noteWG+$noteWF+$noteMF)/$nbNote,1); // moyenne sans pondération par site Internet
         } else {
             return -1;
         }

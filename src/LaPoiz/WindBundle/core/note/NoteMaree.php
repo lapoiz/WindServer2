@@ -59,7 +59,7 @@ class NoteMaree {
                 }
 
                 // calcul de la note vis à vis de du temps de navigation / temps etat ok, warn et KO
-                $tabNotes[$mareeDate->getDatePrev()->format('Y-m-d')]["marée"]=NoteMaree::getNot($timeMareeOK, $timeMareeWarn, $timeMareeKO);
+                $tabNotes[$mareeDate->getDatePrev()->format('Y-m-d')]["marée"]=NoteMaree::getNote($timeMareeOK, $timeMareeWarn, $timeMareeKO);
 
                 $tabNotes[$mareeDate->getDatePrev()->format('Y-m-d')]["maréeTimeOK"]=$timeMareeOKTab;
                 $tabNotes[$mareeDate->getDatePrev()->format('Y-m-d')]["maréeTimeWarn"]=$timeMareeWarnTab;
@@ -337,10 +337,10 @@ class NoteMaree {
      * @param $timeMareeKO
      * Calcul la note en fonction du temps de chaque état
      */
-    static function getNot($timeMareeOK, $timeMareeWarn, $timeMareeKO) {
+    static function getNote($timeMareeOK, $timeMareeWarn, $timeMareeKO) {
         $totalTime = $timeMareeOK+$timeMareeWarn+$timeMareeKO;
         if ($totalTime>0) {
-            return ($timeMareeOK + 0.5 * $timeMareeWarn) / $totalTime;
+            return round(($timeMareeOK + 0.5 * $timeMareeWarn) / $totalTime,1);
         } else {
             return -1;
         }
