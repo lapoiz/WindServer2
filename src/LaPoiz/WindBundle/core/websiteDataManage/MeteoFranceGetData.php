@@ -312,7 +312,7 @@ class MeteoFranceGetData extends WebsiteGetData
 	// return: 15
 	static private function getTempClean($htmlValue) {
 		if (preg_match('#[0-9]+#',$htmlValue,$value)>0) {
-			return $value[0];
+			return intval($value[0]);
 		} else {
 			return "?";
 		}

@@ -89,6 +89,7 @@ class NoteWind {
                             $nbSupr15Nds=$nbSupr15Nds+0.5;
                             //$nbInf12Nds=$nbInf12Nds+0.5;
                         }
+                        // if ($wind > 40 ) ??????
                     } else {
                         if ($stateOrientation=='OK' || $stateOrientation=='?') {
                             $nbSupr12Nds++;

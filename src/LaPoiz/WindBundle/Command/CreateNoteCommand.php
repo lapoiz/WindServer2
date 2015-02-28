@@ -4,7 +4,11 @@ namespace LaPoiz\WindBundle\Command;
 
 use LaPoiz\WindBundle\core\note\NoteMaree;
 use LaPoiz\WindBundle\core\note\NoteWind;
+use LaPoiz\WindBundle\core\note\NoteMeteo;
+use LaPoiz\WindBundle\core\note\NoteTemp;
+use LaPoiz\WindBundle\core\note\ManageNote;
 use LaPoiz\WindBundle\core\websiteDataManage\WebsiteGetData;
+
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -33,189 +37,72 @@ class CreateNoteCommand extends ContainerAwareCommand  {
 
     	
     	foreach ($listSpot as $spot) {
-    		$output->write('<info>Spot '.$spot->getNom().' - </info>');
+    		$output->write('<info>Note du Spot '.$spot->getNom().' - </info>');
+
+            // On efface les vielles notes (avant aujourd'hui)
+            ManageNote::deleteOldData($spot, $em);
 
             $tabNotes = array();
-            // Pour les 7 prochains jours
-            $day= new \DateTime("now");
-            for ($nbPrevision=0; $nbPrevision<7; $nbPrevision++) {
-                $tabNotes[$day->format('Y-m-d')]=array();
-                $day->modify('+1 day');
-            }
-
-            //********** Marée **********
-            // récupére la marée du jour
-            // Note la marée en fonction des restrictions et entre 9h et 19h
-            $listeMareeFuture = $em->getRepository('LaPoizWindBundle:MareeDate')->getFuturMaree($spot);
-            foreach ($listeMareeFuture as $mareeDate) {
-                NoteMaree::calculNoteMaree($spot, $tabNotes, $mareeDate);
-            }
-
-
-
-            //********** Orientation **********
-            if ($spot->getWindOrientation() !=null && count($spot->getWindOrientation())>0) {
-
-                // récupére l'orientation du vent sur WindFinder
-                foreach ($spot->getDataWindPrev() as $dataWindPrev) {
-                    // Recherche WindFinder
-                    if ($dataWindPrev->getWebSite()->getNom()==WebsiteGetData::windFinderName) {
-                        // $dataWindPrev -> WindFinder + spot
-
-                        // Création d'un tableau des orientations
-                        $tabOrientation = array();
-                        foreach ($spot->getWindOrientation() as $windOrientation) {
-                            $tabOrientation[$windOrientation->getOrientation()]=$windOrientation->getState();
-                        }
-
-                        $previsionDateListe = $this->getDoctrine()->getRepository('LaPoizWindBundle:PrevisionDate')->findLastCreated($dataWindPrev);
-
-                        // Pour chaque jour
-                        foreach ($previsionDateListe as $previsionDate) {
-
-                            // vérifie que $previsionDate->getDatePrev() soit dans $tabNotes
-
-                            // tableau du nb d'orientation par état
-                            $tabNbOrientation = array("OK"=>0, "warn"=>0, "KO"=>0);
-
-                            // regarde quel est l'etat de l'orientation durant la période de navigation
-                            foreach ($previsionDate->getListPrevision() as $prevision) {
-                                // if (dans le creneau horaire) {
-                                // $orientationState = $tabOrientation[getOrientation($prevision->getOrientation())]]
-                                // $tabNbOrientation[$orientationState] = $tabNbOrientation[$orientationState]+1;
-                                // }
-                            }
-                            // calcule la note pour la journnée
-                            // $tabNotes[$previsionDate->getDatePrev()->format("Y-m-d")]["windOrientation"]=$note;
-                            // $tabNotes[$previsionDate->getDatePrev()->format("Y-m-d")]["windOrientationData"]=$nbHeureOK;
-                        }
-
-                    }
-                }
-            }
-
-            //********** Température **********
-            ///////// récupére la temperature dans le spot - Dans MeteoFranceGetData (par ex)
-
-            // calcul la température moyenne entre 9h et 19h
-            // Note la température entre 9h et 19h en fonction:
-            //  du temps ou la temperature est inf à ...
-            //  du temps ou la temperature est entre ... et ...
-            //  du temps ou la temperature est supérieur à ...
-
-            //********** Température de l'eau **********
-            // rien n'existe actuellement
-            // récupére la temperature de l'eau dans la journée (elle ne varie quasi pas
-            // calcul de la note en fonction de la T°C
-
-
-            //********** Wind **********
-            //list des PrevisionDate pour les prochain jour, pour le spot pour tous les websites
-            $listALlPrevisionDate = $this->getDoctrine()->getRepository('LaPoizWindBundle:PrevisionDate')->getPrevDateAllWebSiteNextDays($spot);
-
-
-            $tabListePrevisionDate = array(); // tableau des liste des PrevisionDate, cahque cellule correspondant à une dateprev
+            $tabListePrevisionDate = array(); // tableau des liste des PrevisionDate, chaque cellule correspondant à une dateprev
 
             // Pour les 7 prochains jours
             $day= new \DateTime("now");
             for ($nbPrevision=0; $nbPrevision<7; $nbPrevision++) {
+                $tabNotes[$day->format('Y-m-d')]=-1;
                 $tabListePrevisionDate[$day->format('Y-m-d')]=array();
                 $day->modify('+1 day');
             }
+
+            $output->write('<info>Note la maree </info>');
+
+            //********** Marée **********
+            // récupére la marée du jour
+            // Note la marée en fonction des restrictions
+            $listeMareeFuture = $em->getRepository('LaPoizWindBundle:MareeDate')->getFuturMaree($spot);
+            foreach ($listeMareeFuture as $mareeDate) {
+                $noteDate = ManageNote::getNotesDate($spot,$mareeDate->getDatePrev(), $em);
+                $tabNotes = NoteMaree::calculNoteMaree($spot, $tabNotes, $mareeDate);
+                $noteDate->setNoteMaree($tabNotes[$mareeDate->getDatePrev()->format('Y-m-d')]["marée"]);
+                $em->persist($noteDate);
+            }
+
+            $output->writeln('<info>Note la Météo</info>');
+            //********** Meteo **********
+
+            //list des PrevisionDate pour les prochain jour, pour le spot pour tous les websites
+            $listALlPrevisionDate = $em->getRepository('LaPoizWindBundle:PrevisionDate')->getPrevDateAllWebSiteNextDays($spot);
 
             foreach ($listALlPrevisionDate as $previsionDate) {
                 // ajouter au tableau de la cellule du jour de $tabListePrevisionDate
                 $tabListePrevisionDate[$previsionDate->getDatePrev()->format('Y-m-d')][]=$previsionDate;
             }
 
+            // Save Note on spot
             foreach ($tabNotes as $keyDate=>$note) {
                 if ($tabListePrevisionDate[$keyDate] != null && count($tabListePrevisionDate[$keyDate])>0) {
-                    $tabNotes[$keyDate] = NoteWind::calculNoteWind($tabListePrevisionDate[$keyDate]);
+                    $noteDate = ManageNote::getNotesDate($spot,\DateTime::createFromFormat('Y-m-d',$keyDate), $em);
+                    $output->write('<info>'.$keyDate.': ');
+                    $noteDate->setNoteWind(NoteWind::calculNoteWind($tabListePrevisionDate[$keyDate]));
+                    $output->write(' wind:'.$noteDate->getNoteWind().' - ');
+                    $noteDate->setNoteMeteo(NoteMeteo::calculNoteMeteo($tabListePrevisionDate[$keyDate]));
+                    $output->write(' meteo:'.$noteDate->getNoteMeteo().' - ');
+                    $noteDate->setNoteTemp(NoteTemp::calculNoteTemp($tabListePrevisionDate[$keyDate]));
+                    $output->write(' temp:'.$noteDate->getNoteTemp());
+                    $output->writeln('</info>');
+                    $em->persist($noteDate);
                 }
             }
 
-            //********** Précipitation **********
-            // Depuis WindFinder
+            $em->flush();
 
-            // Boucle sur tous les sites
-            foreach ($spot->getDataWindPrev() as $dataWindPrev) {
-                // Recherche WindFinder
-                if ($dataWindPrev->getWebSite()->getNom()==WebsiteGetData::windFinderName) {
-                    // $dataWindPrev -> WindFinder + spot
+            //********** Température de l'eau **********
+            // rien n'existe actuellement
+            // récupére la temperature de l'eau dans la journée (elle ne varie quasi pas
+            // calcul de la note en fonction de la T°C
 
-                    // Récupére les dernieres prévisions
-                    $previsionDateListe = $this->getDoctrine()->getRepository('LaPoizWindBundle:PrevisionDate')->findLastCreated($dataWindPrev);
-
-                    // Pour chaque jour
-                    foreach ($previsionDateListe as $previsionDate) {
-
-                        // vérifie que $previsionDate->getDatePrev() soit dans $tabNotes
-
-                        // nb de fois sous l'eau + quantité
-                        $tempsFortePluie = 0;
-                        $tempsPetitePluie = 0;
-                        $tempsSansPluie = 0;
-
-                        // regarde la précipitation durant la période de navigation
-                        foreach ($previsionDate->getListPrevision() as $prevision) {
-                            // if (dans le creneau horaire) {
-                            $precipitation = $prevision->getPrecipitation();
-                            //if ($precipitation=0) {// Attention c'est un String dans la BD
-                            //$tempsSansPluie++;
-                            //} elseif ($precipitation<??) {
-                                //$tempsPetitePluie++;
-                            //} elseif ($precipitation>=??) {
-                            //$tempsFortePluie++;
-                            //}
-
-                            // }
-                        }
-                        // calcule la note pour la journnée
-                        // $tabNotes[$previsionDate->getDatePrev()->format("Y-m-d")]["Precipitation"]=$note;
-                        // $tabNotes[$previsionDate->getDatePrev()->format("Y-m-d")]["PrecipitationData"]=$nbHeureOK;
-                    }
-
-                }
-            }
-
-
-            //********** Météo **********
-            // récupére la météo: Meteo France + couverture nuageuse
-            // calcul le nombre d'heure au soleil
-            // calcul le nombre d'heure sous les nuages
-            // calcul le nombre d'heure sous les orages
-            // Calcul la note
-
-            /////////////// A EFFACER ///////////////////////////////
-
-
-
-    			
-    		// save data
-    		$websiteGetData=WebsiteGetData::getWebSiteObject($dataWindPrev);// return WindguruGetData or MeteoFranceGetData... depend of $dataWindPrev
-    		
-    		$data=$websiteGetData->getDataFromURL($dataWindPrev); // array($result,$chrono)
-    		$output->write('<info>    get data: '.$data[1].'</info>');
-    		$analyse=$websiteGetData->analyseDataFromPage($data[0],$dataWindPrev->getUrl()); // array($result,$chrono)
-    		$output->write('<info>    analyse: '.$analyse[1].'</info>');
-    		$transformData=$websiteGetData->transformDataFromTab($analyse[0]); // array($result,$chrono)
-    		$output->write('<info>    transforme data: '.$transformData[1].'</info>');
-    		$saveData=$websiteGetData->saveFromTransformData($transformData[0],$dataWindPrev,$em); // array(array $prevDate,$chrono)
-    		$output->writeln('<info>    save data: '.$saveData[1].'</info>');
     		$output->writeln('<info>******************************</info>');
     	}
 
-
-        // Get Marée
-        $spotList = $em->getRepository('LaPoizWindBundle:Spot')->findAll();
-
-        $output->writeln('<info>************** GET MAREE ****************</info>');
-        foreach ($spotList as $spot) {
-            if ($spot->getMareeURL()!=null) {
-                $prevMaree = MareeGetData::getMaree($spot->getMareeURL());
-                MareeGetData::saveMaree($spot, $prevMaree, $em, $output);
-            }
-        }
     }
 
 }

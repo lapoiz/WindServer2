@@ -147,13 +147,13 @@ _bo_ajax_spot_dataWindPrev:
   defaults: { _controller: LaPoizWindBundle:BOAjaxSite:spotWebSite }
   pattern: /admin/BO/ajax/spot/webSite/{id}
 
-_bo_ajax_spot_wind_launch_note:
-  defaults: { _controller: LaPoizWindBundle:BOAjaxSite:spotLaunchWindNote }
-  pattern: /admin/BO/ajax/spot/wind/note/{id}
+_bo_ajax_spot_meteo_launch_note:
+  defaults: { _controller: LaPoizWindBundle:BOAjaxSite:spotLaunchMeteoNote }
+  pattern: /admin/BO/ajax/spot/meteo/note/{id}
 
-_bo_ajax_spot_wind_save_note:
-  defaults: { _controller: LaPoizWindBundle:BOAjaxSite:spotSaveWindNote }
-  pattern: /admin/BO/ajax/spot/wind/note/save/{id}
+_bo_ajax_spot_meteo_save_note:
+  defaults: { _controller: LaPoizWindBundle:BOAjaxSite:spotSaveMeteoNote }
+  pattern: /admin/BO/ajax/spot/meteo/note/save/{id}
 
 _json_spot_detail:
   defaults: { _controller: LaPoizWindBundle:JSon:detailSpot }

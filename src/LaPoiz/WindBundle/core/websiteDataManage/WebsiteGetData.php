@@ -145,6 +145,9 @@ class WebsiteGetData
                 if (isset($dataPrev["precipitation"])) {
                     $prev->setPrecipitation($dataPrev["precipitation"]);
                 }
+                if (isset($dataPrev["temp"])) {
+                    $prev->setTemp($dataPrev["temp"]);
+                }
 				
 				WindFinderGetData::calculateWind($windCalculate,$prev);
 				

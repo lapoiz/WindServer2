@@ -20,7 +20,7 @@
                     </li>
                     {% endfor %}
                 {% endif %}
-                <li class="" id="menuWindNote"><a onclick="noteWind(this)">Note du vent</a></li>
+                <li class="" id="menuMeteoNote"><a onclick="noteMeteo(this)">Note de la météo</a></li>
             </ul>
         </div>
     </div>
@@ -82,14 +82,14 @@
             return false;
         }
 
-        function noteWind(elemLink){
+        function noteMeteo(elemLink){
             deselectAllMenu();
             elemLink.parentNode.className = elemLink.parentNode.className+" active";
             $('#result').html('<img src="{{ asset('bundles/lapoizwind/images/loading.gif') }}" alt="Loading Ajax data" />');
 
             $.ajax({
                 type: "POST",
-                url: "{{ path('_bo_ajax_spot_wind_launch_note', {'id':spot.id})}}",
+                url: "{{ path('_bo_ajax_spot_meteo_launch_note', {'id':spot.id})}}",
                 cache: false,
                 success: function(data){
                     $('#result').html(data);
@@ -201,7 +201,7 @@
 
         function deselectAllMenu() {
             // liste des menu fixe et connu
-            idMenuArray = new Array ("menuEditer", "menuAddSite", "menuWindNote");
+            idMenuArray = new Array ("menuEditer", "menuAddSite", "menuMeteoNote");
             // ajouter les menu des webSites
 
             {% if spot.mareeURL is defined %}

@@ -9,6 +9,7 @@
                     <th>Date</th>
                     <th>Vent</th>
                     <th>Marée</th>
+                    <th>Meteo</th>
                     <th>T°C</th>
                 </tr>
             </thead>
@@ -29,6 +30,13 @@
                             {{ "?" }}
                         {% else %}
                             {{ notesDate.noteMaree }}
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if notesDate.noteMeteo is not defined or notesDate.noteMeteo is null %}
+                            {{ "?" }}
+                        {% else %}
+                            {{ notesDate.noteMeteo }}
                         {% endif %}
                     </td>
                     <td>

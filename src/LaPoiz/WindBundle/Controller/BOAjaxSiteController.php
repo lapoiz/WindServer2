@@ -8,6 +8,8 @@ use LaPoiz\WindBundle\Entity\WebSite;
 use LaPoiz\WindBundle\Form\SpotType;
 use LaPoiz\WindBundle\Form\DataWindPrevType;
 use LaPoiz\WindBundle\core\note\NoteWind;
+use LaPoiz\WindBundle\core\note\NoteMeteo;
+use LaPoiz\WindBundle\core\note\NoteTemp;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Security\Core\SecurityContext;
@@ -202,13 +204,73 @@ class BOAjaxSiteController extends Controller
         }
     }
 
+    /**
+     * @Template()
+     * Note la meteo: vent +  pluie + soleil + Temp
+     * http://localhost/Wind/web/app_dev.php/admin/BO/ajax/spot/meteo/note/1
+     */
+    public function spotLaunchMeteoNoteAction($id)
+    {
+        $em = $this->container->get('doctrine.orm.entity_manager');
+        $spot = $em->find('LaPoizWindBundle:Spot', $id);
+
+        if (!$spot)
+        {
+            return $this->container->get('templating')->renderResponse(
+                'LaPoizWindBundle:Default:errorBlock.html.twig',
+                array('errMessage' => "Spot not find !"));
+        }
+
+
+        $tabNotes = array();
+        $tabListePrevisionDate = array(); // tableau des liste des PrevisionDate, cahque cellule correspondant à une dateprev
+
+        // Pour les 7 prochains jours
+        $day= new \DateTime("now");
+        for ($nbPrevision=0; $nbPrevision<7; $nbPrevision++) {
+            $tabNotes[$day->format('Y-m-d')]=array();
+            $tabListePrevisionDate[$day->format('Y-m-d')]=array();
+            $day->modify('+1 day');
+        }
+
+        //********** Meteo **********
+
+        //list des PrevisionDate pour les prochain jour, pour le spot pour tous les websites
+        $listALlPrevisionDate = $this->getDoctrine()->getRepository('LaPoizWindBundle:PrevisionDate')->getPrevDateAllWebSiteNextDays($spot);
+
+        foreach ($listALlPrevisionDate as $previsionDate) {
+            // ajouter au tableau de la cellule du jour de $tabListePrevisionDate
+            $nomSite=$previsionDate->getDataWindPrev()->getWebsite()->getNom();
+            $nomSpot=$previsionDate->getDataWindPrev()->getSpot()->getNom();
+
+            // Todo: couple spot/website/datePrev en double -> regarder comment récupérer dans le Repository un seul objet de chaque
+            $tabListePrevisionDate[$previsionDate->getDatePrev()->format('Y-m-d')][]=$previsionDate;
+        }
+
+        foreach ($tabNotes as $keyDate=>$note) {
+            if ($tabListePrevisionDate[$keyDate] != null && count($tabListePrevisionDate[$keyDate])>0) {
+                $tabNotes[$keyDate]["wind"] = NoteWind::calculNoteWind($tabListePrevisionDate[$keyDate]);
+                $tabNotes[$keyDate]["meteo"] = NoteMeteo::calculNoteMeteo($tabListePrevisionDate[$keyDate]);
+                $tabNotes[$keyDate]["temp"] = NoteTemp::calculNoteTemp($tabListePrevisionDate[$keyDate]);
+            }
+        }
+
+
+        return $this->container->get('templating')->renderResponse('LaPoizWindBundle:BackOffice/Spot/Ajax:meteoDisplayNote.html.twig',
+            array(
+                'tabNotes' => $tabNotes,
+                'spot' => $spot,
+                'message' => "",
+                'saveSuccess' => true
+            ));
+    }
 
     /**
      * @Template()
-     * Note le vent
-     * http://localhost/Wind/web/app_dev.php/admin/BO/ajax/spot/wind/note/1
+     * Note la meteo: pluie + soleil
+     * http://localhost/Wind/web/app_dev.php/admin/BO/ajax/spot/meteo/note/save/1
      */
-    public function spotLaunchWindNoteAction($id)
+    public function spotSaveMeteoNoteAction($id)
     {
         $em = $this->container->get('doctrine.orm.entity_manager');
         $spot = $em->find('LaPoizWindBundle:Spot', $id);
@@ -232,83 +294,30 @@ class BOAjaxSiteController extends Controller
             $day->modify('+1 day');
         }
 
-        //********** Wind **********
+        //********** Meteo **********
 
-        //list des PrevisionDate pour les prochain jour, pour le spot pour tous les websites
-        $listALlPrevisionDate = $this->getDoctrine()->getRepository('LaPoizWindBundle:PrevisionDate')->getPrevDateAllWebSiteNextDays($spot);
-
-        foreach ($listALlPrevisionDate as $previsionDate) {
-            // ajouter au tableau de la cellule du jour de $tabListePrevisionDate
-            $tabListePrevisionDate[$previsionDate->getDatePrev()->format('Y-m-d')][]=$previsionDate;
-        }
-
-        foreach ($tabNotes as $keyDate=>$note) {
-            if ($tabListePrevisionDate[$keyDate] != null && count($tabListePrevisionDate[$keyDate])>0) {
-                $tabNotes[$keyDate] = NoteWind::calculNoteWind($tabListePrevisionDate[$keyDate]);
-            }
-        }
-
-
-        return $this->container->get('templating')->renderResponse('LaPoizWindBundle:BackOffice/Spot/Ajax:windDisplayNote.html.twig',
-            array(
-                'tabNotes' => $tabNotes,
-                'spot' => $spot,
-                'message' => "",
-                'saveSuccess' => true
-            ));
-    }
-
-    /**
-     * @Template()
-     * sauve les notes du vent
-     * http://localhost/Wind/web/app_dev.php/admin/BO/ajax/spot/wind/note/save/1
-     */
-    public function spotSaveWindNoteAction($id)
-    {
-        $em = $this->container->get('doctrine.orm.entity_manager');
-        $spot = $em->find('LaPoizWindBundle:Spot', $id);
-
-        if (!$spot)
-        {
-            return $this->container->get('templating')->renderResponse(
-                'LaPoizWindBundle:Default:errorBlock.html.twig',
-                array('errMessage' => "Spot not find !"));
-        }
-
-
-        $tabNotes = array();
-        $tabListePrevisionDate = array(); // tableau des liste des PrevisionDate, chaque cellule correspondant à une dateprev
-
-        // Pour les 7 prochains jours
-        $day= new \DateTime("now");
-        for ($nbPrevision=0; $nbPrevision<7; $nbPrevision++) {
-            $tabNotes[$day->format('Y-m-d')]=-1;
-            $tabListePrevisionDate[$day->format('Y-m-d')]=array();
-            $day->modify('+1 day');
-        }
-
-        //********** Wind **********
-
-        //list des PrevisionDate pour les prochain jour, pour le spot pour tous les websites
-        $listALlPrevisionDate = $this->getDoctrine()->getRepository('LaPoizWindBundle:PrevisionDate')->getPrevDateAllWebSiteNextDays($spot);
-
-        foreach ($listALlPrevisionDate as $previsionDate) {
-            // ajouter au tableau de la cellule du jour de $tabListePrevisionDate
-            $tabListePrevisionDate[$previsionDate->getDatePrev()->format('Y-m-d')][]=$previsionDate;
-        }
 
         // On efface les vielle données
         ManageNote::deleteOldData($spot, $em);
 
-        // Save Note on spot
+        //list des PrevisionDate pour les prochain jour, pour le spot pour tous les websites
+        $listALlPrevisionDate = $this->getDoctrine()->getRepository('LaPoizWindBundle:PrevisionDate')->getPrevDateAllWebSiteNextDays($spot);
+
+        foreach ($listALlPrevisionDate as $previsionDate) {
+            // ajouter au tableau de la cellule du jour de $tabListePrevisionDate
+            $tabListePrevisionDate[$previsionDate->getDatePrev()->format('Y-m-d')][]=$previsionDate;
+        }
 
         foreach ($tabNotes as $keyDate=>$note) {
             if ($tabListePrevisionDate[$keyDate] != null && count($tabListePrevisionDate[$keyDate])>0) {
                 $noteDate = ManageNote::getNotesDate($spot,\DateTime::createFromFormat('Y-m-d',$keyDate), $em);
+                $noteDate->setNoteMeteo(NoteMeteo::calculNoteMeteo($tabListePrevisionDate[$keyDate]));
                 $noteDate->setNoteWind(NoteWind::calculNoteWind($tabListePrevisionDate[$keyDate]));
+                $noteDate->setNoteTemp(NoteTemp::calculNoteTemp($tabListePrevisionDate[$keyDate]));
                 $em->persist($noteDate);
             }
         }
+
         $em->flush();
 
         return $this->container->get('templating')->renderResponse('LaPoizWindBundle:BackOffice/Spot/Ajax:displayNote.html.twig',
