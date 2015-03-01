@@ -148,10 +148,15 @@ class PrevisionDateRepository extends EntityRepository
 	public function getPrevDateOneWebSiteNextDays($dataWindPrev)
 	{
 		$queryBuilder = $this->createQueryBuilder('previsionDate');
-		$queryBuilder
-		->where($queryBuilder->expr()->andx(
-		$queryBuilder->expr()->eq('previsionDate.dataWindPrev_id',$dataWindPrev->getId()),
-		$queryBuilder->expr()->gte('previsionDate.datePrev','NOW')));
+
+		$queryBuilder->innerJoin('previsionDate.dataWindPrev', 'dataWindPrev');
+        $queryBuilder->addSelect('dataWindPrev');
+
+         $queryBuilder->where($queryBuilder->expr()->andx(
+		        $queryBuilder->expr()->eq('dataWindPrev.id',$dataWindPrev->getId()),
+		        $queryBuilder->expr()->gte('previsionDate.datePrev',"'".(new \DateTime('now'))->format('Y-m-d H:i:s')."'")));
+
+        $queryBuilder->groupBy('previsionDate.datePrev');
 
 		try {
 			return $queryBuilder->getQuery()->getResult();
@@ -166,29 +171,11 @@ class PrevisionDateRepository extends EntityRepository
 	 */
 	public function getPrevDateAllWebSiteNextDays($spot)
 	{
-		//$queryBuilder = $this->createQueryBuilder('previsionDate');
-		//$queryBuilder
-		//->where($queryBuilder->expr()->andx(
-		//$queryBuilder->expr()->eq('previsionDate.dataWindPrev.spot_id',$spot->getId())
-		//,$queryBuilder->expr()->gte('previsionDate.datePrev',"'".(new \DateTime('now'))->format('Y-m-d H:i:s')."'")
-        //        ));
-        //$queryBuilder->setParameter('today', new \DateTime("now"));
-
-
-        $queryBuilder = $this->createQueryBuilder('previsionDate');
-        $queryBuilder
-            ->leftJoin('previsionDate.dataWindPrev', 'dataWindPrev')
-            ->leftJoin('dataWindPrev.spot', 'spot')
-            ->where($queryBuilder->expr()->andx(
-                    $queryBuilder->expr()->eq('spot.id',$spot->getId()),
-                    $queryBuilder->expr()->gte('previsionDate.datePrev',"'".(new \DateTime('now'))->format('Y-m-d H:i:s')."'")));
-
-
-		try {
-			return $queryBuilder->getQuery()->getResult();
-		} catch (\Doctrine\ORM\NoResultException $e) {
-			return null;
-		}
+        $result = array();
+        foreach ($spot->getDataWindPrev() as $dataWindPrev) {
+            $result=array_merge($result,$this->getPrevDateOneWebSiteNextDays($dataWindPrev));
+        }
+        return $result;
 	}
 
 	/**

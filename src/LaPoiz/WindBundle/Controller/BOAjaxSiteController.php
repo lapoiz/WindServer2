@@ -240,10 +240,6 @@ class BOAjaxSiteController extends Controller
 
         foreach ($listALlPrevisionDate as $previsionDate) {
             // ajouter au tableau de la cellule du jour de $tabListePrevisionDate
-            $nomSite=$previsionDate->getDataWindPrev()->getWebsite()->getNom();
-            $nomSpot=$previsionDate->getDataWindPrev()->getSpot()->getNom();
-
-            // Todo: couple spot/website/datePrev en double -> regarder comment récupérer dans le Repository un seul objet de chaque
             $tabListePrevisionDate[$previsionDate->getDatePrev()->format('Y-m-d')][]=$previsionDate;
         }
 
