@@ -18,13 +18,34 @@ class FOController extends Controller
        $em = $this->container->get('doctrine.orm.entity_manager');
         // récupere tous les spots
         $listSpot = $em->getRepository('LaPoizWindBundle:Spot')->findAll();
+        $tabNotesAllSpots=array();
 
         // Construire le tableau, pour afficher les notes
+        foreach ($listSpot as $spot) {
 
+            $tabNotes = array();
+            $listNotes=$spot->getNotesDate();
+
+            $day= new \DateTime("now");
+            for ($nbPrevision=0; $nbPrevision<7; $nbPrevision++) {
+                $tabNotes[$day->format('Y-m-d')]=null;
+                $day->modify('+1 day');
+            }
+
+            foreach ($listNotes as $notesDate) {
+                if (array_key_exists($notesDate->getDatePrev()->format('Y-m-d'), $tabNotes)) {
+                    $tabNotes[$notesDate->getDatePrev()->format('Y-m-d')]=$notesDate;
+                }
+            }
+
+            $tabNotesAllSpots[$spot->getNom()]=$tabNotes;
+        }
 
         return $this->container->get('templating')->renderResponse('LaPoizWindBundle:FrontOffice:index.html.twig',
             array(
-                'listSpot' => $listSpot));
+                'listSpot' => $listSpot,
+                'tabNotesAllSpots' => $tabNotesAllSpots
+            ));
     }
 
 

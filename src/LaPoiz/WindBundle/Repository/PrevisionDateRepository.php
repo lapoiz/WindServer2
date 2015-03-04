@@ -165,6 +165,7 @@ class PrevisionDateRepository extends EntityRepository
 		}
 	}
 
+
 	/**
 	 * Return list of PrevisionDate for next days (after now) for the spot for all website
 	 * @param Spot $spot
