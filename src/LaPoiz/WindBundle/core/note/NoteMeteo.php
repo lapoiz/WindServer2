@@ -56,19 +56,40 @@ class NoteMeteo {
 
     // calcul la note de la meteo (precipitation, soleil...) pour ce previsionDate qui est du site WindGuru
     static function calculateNoteWindfinder($previsionDate) {
+        $nbFoisPluie=0;
+        $nbFoisSansPluie=0;
+        $coef=1;
 
         foreach ($previsionDate->getListPrevision() as $prevision) {
 
             // si dans la tranche horaire de $prevision->getTime()
             if (NoteWind::isInGoodTime($prevision->getTime())) {
                 $precipitation = $prevision->getPrecipitation();
-
+                if ($precipitation>0) {
+                    $nbFoisPluie++;
+                } else {
+                    $nbFoisSansPluie++;
+                }
             }
         }
-        return 1;
+        $note = ($nbFoisSansPluie/($nbFoisPluie+$nbFoisSansPluie));
+        if ($precipitation>0) {
+            // On applique un coef en fonction de la densité de la pluie
+            $precipitationHeure= $precipitation/($nbFoisPluie*3); // x 3 -> car tranche de 3h
+
+            // 3mm de pluie par heure -> pluie modéréé (Wikipedia)
+            // http://fr.wikipedia.org/wiki/Pluie
+            if ($precipitationHeure<3) {
+                $coef=1.25; // on améliore la note
+            } elseif ($precipitationHeure>7) {
+                $coef=0.75; // on réduit la note
+            }
+        }
+
+        return $note*$coef;
     }
 
-    // calcul la note du vent pour ce previsionDate qui est du site Meteo France
+    // calcul la note de la meteo (precipitation, soleil...) pour ce previsionDate qui est du site Meteo France
     static function calculateNoteMeteoFrance($previsionDate) {
 
         $isDanger=false;

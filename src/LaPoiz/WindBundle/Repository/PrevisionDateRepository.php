@@ -142,11 +142,16 @@ class PrevisionDateRepository extends EntityRepository
 	}
 
 	/**
-	 * Return list of PrevisionDate for next days (after now) for the spot and website of DataWindPrev
+	 * Return list of LAST PrevisionDate for next days (after now) for the spot and website of DataWindPrev
 	 * @param DataWindPrev $dataWindPrev
 	 */
 	public function getPrevDateOneWebSiteNextDays($dataWindPrev)
 	{
+        $today=new \DateTime('now');
+        $today->setTime(0,0,0);
+
+        $lastPrevisionDate=$this->getTheLastPrevDateForWebSiteSpot($dataWindPrev);
+
 		$queryBuilder = $this->createQueryBuilder('previsionDate');
 
 		$queryBuilder->innerJoin('previsionDate.dataWindPrev', 'dataWindPrev');
@@ -154,9 +159,10 @@ class PrevisionDateRepository extends EntityRepository
 
          $queryBuilder->where($queryBuilder->expr()->andx(
 		        $queryBuilder->expr()->eq('dataWindPrev.id',$dataWindPrev->getId()),
-		        $queryBuilder->expr()->gte('previsionDate.datePrev',"'".(new \DateTime('now'))->format('Y-m-d H:i:s')."'")));
+                $queryBuilder->expr()->eq('previsionDate.created',"'".$lastPrevisionDate->getCreated()->format('Y-m-d H:i:s')."'"),
+		        $queryBuilder->expr()->gte('previsionDate.datePrev',"'".$today->format('Y-m-d H:i:s')."'")));
 
-        $queryBuilder->groupBy('previsionDate.datePrev');
+        //$queryBuilder->groupBy('previsionDate.datePrev');
 
 		try {
 			return $queryBuilder->getQuery()->getResult();
@@ -166,7 +172,31 @@ class PrevisionDateRepository extends EntityRepository
 	}
 
 
-	/**
+    /**
+     * Return the LAST PrevisionDate created for the spot and website of DataWindPrev
+     * @param DataWindPrev $dataWindPrev
+     */
+    public function getTheLastPrevDateForWebSiteSpot($dataWindPrev)
+    {
+        $queryBuilder = $this->createQueryBuilder('previsionDate');
+
+        $queryBuilder->innerJoin('previsionDate.dataWindPrev', 'dataWindPrev');
+        $queryBuilder->addSelect('dataWindPrev');
+        $queryBuilder->where(
+            $queryBuilder->expr()->eq('dataWindPrev.id',$dataWindPrev->getId())
+        );
+        $queryBuilder->orderBy('previsionDate.created', 'DESC');
+        $queryBuilder->setMaxResults(1);
+
+        try {
+            return $queryBuilder->getQuery()->getSingleResult();
+        } catch (\Doctrine\ORM\NoResultException $e) {
+            return null;
+        }
+    }
+
+
+    /**
 	 * Return list of PrevisionDate for next days (after now) for the spot for all website
 	 * @param Spot $spot
 	 */

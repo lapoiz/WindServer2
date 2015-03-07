@@ -54,7 +54,7 @@ class WindguruGetData extends WebsiteGetData
 		$tableauWindData = array();
 		$currentDate = '';
 		$firstElem=true;
-		$currenteLine;
+		$currenteLine=array();
 		//$indexCol=0;
 		
 		foreach ($tableauData['date'] as $key=>$date) {
@@ -98,7 +98,9 @@ class WindguruGetData extends WebsiteGetData
     static private function getPart($expres,$line) 
 	{ 
       //$patternPart = '#\"WINDSPD\":\[([\d\.,\"]*)#';
-      $patternPart = '#\"'.$expres.'\":\[([\d\.,\"]*)#';
+      // la valeur peut parfoit être égale à "null"
+      // $patternPart = '#\"'.$expres.'\":\[([\d\.,\"]*)#'; -> fonctionne hors "null"
+      $patternPart = '#\"'.$expres.'\":\[([\d|null\.,\"]*)#';
 	  preg_match_all($patternPart,$line,$parts);
       return $parts[1][0];
 	}

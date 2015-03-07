@@ -45,9 +45,9 @@
                             <table class="table">
                                 {% if notesDate.noteWind is defined and notesDate.noteWind is not null %}
                                     {% set classNote = 'success' %}
-                                    {% if notesDate.noteWind<0.5 %}
+                                    {% if notesDate.noteWind<0.4 %}
                                         {% set classNote = 'danger' %}
-                                    {% elseif notesDate.noteWind<0.7 %}
+                                    {% elseif notesDate.noteWind<0.6 %}
                                         {% set classNote = 'warning' %}
                                     {% endif %}
                                     <tr class="{{ classNote }}"><td>vent</td></tr>
@@ -57,9 +57,9 @@
 
                                 {% if notesDate.noteTemp is defined and notesDate.noteTemp is not null %}
                                     {% set classNote = 'success' %}
-                                    {% if notesDate.noteTemp<0.2 %}
+                                    {% if notesDate.noteTemp<0.4 %}
                                         {% set classNote = 'danger' %}
-                                    {% elseif notesDate.noteTemp<0.5 %}
+                                    {% elseif notesDate.noteTemp<0.6 %}
                                         {% set classNote = 'warning' %}
                                     {% endif %}
                                     <tr class="{{ classNote }}"><td>T°C</td></tr>
@@ -71,7 +71,7 @@
                                     {% set classNote = 'success' %}
                                     {% if notesDate.noteMeteo<0.4 %}
                                         {% set classNote = 'danger' %}
-                                    {% elseif notesDate.noteMeteo<0.7 %}
+                                    {% elseif notesDate.noteMeteo<0.8 %}
                                         {% set classNote = 'warning' %}
                                     {% endif %}
                                     <tr class="{{ classNote }}"><td>Météo</td></tr>
@@ -79,6 +79,18 @@
                                     <tr><td>Météo:?</td></tr>
                                 {% endif %}
 
+
+                                {% if notesDate.noteMaree is defined and notesDate.noteMaree is not null %}
+                                    {% set classNote = 'success' %}
+                                    {% if notesDate.noteMaree<0.4 %}
+                                        {% set classNote = 'danger' %}
+                                    {% elseif notesDate.noteMaree<0.6 %}
+                                        {% set classNote = 'warning' %}
+                                    {% endif %}
+                                    <tr class="{{ classNote }}"><td>Marée</td></tr>
+                                {% else %}
+                                    <tr><td>Marée:?</td></tr>
+                                {% endif %}
 
                             </table>
                         </td>

@@ -36,15 +36,27 @@ class NoteWind {
                 switch ($previsionDate->getDataWindPrev()->getWebSite()->getNom()) {
                     case WebsiteGetData::windguruName :
                         $noteWG=NoteWind::calculateNoteWindguru($previsionDate,$tabRosaceOrientation);
-                        $nbNote++;
+                        if ($noteWG>=0) {
+                            $nbNote++;
+                        } else {
+                            $noteWG=0;
+                        }
                         break;
                     case WebsiteGetData::windFinderName :
-                        $noteWF=NoteWind::calculateNoteWindguru($previsionDate,$tabRosaceOrientation); // même façon de calculer que WindGuru
-                        $nbNote++;
+                        $noteWF=NoteWind::calculateNoteWindFinder($previsionDate,$tabRosaceOrientation); // même façon de calculer que WindGuru
+                        if ($noteWF>=0) {
+                            $nbNote++;
+                        } else {
+                            $noteWF=0;
+                        }
                         break;
                     case WebsiteGetData::meteoFranceName :
                         $noteMF=NoteWind::calculateNoteMeteoFrance($previsionDate,$tabRosaceOrientation); // même façon de calculer que WindGuru
-                        $nbNote++;
+                        if ($noteMF>=0) {
+                            $nbNote++;
+                        } else {
+                            $noteMF=0;
+                        }
                         break;
 
                 }
@@ -70,6 +82,7 @@ class NoteWind {
         $nbInf12Nds = 0;
         $nbSupr12Nds = 0;
         $nbSupr15Nds = 0;
+        $nbOrientationKO=0;
 
         foreach ($previsionDate->getListPrevision() as $prevision) {
 
@@ -86,20 +99,25 @@ class NoteWind {
                         if ($stateOrientation=='OK' || $stateOrientation=='?') {
                             $nbSupr15Nds++;
                         } elseif ($stateOrientation=='warn') {
-                            $nbSupr15Nds=$nbSupr15Nds+0.5;
+                            $nbSupr15Nds=$nbSupr15Nds+0.5;// compté 1/2 car mauvaise orientation
                             //$nbInf12Nds=$nbInf12Nds+0.5;
+                        } else {
+                            $nbOrientationKO++;
                         }
                         // if ($wind > 40 ) ??????
                     } else {
                         if ($stateOrientation=='OK' || $stateOrientation=='?') {
                             $nbSupr12Nds++;
-                        } // si Warn -> 0 car pas assez de vent pour une orientation moyenne
+                        } else {
+                            // si Warn -> KO car pas assez de vent pour une orientation moyenne
+                            $nbOrientationKO++;
+                        }
                     }
                 }
             }
         }
-        if ($nbInf12Nds+$nbSupr12Nds+$nbSupr15Nds>0) {
-            return ($nbSupr15Nds+$nbInf12Nds*0.5)/($nbInf12Nds+$nbSupr12Nds+$nbSupr15Nds);
+        if ($nbInf12Nds+$nbSupr12Nds+$nbSupr15Nds+$nbOrientationKO>0) { // on a des chiffres
+            return ($nbSupr15Nds+$nbSupr12Nds*0.5)/($nbInf12Nds+$nbSupr12Nds+$nbSupr15Nds+$nbOrientationKO);
         } else {
             return -1;
         }
@@ -107,9 +125,19 @@ class NoteWind {
 
     // calcul la note du vent pour ce previsionDate qui est du site Meteo France
     static function calculateNoteMeteoFrance($previsionDate,$tabRosaceOrientation) {
-        return 1;
+        $note=NoteWind::calculateNoteWindguru($previsionDate,$tabRosaceOrientation);
+        if ($note<0 && $note<0.7) {
+            // MeteoFrance est toujours pessimiste niveau vent
+            $note+=0.2; // On ajoute 0.2
+        }
+        return $note;
     }
 
+    // calcul la note du vent pour ce previsionDate qui est du site WindFinder
+    static function calculateNoteWindFinder($previsionDate,$tabRosaceOrientation) {
+        // identique à WindGuru
+        return NoteWind::calculateNoteWindguru($previsionDate,$tabRosaceOrientation);
+    }
 
     // return true si $time est dans l'horaire de navigation
     static function isInGoodTime($time) {
