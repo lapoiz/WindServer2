@@ -14,3 +14,24 @@ nav {
     font-family: 'Lucida Grande', 'Lucida Sans Unicode', Arial;
     line-height: normal
 }
+.titleLineTableNote {
+    vertical-align:middle;
+}
+
+.table-note {
+    text-align: center;
+}
+
+.elemGreen {
+    background-color:green;
+}
+.elemOrange {
+    background-color:orange;
+}
+.elemRed {
+    background-color:red;
+}
+
+#meteoGraph {
+    height: 400px;
+}

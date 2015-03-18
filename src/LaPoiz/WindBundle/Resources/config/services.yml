@@ -21,6 +21,12 @@ services:
         class: LaPoiz\WindBundle\Form\MareeType
         tags:
             - { name: form.type, alias: mareeForm }
+
+#    twig.extension.intl:
+#        class: Twig\Extensions\Extension\Intl
+#        tags:
+#            - { name: twig.extension }
+
 #    la_poiz_wind.example:
 #        class: %la_poiz_wind.example.class%
 #        arguments: [@service_id, "plain_value", %parameter%]

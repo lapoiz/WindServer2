@@ -18,9 +18,11 @@
 
     <!-- Icons en plus -->
     <link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
-    <!-- Custom styles for this template -->
-    <link href="{{ asset('bundles/lapoizwind/css/laPoizWind.css') }}" rel="stylesheet">
 
+    <!-- Custom styles for this template -->
+    {% stylesheets 'bundles/lapoizwind/css/*' filter='cssrewrite' %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
 
     <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
     <script src="{{ asset('bundles/lapoizwind/js/bootstrap.min.js') }}"></script>

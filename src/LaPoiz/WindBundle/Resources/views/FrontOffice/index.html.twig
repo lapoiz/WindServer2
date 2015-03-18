@@ -19,7 +19,7 @@
 
         <h1>Les sites</h1>
 
-        <table class="table table-hover">
+        <table class="table table-hover table-note">
             <thead>
                 <tr>
                     <th>Spot</th>
@@ -33,21 +33,26 @@
 
         {% for spot in listSpot %}
             <tr>
-                <th scope="row">
+                <th scope="row" class="titleLineTableNote">
                     <a href="{{ path('_fo_spot_graph',{'id':spot.id}) }}">
                         {{ spot.nom }}</a>
                 </th>
                 {% set listNotesDate = tabNotesAllSpots[spot.nom] %}
                 {% if listNotesDate is not null %}
+
+                    {% set classTop = 'elemGreen' %}
+                    {% set classBof = 'elemOrange' %}
+                    {% set classNule = 'elemRed' %}
+
                     {% for notesDate in listNotesDate %}
                         <td>
                             <table class="table">
                                 {% if notesDate.noteWind is defined and notesDate.noteWind is not null %}
-                                    {% set classNote = 'success' %}
+                                    {% set classNote = classTop %}
                                     {% if notesDate.noteWind<0.4 %}
-                                        {% set classNote = 'danger' %}
+                                        {% set classNote = classNule %}
                                     {% elseif notesDate.noteWind<0.6 %}
-                                        {% set classNote = 'warning' %}
+                                        {% set classNote = classBof %}
                                     {% endif %}
                                     <tr class="{{ classNote }}"><td>vent</td></tr>
                                 {% else %}
@@ -55,11 +60,11 @@
                                 {% endif %}
 
                                 {% if notesDate.noteTemp is defined and notesDate.noteTemp is not null %}
-                                    {% set classNote = 'success' %}
+                                    {% set classNote = classTop %}
                                     {% if notesDate.noteTemp<0.4 %}
-                                        {% set classNote = 'danger' %}
+                                        {% set classNote = classNule %}
                                     {% elseif notesDate.noteTemp<0.6 %}
-                                        {% set classNote = 'warning' %}
+                                        {% set classNote = classBof %}
                                     {% endif %}
                                     <tr class="{{ classNote }}"><td>T°C</td></tr>
                                 {% else %}
@@ -67,29 +72,30 @@
                                 {% endif %}
 
                                 {% if notesDate.noteMeteo is defined and notesDate.noteMeteo is not null %}
-                                    {% set classNote = 'success' %}
+                                    {% set classNote = classTop %}
                                     {% if notesDate.noteMeteo<0.4 %}
-                                        {% set classNote = 'danger' %}
+                                        {% set classNote = classNule %}
                                     {% elseif notesDate.noteMeteo<0.8 %}
-                                        {% set classNote = 'warning' %}
+                                        {% set classNote = classBof %}
                                     {% endif %}
                                     <tr class="{{ classNote }}"><td>Météo</td></tr>
                                 {% else %}
                                     <tr><td>Météo:?</td></tr>
                                 {% endif %}
 
-
+                        {% if spot.mareeURL is defined and  spot.mareeURL is not null %}
                                 {% if notesDate.noteMaree is defined and notesDate.noteMaree is not null %}
-                                    {% set classNote = 'success' %}
+                                    {% set classNote = classTop %}
                                     {% if notesDate.noteMaree<0.4 %}
-                                        {% set classNote = 'danger' %}
+                                        {% set classNote = classNule %}
                                     {% elseif notesDate.noteMaree<0.6 %}
-                                        {% set classNote = 'warning' %}
+                                        {% set classNote = classBof %}
                                     {% endif %}
                                     <tr class="{{ classNote }}"><td>Marée</td></tr>
                                 {% else %}
                                     <tr><td>Marée:?</td></tr>
                                 {% endif %}
+                        {% endif %}
 
                             </table>
                         </td>
