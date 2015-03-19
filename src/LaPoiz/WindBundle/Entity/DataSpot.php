@@ -264,16 +264,6 @@ class DataSpot
     }
 
     /**
-     * Add listMaree
-     *
-     * @param LaPoiz\WindBundle\Entity\Maree $listMaree
-     */
-    public function addMaree(\LaPoiz\WindBundle\Entity\Maree $listMaree)
-    {
-        $this->listMaree[] = $listMaree;
-    }
-
-    /**
      * Set date
      *
      * @param datetime $date
@@ -303,13 +293,4 @@ class DataSpot
         $this->listDataWindSpot->removeElement($listDataWindSpot);
     }
 
-    /**
-     * Remove listMaree
-     *
-     * @param \LaPoiz\WindBundle\Entity\Maree $listMaree
-     */
-    public function removeListMaree(\LaPoiz\WindBundle\Entity\Maree $listMaree)
-    {
-        $this->listMaree->removeElement($listMaree);
-    }
 }
