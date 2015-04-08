@@ -19,13 +19,13 @@
 
         <h1>Les sites</h1>
 
-        <table class="table table-hover table-note">
+        <table class="table table-hover table-note table-bordered">
             <thead>
                 <tr>
-                    <th>Spot</th>
+                    <th class="text-center">Spot</th>
 
                     {% for i in 0..6 %}
-                        <th>{{ date('+' ~ i ~ 'days')|date('D j M') }}</th>
+                        <th class="text-center">{{ date('+' ~ i ~ 'days')|date('D j M') }}</th>
                     {% endfor %}
 
                 </tr>
@@ -46,19 +46,20 @@
 
                     {% for notesDate in listNotesDate %}
                         <td>
-                            <table class="table">
-                                {% if notesDate.noteWind is defined and notesDate.noteWind is not null %}
-                                    {% set classNote = classTop %}
-                                    {% if notesDate.noteWind<0.4 %}
-                                        {% set classNote = classNule %}
-                                    {% elseif notesDate.noteWind<0.6 %}
-                                        {% set classNote = classBof %}
-                                    {% endif %}
-                                    <tr class="{{ classNote }}"><td>vent</td></tr>
-                                {% else %}
-                                    <tr><td>vent:?</td></tr>
-                                {% endif %}
+                        <!-- Wind -->
+                        {% if notesDate.noteWind is defined and notesDate.noteWind is not null %}
+                            {% set classNote = classTop %}
+                            {% if notesDate.noteWind<0.4 %}
+                                {% set classNote = classNule %}
+                            {% elseif notesDate.noteWind<0.6 %}
+                                {% set classNote = classBof %}
+                            {% endif %}
+                            <span class="{{ classNote }}"><i class="icon-wind"></i></span>
+                        {% else %}
+                            <span><i class="icon-wind"></i></span>
+                        {% endif %}
 
+                        <!-- Temperature -->
                                 {% if notesDate.noteTemp is defined and notesDate.noteTemp is not null %}
                                     {% set classNote = classTop %}
                                     {% if notesDate.noteTemp<0.4 %}
@@ -66,11 +67,12 @@
                                     {% elseif notesDate.noteTemp<0.6 %}
                                         {% set classNote = classBof %}
                                     {% endif %}
-                                    <tr class="{{ classNote }}"><td>T°C</td></tr>
+                                    <span class="{{ classNote }}"><i class="icon-temperature"></i></span>
                                 {% else %}
-                                    <tr><td>T°C:?</td></tr>
+                                    <span><i class="icon-temperature"></i></span>
                                 {% endif %}
 
+                        <!-- Meteo -->
                                 {% if notesDate.noteMeteo is defined and notesDate.noteMeteo is not null %}
                                     {% set classNote = classTop %}
                                     {% if notesDate.noteMeteo<0.4 %}
@@ -78,11 +80,12 @@
                                     {% elseif notesDate.noteMeteo<0.8 %}
                                         {% set classNote = classBof %}
                                     {% endif %}
-                                    <tr class="{{ classNote }}"><td>Météo</td></tr>
+                                    <span class="{{ classNote }}"><i class="icon-cloud-sun-inv"></i></span>
                                 {% else %}
-                                    <tr><td>Météo:?</td></tr>
+                                    <span><i class="icon-cloud-sun-inv"></i></span>
                                 {% endif %}
 
+                        <!-- Maree -->
                         {% if spot.mareeURL is defined and  spot.mareeURL is not null %}
                                 {% if notesDate.noteMaree is defined and notesDate.noteMaree is not null %}
                                     {% set classNote = classTop %}
@@ -91,13 +94,12 @@
                                     {% elseif notesDate.noteMaree<0.6 %}
                                         {% set classNote = classBof %}
                                     {% endif %}
-                                    <tr class="{{ classNote }}"><td>Marée</td></tr>
+                                    <span class="{{ classNote }}"><i class="icon-waves"></i></span>
                                 {% else %}
-                                    <tr><td>Marée:?</td></tr>
+                                    <span><i class="icon-waves"></i></span>
                                 {% endif %}
                         {% endif %}
 
-                            </table>
                         </td>
                     {% endfor %}
                 {% endif %}
@@ -105,7 +107,45 @@
         {% endfor %}
 
         </table>
-
+        <br>
+        <br>
+        <div class="row">
+            <div class="col-md-7">
+                <p class="bg-info">
+                <table class="table table-condensed">
+                    <caption>Légende</caption>
+                    <tr>
+                        <td>Puissance et orientation du vent</td>
+                        <td class="elemRed"><i class="icon-wind"></i>: <12 Nd</td>
+                        <td class="elemOrange"><i class="icon-wind"></i>: ~12 Nd</td>
+                        <td class="elemGreen"><i class="icon-wind"></i>: >12 Nd</td>
+                        <td><i class="icon-wind"></i>: ?</td>
+                    </tr>
+                    <tr>
+                        <td>Température</td>
+                        <td class="elemRed"><i class="icon-temperature"></i>: <10°C</td>
+                        <td class="elemOrange"><i class="icon-temperature"></i>: 10°C<Temp<15°C</td>
+                        <td class="elemGreen"><i class="icon-temperature"></i>: >15°C</td>
+                        <td><i class="icon-temperature"></i>: ?</td>
+                    </tr>
+                    <tr>
+                        <td>Météo</td>
+                        <td class="elemRed"><i class="icon-cloud-sun-inv"></i>: Orage</td>
+                        <td class="elemOrange"><i class="icon-cloud-sun-inv"></i>: Nuageux</td>
+                        <td class="elemGreen"><i class="icon-cloud-sun-inv"></i>: Soleil</td>
+                        <td><i class="icon-cloud-sun-inv"></i>: ?</td>
+                    </tr>
+                    <tr>
+                        <td>Marée</td>
+                        <td class="elemRed"><i class="icon-waves"></i>: Impraticable</td>
+                        <td class="elemOrange"><i class="icon-waves"></i>: Parfois OK</td>
+                        <td class="elemGreen"><i class="icon-waves"></i>: Naviguable</td>
+                        <td><i class="icon-waves"></i>: ?</td>
+                    </tr>
+                </table>
+                </p>
+            </div>
+        </div>
 
     </div>
 

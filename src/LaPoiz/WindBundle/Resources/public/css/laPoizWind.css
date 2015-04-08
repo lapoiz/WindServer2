@@ -23,13 +23,13 @@ nav {
 }
 
 .elemGreen {
-    background-color:green;
+    color:green;
 }
 .elemOrange {
-    background-color:orange;
+    color:orange;
 }
 .elemRed {
-    background-color:red;
+    color:red;
 }
 
 #meteoGraph {
