@@ -3,6 +3,7 @@
 namespace LaPoiz\WindBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -30,25 +31,12 @@ class GetDataCommand extends ContainerAwareCommand  {
     	$dataWindPrevList = $em->getRepository('LaPoizWindBundle:DataWindPrev')->findAll();
     	
     	foreach ($dataWindPrevList as $dataWindPrev) {
-    		$output->write('<info>Spot '.$dataWindPrev->getSpot()->getNom().' - </info>');
-    		 
-    		// get each web site
-    		$output->writeln('<info>site '.$dataWindPrev->getWebSite()->getNom().' -> '.$dataWindPrev->getUrl().'</info>');
-    			
-    		// save data
-    		$websiteGetData=WebsiteGetData::getWebSiteObject($dataWindPrev);// return WindguruGetData or MeteoFranceGetData... depend of $dataWindPrev
-    		
-    		$data=$websiteGetData->getDataFromURL($dataWindPrev); // array($result,$chrono)
-    		$output->write('<info>    get data: '.$data[1].'</info>');
-    		$analyse=$websiteGetData->analyseDataFromPage($data[0],$dataWindPrev->getUrl()); // array($result,$chrono)
-    		$output->write('<info>    analyse: '.$analyse[1].'</info>');
-    		$transformData=$websiteGetData->transformDataFromTab($analyse[0]); // array($result,$chrono)
-    		$output->write('<info>    transforme data: '.$transformData[1].'</info>');
-    		$saveData=$websiteGetData->saveFromTransformData($transformData[0],$dataWindPrev,$em); // array(array $prevDate,$chrono)
-    		$output->writeln('<info>    save data: '.$saveData[1].'</info>');
-    		$output->writeln('<info>******************************</info>');
+            try {
+                GetDataCommand::getDataFromDataWindPrev($dataWindPrev, $output, $em);
+            } catch (Exception $e) {
+                $output->writeln('<error>'.$e->getMessage().'</error>');
+            }
     	}
-
 
         // Get Marée
         $spotList = $em->getRepository('LaPoizWindBundle:Spot')->findAll();
@@ -61,5 +49,24 @@ class GetDataCommand extends ContainerAwareCommand  {
             }
         }
     }
-    
+
+    public static function getDataFromDataWindPrev($dataWindPrev, $output, $em) {
+        $output->write('<info>Spot '.$dataWindPrev->getSpot()->getNom().' - </info>');
+
+        // get each web site
+        $output->writeln('<info>site '.$dataWindPrev->getWebSite()->getNom().' -> '.$dataWindPrev->getUrl().'</info>');
+
+        // save data
+        $websiteGetData=WebsiteGetData::getWebSiteObject($dataWindPrev);// return WindguruGetData or MeteoFranceGetData... depend of $dataWindPrev
+
+        $data=$websiteGetData->getDataFromURL($dataWindPrev); // array($result,$chrono)
+        $output->write('<info>    get data: '.$data[1].'</info>');
+        $analyse=$websiteGetData->analyseDataFromPage($data[0],$dataWindPrev->getUrl()); // array($result,$chrono)
+        $output->write('<info>    analyse: '.$analyse[1].'</info>');
+        $transformData=$websiteGetData->transformDataFromTab($analyse[0]); // array($result,$chrono)
+        $output->write('<info>    transforme data: '.$transformData[1].'</info>');
+        $saveData=$websiteGetData->saveFromTransformData($transformData[0],$dataWindPrev,$em); // array(array $prevDate,$chrono)
+        $output->writeln('<info>    save data: '.$saveData[1].'</info>');
+        $output->writeln('<info>******************************</info>');
+    }
 }

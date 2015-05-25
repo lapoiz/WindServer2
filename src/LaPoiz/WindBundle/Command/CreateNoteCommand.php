@@ -37,7 +37,7 @@ class CreateNoteCommand extends ContainerAwareCommand  {
 
     	
     	foreach ($listSpot as $spot) {
-    		$output->write('<info>Note du Spot '.$spot->getNom().' - </info>');
+    		$output->writeln('<info>Note du Spot '.$spot->getNom().' - </info>');
 
             // On efface les vielles notes (avant aujourd'hui)
             ManageNote::deleteOldData($spot, $em);
@@ -53,7 +53,7 @@ class CreateNoteCommand extends ContainerAwareCommand  {
                 $day->modify('+1 day');
             }
 
-            $output->write('<info>Note la maree </info>');
+            $output->writeln('<info>  Note la maree </info>');
 
             //********** Marée **********
             // récupére la marée du jour
@@ -62,11 +62,15 @@ class CreateNoteCommand extends ContainerAwareCommand  {
             foreach ($listeMareeFuture as $mareeDate) {
                 $noteDate = ManageNote::getNotesDate($spot,$mareeDate->getDatePrev(), $em);
                 $tabNotes = NoteMaree::calculNoteMaree($spot, $tabNotes, $mareeDate);
-                $noteDate->setNoteMaree($tabNotes[$mareeDate->getDatePrev()->format('Y-m-d')]["marée"]);
+                $keyDate=$mareeDate->getDatePrev()->format('Y-m-d');
+                $noteMaree=$tabNotes[$keyDate]["marée"];
+                $noteDate->setNoteMaree($noteMaree);
+                $output->writeln('<info>'.$keyDate.': '.$noteMaree.'</info> ');
                 $em->persist($noteDate);
             }
 
-            $output->writeln('<info>Note la Météo</info>');
+
+            $output->writeln('<info>  Note la Météo</info>');
             //********** Meteo **********
 
             //list des PrevisionDate pour les prochain jour, pour le spot pour tous les websites
