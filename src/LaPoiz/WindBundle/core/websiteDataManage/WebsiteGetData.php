@@ -8,6 +8,7 @@ use LaPoiz\WindBundle\Entity\Prevision;
 class WebsiteGetData
 {
 	const windguruName="Windguru";
+    const windguruProName="WindguruPro";
 	const windFinderName="WindFinder";
 	const meteoFranceName="MeteoFrance"; 
 	
@@ -15,6 +16,7 @@ class WebsiteGetData
 		return array(
 			WebsiteGetData::meteoFranceName,
 			WebsiteGetData::windguruName,
+            WebsiteGetData::windguruProName,
 			WebsiteGetData::windFinderName 
 		);
 	}
@@ -28,6 +30,9 @@ class WebsiteGetData
 			case WebsiteGetData::windguruName:
 				return new WindguruGetData();
 				break;
+            case WebsiteGetData::windguruProName:
+                return new WindguruProGetData();
+                break;
 			case WebsiteGetData::windFinderName:
 				return new WindFinderGetData();
 				break;
@@ -203,5 +208,46 @@ class WebsiteGetData
 		return $result;
 	}
 
+    static function transformeOrientationDeg($orientationDeg) {
+        $result='';
+
+        if ($orientationDeg < 11.5) {
+            $result='n';
+        } elseif ($orientationDeg < 33.75) {
+            $result='nne';
+        } elseif ($orientationDeg < 56.25) {
+            $result='ne';
+        } elseif ($orientationDeg < 78.75) {
+            $result='ene';
+        } elseif ($orientationDeg < 101.25) {
+            $result='e';
+        } elseif ($orientationDeg < 123.75) {
+            $result='ese';
+        } elseif ($orientationDeg < 146.25) {
+            $result='se';
+        } elseif ($orientationDeg < 168.75) {
+            $result='sse';
+        } elseif ($orientationDeg < 191.25) {
+            $result='s';
+        } elseif ($orientationDeg < 213.75) {
+            $result='ssw';
+        } elseif ($orientationDeg < 236.25) {
+            $result='sw';
+        } elseif ($orientationDeg < 258.75) {
+            $result='wsw';
+        } elseif ($orientationDeg < 281.25) {
+            $result='w';
+        } elseif ($orientationDeg < 303.75) {
+            $result='wnw';
+        } elseif ($orientationDeg < 326.25) {
+            $result='nw';
+        } elseif ($orientationDeg < 348.75) {
+            $result='nnw';
+        } else {
+            $result='n';
+        }
+
+        return $result;
+    }
 
 }

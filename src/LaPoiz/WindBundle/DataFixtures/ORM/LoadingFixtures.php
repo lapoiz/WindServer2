@@ -30,7 +30,14 @@ class LoadingFixtures implements FixtureInterface
         $webSiteWG->setLogo("logo");
         $manager->persist($webSiteWG);
         $manager->flush();
-        
+
+
+        $webSiteWGPro = new WebSite();
+        $webSiteWGPro->setNom(WebsiteGetData::windguruProName);
+        $webSiteWGPro->setUrl("www.windguru.cz");
+        $webSiteWGPro->setLogo("logo");
+        $manager->persist($webSiteWGPro);
+        $manager->flush();
         
         $webSiteWF = new WebSite();
         $webSiteWF->setNom(WebsiteGetData::windFinderName);

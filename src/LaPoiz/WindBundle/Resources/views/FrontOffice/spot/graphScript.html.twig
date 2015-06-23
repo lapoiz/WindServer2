@@ -12,6 +12,7 @@
         this.windDirectionNames = [];
 
         this.windGuru = [];
+        this.windGuruPro = [];
         this.windFinder = [];
         this.meteoFrance = [];
         this.precipitation = [];
@@ -90,6 +91,13 @@
                 meteogram.windGuru.push({
                     x: datePrev,
                     y: parseFloat(time.Windguru)
+                });
+            }
+
+            if (typeof(time.WindguruPro) != 'undefined') {
+                meteogram.windGuruPro.push({
+                    x: datePrev,
+                    y: parseFloat(time.WindguruPro)
                 });
             }
 
@@ -306,7 +314,18 @@
                 marker: {
                     enabled: false
                 },
-                color: '#40A3EF',
+                color: '#FF8000',
+                negativeColor: '#808080'
+            },{
+                name: 'WindGuruPro',
+                yAxis: 0,
+                data: this.windGuruPro,
+                type: 'spline',
+                zIndex: 1,
+                marker: {
+                    enabled: false
+                },
+                color: '#FF0000',
                 negativeColor: '#48AFE8'
             },{
                 name: 'Météo France',
@@ -317,7 +336,7 @@
                 marker: {
                     enabled: false
                 },
-                color: '#C5CBD0',
+                color: '#D3D3D3',
                 negativeColor: '#48AFE8'
             },{
                 name: 'WindFinder',
@@ -328,7 +347,7 @@
                 marker: {
                     enabled: false
                 },
-                color: '#FF3333',
+                color: '#8FBC8F',
                 negativeColor: '#48AFE8'
             }, {
                 name: 'Marée',

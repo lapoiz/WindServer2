@@ -2,9 +2,14 @@
 {% if typeDisplay == "code" %}
 
         <code>
-            {% for line in info %}
-                {{ line }}<br />
-            {% endfor %}
+            {% if info is iterable %}
+                {% for line in info %}
+                    {{ line }}<br />
+                {% endfor %}
+            {% else %}
+                {# info is probably a string #}
+                {{ info }}
+            {% endif %}
         </code>
 
 {% elseif typeDisplay == "arrayOfArray" %}

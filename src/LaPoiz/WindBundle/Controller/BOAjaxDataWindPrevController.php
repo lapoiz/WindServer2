@@ -85,7 +85,8 @@ class BOAjaxDataWindPrevController extends Controller
 	/**
 	* @Template()
 	*/
-	// for trdting: http://localhost/WindServer/web/app_dev.php/ajax/dataWindPrev/test/step1/1
+	// for testing: http://localhost/WindServer/web/app_dev.php/ajax/dataWindPrev/test/step1/1
+    // for testing: http://localhost/Wind/web/app_dev.php/admin/BO/ajax/spot/dataWindPrev/test/step1/7
 	public function testStep1Action($id=null)
 	{
 		try {
