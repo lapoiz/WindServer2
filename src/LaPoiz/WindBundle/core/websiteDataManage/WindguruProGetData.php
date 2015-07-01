@@ -167,7 +167,10 @@ class WindguruProGetData extends WebsiteGetData
             if ($today->format('d') > $date) {
 			    $today->modify( '+1 month' );
             }
-		}
+		} elseif ($today->format('d')==1 && $date > 27) {
+            // $today < $date et $today = 01/mm/aaaa et $date > 27 -> date = jour du mois précédent
+            $today->modify( '-1 month' );
+        }
 		$result=$today->format('Y-m-').$date;
 		return $result;
 	}
