@@ -1,0 +1,41 @@
+{% macro info(spot) %}
+
+    <h4>Mise à jour des données</h4>
+    <div>
+        Chaque site Internet (Windguru, Meteo France ...) que le site scan, met a jours les prévisions périodiquement.<br />
+        Le site les scans juste après ces mis à jours, c'est à dire:
+        <ul style="list-style-type:disc">
+            <li>Windguru et WindguruPro: 7h15, 13h15, 19h15 et 1h15</li>
+            <li>Windfinder: 1h, 8h, 13h et 19h</li>
+            <li>Météo France: 4h, 8h, 12h, 16h, 20h et minuit</li>
+        </ul>
+    </div>
+
+    <h4>Rosace du vent</h4>
+    <div>
+        Cette rosace des vents représente les orientations où il est possible de naviguer:
+        <ul style="list-style-type:disc">
+            <li>Vert: conditions idéals</li>
+            <li>Orange: possible, mais il y a un mais...(il faut avoir un tres bon niveau pour naviguer)</li>
+            <li>Rouge: Fortement déconsillé (vent offshore ...)</li>
+        </ul>
+        Ce code couleur se retrouve dans la partie basse du graphique principal.
+    </div>
+
+
+    <h4>Marée</h4>
+    <div>
+        Cette partie apparait uniquement pour les site assujeti aux marée (donc pas en méditerranée). <br />
+        Il représente en pointillé les plus hautes et plus basses marées. En trait plein la marée moyenne.<br />
+        Le code couleur est le même:
+        <ul style="list-style-type:disc">
+            <li>Vert: conditions idéals</li>
+            <li>Orange: possible, mais il y a un mais... (il faut avoir un tres bon niveau pour naviguer)</li>
+            <li>Rouge: Fortement déconsillé, voir impossible (mer trop éloignée...)</li>
+        </ul>
+        Dans la partie basse du graphique, se trouve les prévisions de marée de <a href="http://maree.info/">maree.info</a>
+        et les niveaux de navigation possible, reprenant le même code couleur. La modélisation des marées est sinusoidal,
+        ce qui ne correspond pas tout à fait à la réalité. De plus le vent ainsi que les autres conditions méthorologiques peuvent
+        influencer la hauteur réel des marées. C'est cependant une bonne base pour prévoir une navigation ou non...
+    </div>
+{% endmacro %}
