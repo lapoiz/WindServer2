@@ -32,6 +32,9 @@ class GetDataWindguruCommand extends ContainerAwareCommand  {
             if ($dataWindPrev->getWebSite()->getNom() == WebsiteGetData::windguruName) {
                 GetDataCommand::getDataFromDataWindPrev($dataWindPrev, $output, $em);
             }
+            if ($dataWindPrev->getWebSite()->getNom() == WebsiteGetData::windguruProName) {
+                GetDataCommand::getDataFromDataWindPrev($dataWindPrev, $output, $em);
+            }
     	}
     }
 }
