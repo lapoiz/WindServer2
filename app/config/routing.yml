@@ -1,3 +1,7 @@
 la_poiz_wind:
     resource: "@LaPoizWindBundle/Resources/config/routing.yml"
     prefix:   /
+
+_welcome:
+    pattern:  /
+    defaults: { _controller: LaPoizWindBundle:FO:index }
