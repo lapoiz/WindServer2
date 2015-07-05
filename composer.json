@@ -35,7 +35,7 @@
         "jquery/jquery":  "1.10.*",
         "incenteev/composer-parameter-handler": "~2.0",
         "fabpot/goutte": "~2.0",
-
+        "genemu/form-bundle": "2.2.*",
         "braincrafted/bootstrap-bundle": "~2.1"
     },
     "require-dev": {

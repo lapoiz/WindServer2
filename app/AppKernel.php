@@ -18,7 +18,7 @@ class AppKernel extends Kernel
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new LaPoiz\WindBundle\LaPoizWindBundle(),
             new Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle(),
-
+            new Genemu\Bundle\FormBundle\GenemuFormBundle(),
             new Braincrafted\Bundle\BootstrapBundle\BraincraftedBootstrapBundle(),
         );
 

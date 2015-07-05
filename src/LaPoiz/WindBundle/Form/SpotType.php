@@ -16,11 +16,15 @@ class SpotType extends AbstractType
   public function buildForm(FormBuilderInterface $builder, array $options)
   {
     $builder->add('nom');
-    $builder->add('description','textarea', array('attr' => array('class' => 'ckeditor',)));
+    //$builder->add('description','textarea', array('attr' => array('class' => 'ckeditor',)));
+    $builder->add('description','genemu_tinymce');
+
     $builder->add('isKitePractice');
     $builder->add('isWindsurfPractice');
     $builder->add('googleMapURL','text',array('label'=>'URL (googleMap)'));
-    $builder->add('localisationDescription','textarea',array('label'=>'Description','attr' => array('class' => 'ckeditor',)));
+    //$builder->add('localisationDescription','textarea',array('label'=>'Description','attr' => array('class' => 'ckeditor',)));
+    $builder->add('localisationDescription','genemu_tinymce');
+
     $builder->add('gpsLong','number',array('label'=>'GPS long'));
     $builder->add('gpsLat','number',array('label'=>'GPS lat'));
 

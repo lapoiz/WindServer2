@@ -1,5 +1,12 @@
 {% if spot is defined and spot is not null %}
 
+
+
+        <script type="text/javascript" src="{{ asset('bundles/lapoizwind/js/tinymce/tinymce.min.js') }}"></script>
+        {{ form_stylesheet(form) }}
+        {{ form_javascript(form) }}
+
+
     <div class="row">
         <div class="col-sm-8">
             {{ form_start(form, {

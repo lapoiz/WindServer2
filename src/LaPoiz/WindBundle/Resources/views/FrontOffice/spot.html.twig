@@ -90,7 +90,15 @@
 
 
     <div class="row">
-        <div class="col-sm-12">
+
+        <div class="col-sm-6">
+            <h3>Détail du spot de {{ spot.nom }}</h3>
+
+            {% from "LaPoizWindBundle:FrontOffice/spot:details.html.twig" import detail %}
+            {{ detail(spot) }}
+        </div>
+
+        <div class="col-sm-6">
             <h3>Explications sur les graphiques</h3>
 
             {% from "LaPoizWindBundle:FrontOffice/spot:explications.html.twig" import info %}
