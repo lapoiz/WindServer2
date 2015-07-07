@@ -16,10 +16,13 @@
 </div>
 
 <div class="row">
+
     <div class="col-sm-6 center-block text-center">
         <h3 class="titreSVG">Rosace du vent à {{ spot.nom }}</h3>
         {% from "LaPoizWindBundle:BackOffice/Spot/Ajax:rosaceWind.html.twig" import displayRosace %}
         {{ displayRosace() }}
+
+
 
         <script>
 
@@ -38,8 +41,16 @@
                 tabOrientationState["{{ windOrientation.orientation }}"]="{{ windOrientation.state?windOrientation.state:"?" }}";
                 {% endfor %}
 
-                svgLoad(tabOrientationState);
+                svgLoad(tabOrientationState, true);
             }
+
+
+            //$('#rosaceWindSVG').setAttributeNS(null, "width", "500");
+            //var rosace = document.getElementById("rosaceWindSVG");
+            //rosace.setAttributeNS(null, "width", "50");
+            //$('#rosaceWindSVG').attr("viewBox", "500 500 1000 1000");
+            //window.svgDocument.scale(0.5);
+
         </script>
 
     </div>

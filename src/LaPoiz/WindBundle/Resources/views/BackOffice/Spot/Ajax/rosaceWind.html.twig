@@ -30,8 +30,8 @@
     <svg id="rosaceWindSVG"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns="http://www.w3.org/2000/svg"
-         onload="svgLoad()"
          viewBox="0 0 340 340"
+         preserveAspectRatio="xMinYMin meet"
             >
 
         <defs>
@@ -178,6 +178,7 @@
                           to="337.5 170 170"
                 />
 
+
     </svg>
 
 <script>
@@ -199,7 +200,7 @@
         return colorState;
     }
 
-    function svgLoad(orientationState) {
+    function svgLoad(orientationState, small) {
         /*
          var orientationState = new Array();
          orientationState["nord"]="OK";
@@ -213,7 +214,13 @@
                 $('#'+id+'Txt').attr("fill", colorState(orientationState[id],'b'));
             }
         }
+
+        if (typeof small !== 'undefined' & small) {
+            $('#rosaceWindSVG').attr('transform','scale(0.5)');
+        }
+
     }
+
 </script>
 
 
