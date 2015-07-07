@@ -21,6 +21,16 @@
                 </div>
             </div>
 
+
+
+            <div class="row">
+                <div class="col-sm-12">
+                    {% from "LaPoizWindBundle:FrontOffice/spot:map.html.twig" import map %}
+                    {{ map(spot) }}
+                </div>
+            </div>
+
+
             <div class="row">
                 <div class="col-sm-4">
                     Données GPS:
@@ -28,14 +38,6 @@
 
                 <div class="col-sm-8">
                     {{ spot.gpsLat }} - {{ spot.gpsLong }}
-                </div>
-            </div>
-
-
-            <div class="row">
-                <div class="col-sm-12">
-                    {% from "LaPoizWindBundle:FrontOffice/spot:map.html.twig" import map %}
-                    {{ map(spot) }}
                 </div>
             </div>
 

@@ -4,20 +4,23 @@
     <div>
         Chaque site Internet (Windguru, Meteo France ...) que le site scan, met a jours les prévisions périodiquement.<br />
         Le site les scans juste après ces mis à jours, c'est à dire:
-        <ul style="list-style-type:disc">
-            <li>Windguru et WindguruPro: 7h15, 13h15, 19h15 et 1h15</li>
-            <li>Windfinder: 1h, 8h, 13h et 19h</li>
-            <li>Météo France: 4h, 8h, 12h, 16h, 20h et minuit</li>
+        <ul>
+            <li>Windguru et WindguruPro: <span class="badge">7h15</span>, <span class="badge">13h15</span>,
+                <span class="badge">19h15</span> et <span class="badge">1h15</span></li>
+            <li>Windfinder: <span class="badge">1h</span>, <span class="badge">8h</span>, <span class="badge">13h</span>
+                et <span class="badge">19h</span></li>
+            <li>Météo France: <span class="badge">4h</span>, <span class="badge">8h</span>, <span class="badge">12h</span>,
+                <span class="badge">16h</span>, <span class="badge">20h</span> et <span class="badge">minuit</span></li>
         </ul>
     </div>
 
     <h4>Rosace du vent</h4>
     <div>
         Cette rosace des vents représente les orientations où il est possible de naviguer:
-        <ul style="list-style-type:disc">
-            <li>Vert: conditions idéals</li>
-            <li>Orange: possible, mais il y a un mais...(il faut avoir un tres bon niveau pour naviguer)</li>
-            <li>Rouge: Fortement déconsillé (vent offshore ...)</li>
+        <ul>
+            <li class="elemGreen">Vert: conditions idéals</li>
+            <li class="elemOrange">Orange: possible, mais il y a un mais...(il faut avoir un tres bon niveau pour naviguer)</li>
+            <li class="elemRed">Rouge: Fortement déconsillé (vent offshore ...)</li>
         </ul>
         Ce code couleur se retrouve dans la partie basse du graphique principal.
     </div>
@@ -28,10 +31,10 @@
         Cette partie apparait uniquement pour les sites assujetis aux marées (donc pas en méditerranée). <br />
         Il représente en pointillé les plus hautes et plus basses marées. En trait plein: la marée moyenne.<br />
         Le code couleur est le même:
-        <ul style="list-style-type:disc">
-            <li>Vert: conditions idéals</li>
-            <li>Orange: possible, mais il y a un mais... (il faut avoir un tres bon niveau pour naviguer)</li>
-            <li>Rouge: Fortement déconsillé, voir impossible (mer trop éloignée...)</li>
+        <ul>
+            <li class="elemGreen">Vert: conditions idéals</li>
+            <li class="elemOrange">Orange: possible, mais il y a un mais... (il faut avoir un tres bon niveau pour naviguer)</li>
+            <li class="elemRed">Rouge: Fortement déconsillé, voir impossible (mer trop éloignée...)</li>
         </ul>
         Dans la partie basse du graphique, se trouve les prévisions de marée de <a href="http://maree.info/">maree.info</a>
         et les niveaux de navigation possible, reprenant le même code couleur. La modélisation des marées est sinusoidal,
