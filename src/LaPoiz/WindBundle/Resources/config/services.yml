@@ -22,6 +22,18 @@ services:
         tags:
             - { name: form.type, alias: mareeForm }
 
+
+    la_poiz_wind.form.type.contact:
+        class: LaPoiz\WindBundle\Form\ContactType
+        tags:
+            - { name: form.type, alias: contactForm }
+
+
+    la_poiz_wind.form.type.comment:
+        class: LaPoiz\WindBundle\Form\CommentType
+        tags:
+            - { name: form.type, alias: commentForm }
+
 #    twig.extension.intl:
 #        class: Twig\Extensions\Extension\Intl
 #        tags:

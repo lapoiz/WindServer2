@@ -1,0 +1,81 @@
+
+    <h2>Etape n°1: Vous</h2>
+
+    <script type="text/javascript" src="{{ asset('bundles/lapoizwind/js/tinymce/tinymce.min.js') }}"></script>
+    {{ form_stylesheet(form) }}
+    {{ form_javascript(form) }}
+
+
+    <div class="row">
+        <div class="col-sm-8">
+
+
+            <script type="text/javascript" src="{{ asset('bundles/lapoizwind/js/tinymce/tinymce.min.js') }}"></script>
+            {{ form_stylesheet(form) }}
+            {{ form_javascript(form) }}
+
+            {{ form_start(form, {
+            'style': 'horizontal',
+            'label_col': 2,
+            'widget_col': 4,
+            'methode' : 'POST',
+            'action' : path('_fo_ajax_spot_ask_create_step1')
+            })}}
+
+            {{ form_errors(form, { 'global_errors': true }) }}
+
+            {{ form_end(form) }}
+
+        </div>
+
+        <script>
+            $("#contact_form").on('submit', function(e){
+
+                $('#contentAskNewSpot').html('<img src="{{ asset('bundles/lapoizwind/images/loading.gif') }}" alt="Loading Ajax data" />');
+
+                e.preventDefault();
+                var $this = $(this);
+
+                $.ajax({
+                    url: $this.attr('action'),
+                    type: $this.attr('method'),
+                    data: $this.serialize(),
+                    success: function(html) {
+                        $('#contentAskNewSpot').html(html);
+                    }
+                });
+                return false;
+            });
+
+
+        </script>
+
+        <div class="row">
+        <div class="col-sm-12">
+
+            <h2>Précision sur les champs à remplir</h2>
+
+            <h3>Utilisateur</h3>
+            <p>
+                C'est votre surnom, ou autre appelation pour vous identifier.<br />
+                Il sera éventuellement utilisé plus tard pour une acceder à une partie connéctée du site, permettant
+                d'enregistrer vos spots préférés, la plage devent à partir vous naviguer, pour adapter les graphiques,
+                et acceder plus rapidement aux informations qui vous interrese sur le site (pas encore mis en place).
+            </p>
+
+            <h3>Adresse mail</h3>
+            <p>
+                C'est sur cet adresse, que nous vous poserons éventuellement des questions sur le spot, afin de completer
+                au mieux sa fiche. <br />
+                Nous ne diffuserons pas votre adresse mail, nous ne vous enverons pas de mails commerciaux non plus.
+            </p>
+
+
+            <h3>Captcha</h3>
+            <p>
+                Il faut recopier ce qui est ecrit sur l'image, dans le champs.<br />
+                Ce system permet d'empecher les robots, de remplir le formulaire, pour spamer le site..
+            </p>
+
+        </div>
+    </div>

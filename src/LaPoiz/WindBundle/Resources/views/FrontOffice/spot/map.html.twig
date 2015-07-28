@@ -7,7 +7,7 @@
 
 
     <script type="text/javascript"
-            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBsZg9TbRTh7n4zfPArWf3lqVLdVB1xlko">
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBsZg9TbRTh7n4zfPArWf3lqVLdVB1xlko&callback=initialize">
     </script>
     <script type="text/javascript">
         function initialize() {
@@ -27,7 +27,9 @@
                 title: 'Spot'
             });
         }
-        google.maps.event.addDomListener(window, 'load', initialize);
+        $(window).load(function(){
+            google.maps.event.addDomListener(window, 'load', initialize);
+        });
     </script>
 
 

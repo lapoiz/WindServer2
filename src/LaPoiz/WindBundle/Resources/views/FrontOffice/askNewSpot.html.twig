@@ -1,0 +1,111 @@
+{% extends 'LaPoizWindBundle:FrontOffice:base.html.twig' %}
+
+
+{% block bodyPage %}
+
+<h1>Demande d'ajout d'un nouveau spot</h1>
+
+    <div id="askCreateSpotDisplay">
+        <p>
+            L'ajout d'un spot sur le site, se fait en 5 étapes ...:
+            <ul>
+                <li><span class="badge">1er étape</span>: Indiquer votre adresse mail, pour échanger si besoin de plus
+                                            d'information sur le spot + un captcha contre les robots spamers.</li>
+                <li><span class="badge">2nd étape</span>: Remplir un formulaire contenant le nom du spot, sa description, sa
+                                            localisation et la rosace de vent (explication sous le formulaire).</li>
+                <li><span class="badge">3ème étape</span>: Ajouter les URLS des sites de prévision pour le spot
+                                            (Windguru, Météo France, Windfinder ...), et tester si les prévisions de ces
+                                            sites sont bien récupérées.</li>
+                <li><span class="badge">4ème étape</span>: Le cas échéant, indiquer l'URL de
+                                    <a href="http://maree.info/" target="_blank">maree.info</a>, proche du spot, pour les marées.</li>
+                <li><span class="badge">5ème étape</span>: Validation par l'administrateur, de vos données pour être
+                                            visible sur le site.</li>
+            </ul>
+
+        </p>
+        <p>
+            Une fois ces informations complétées, nous les analyserons, afin de valider la création du spot. Donc pas de panique, si votre spot n'apparait pas imédiatement sur le site.<br />
+            Cette démarche de validation à pour but, de s'assurer que les informations indiquées sont corrects et complétes
+            (information sur les dangers, géolocalisation ...).<br />
+        </p>
+
+
+        <button class="btn-primary" onclick="letsGo()">Let's Go</button>
+
+        <script>
+            function letsGo() {
+
+                var htmlBackup = $('#askCreateSpotDisplay').html();
+                $('#askCreateSpotDisplay').html('<img src="{{ asset('bundles/lapoizwind/images/loading.gif') }}" alt="Loading Ajax data" />');
+
+                $.ajax({
+                    url : "{{ path('_fo_ajax_spot_ask_create_step1') }}",
+                    type : 'GET',
+                    success : function(code_html, statut){
+                        buildStructure(code_html);
+                    },
+                    error : function(resultat, statut, erreur){
+                        alert("Problème de connexion !");
+                        $('#askCreateSpotDisplay').html(htmlBackup);
+                    }
+                });
+                return false;
+            }
+
+
+            function buildStructure(html_step1) {
+                var result=false;
+                $.ajax({
+                    url : "{{ path('_fo_ajax_spot_ask_create_structure') }}",
+                    type : 'GET',
+                    success : function(code_html, statut){
+                        $("#askCreateSpotDisplay").html(code_html);
+                        $("#contentAskNewSpot").html(html_step1);
+                        buildNav();
+
+                    },
+                    error: function(resultat, statut, erreur){
+                        alert("Problème de connexion pour la structure de la page !");
+                    }
+                });
+                return false;
+            }
+
+
+            function buildNav() {
+                $.ajax({
+                    url : "{{ path('_fo_ajax_spot_ask_create_nav') }}",
+                    type : 'GET',
+                    success : function(code_html, statut){
+                        $("#navAskNewSpot").html(code_html);
+                        displayStep(1);
+                    },
+                    error: function(resultat, statut, erreur){
+                        alert("Problème de connexion pour la partie affichage des étapes!");
+                    }
+                });
+                return false;
+            }
+        </script>
+
+
+    </div>
+
+
+    <script>
+        function displayStep(numStep) {
+            for (var i = 1; i < 6; i++) {
+                $("#navStep"+i).attr("class", "badge");
+            }
+            $("#navStep"+numStep).attr("class", "badge progress-bar-success");
+        }
+
+
+
+
+    </script>
+
+
+{% endblock %}
+
+

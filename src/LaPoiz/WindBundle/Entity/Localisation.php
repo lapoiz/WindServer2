@@ -3,6 +3,9 @@ namespace LaPoiz\WindBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
+// A EFFACER ?
+
+
 /**
  * @ORM\Entity
  * @ORM\Table(name="windServer_Localisation")

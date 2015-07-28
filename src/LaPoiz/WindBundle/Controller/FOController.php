@@ -1,8 +1,10 @@
 <?php
 namespace LaPoiz\WindBundle\Controller;
 
+use LaPoiz\WindBundle\Entity\Contact;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Security\Core\SecurityContext;
+use Symfony\Component\HttpFoundation\Request;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
@@ -17,7 +19,7 @@ class FOController extends Controller
     {
        $em = $this->container->get('doctrine.orm.entity_manager');
         // récupere tous les spots
-        $listSpot = $em->getRepository('LaPoizWindBundle:Spot')->findAll();
+        $listSpot = $em->getRepository('LaPoizWindBundle:Spot')->findAllValid();
         $tabNotesAllSpots=array();
 
         // Construire le tableau, pour afficher les notes
@@ -56,7 +58,7 @@ class FOController extends Controller
   {
       $em = $this->container->get('doctrine.orm.entity_manager');
       // récupere tous les spots
-      $listSpot = $em->getRepository('LaPoizWindBundle:Spot')->findAll();
+      $listSpot = $em->getRepository('LaPoizWindBundle:Spot')->findAllValid();
 
       return $this->container->get('templating')->renderResponse('LaPoizWindBundle:FrontOffice:concept.html.twig',
         array(
@@ -69,7 +71,7 @@ class FOController extends Controller
   public function spotGraphAction($id=null)
   {
     $em = $this->container->get('doctrine.orm.entity_manager');
-    $listSpot = $em->getRepository('LaPoizWindBundle:Spot')->findAll();
+    $listSpot = $em->getRepository('LaPoizWindBundle:Spot')->findAllValid();
 
     if (isset($id) && $id!=-1)
     {
@@ -86,4 +88,20 @@ class FOController extends Controller
         ));
     }
   }
+
+    /**
+     * @Template()
+     *
+     * Page for ask a new spot
+     */
+    public function spotAskCreateAction(Request $request)
+    {
+        $em = $this->container->get('doctrine.orm.entity_manager');
+        $listSpot = $em->getRepository('LaPoizWindBundle:Spot')->findAllValid();
+
+        return $this->render('LaPoizWindBundle:FrontOffice:askNewSpot.html.twig', array(
+                    'listSpot' => $listSpot
+                ));
+    }
+
 }

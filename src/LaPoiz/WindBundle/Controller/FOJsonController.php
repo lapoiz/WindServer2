@@ -15,8 +15,11 @@ class FOJsonController extends Controller
 
 	/**
 	 * @Template()
+     *
+     * http://localhost/Wind/web/app_dev.php/fo/json/spot/data/1
+     * Used on Highcharts
 	*/
-    // http://localhost/Wind/web/app_dev.php/fo/json/spot/data/1
+
 	public function getAction($id=null)
 	{
 		$em = $this->container->get('doctrine.orm.entity_manager');
@@ -54,4 +57,52 @@ class FOJsonController extends Controller
 				));
 		}
 	}
+
+
+    /**
+     * @Template()
+     *
+     * http://localhost/Wind/web/app_dev.php/json/listeWebsite/spot/1
+     *
+     * Return the website list of the spot
+     */
+
+    public function listWebsiteAction($id=null)
+    {
+        $em = $this->container->get('doctrine.orm.entity_manager');
+        if (isset($id) && $id!=-1)
+        {
+            $spot = $em->find('LaPoizWindBundle:Spot', $id);
+            if (!$spot)
+            {
+                return new JsonResponse(array(
+                    'success' => false,
+                    'description' => "No spot find in GetAction"
+                ));
+            }
+            // Normal way, we find spot
+
+            $tabListResponse = array();
+
+            foreach ($spot->getDataWindPrev() as $dataWindPrev) {
+                // Pour chaque site du spot on récupére le nom
+                $tabListResponse[] =$dataWindPrev->getWebsite()->getNom();
+            }
+
+            /*return new JsonResponse(array(
+                'success' => true,
+                'data' => json_encode($tabListResponse)
+            ));*/
+
+            return new JsonResponse($tabListResponse);
+
+        } else {
+            return new JsonResponse(array(
+                'success' => false,
+                'description' => "Parameter not found (id of spot)"
+            ));
+        }
+    }
+
+
 }

@@ -1,0 +1,49 @@
+{% if spot is defined and spot is not null %}
+
+
+
+    <h2>Etape n°4: Les marées</h2>
+
+    <div id="result">
+
+        {{ include('LaPoizWindBundle:BothOffice/Spot/Ajax/Maree:mareeEdit.html.twig', { 'spot': spot }) }}
+
+    </div>
+
+
+    <button class="btn-primary" onclick="step5()">Finalisation</button>
+
+    <script>
+        function step5() {
+            var htmlBackup =  $('#contentAskNewSpot').html();
+            $('#contentAskNewSpot').html('<img src="{{ asset('bundles/lapoizwind/images/loading.gif') }}" alt="Loading Ajax data" />');
+
+            $.ajax({
+                url : "{{ path('_fo_ajax_spot_ask_create_step5', {'id': spot.id, 'idContact':idContact}) }}",
+                type : 'GET',
+                success : function(code_html, statut){
+                    $('#contentAskNewSpot').html(code_html);
+                },
+                error : function(resultat, statut, erreur){
+                    alert("Problème de connexion !");
+                    $('#contentAskNewSpot').html(htmlBackup);
+                }
+            });
+            return false;
+        }
+
+        displayStep(4);
+    </script>
+
+
+    <div class="row">
+        <div class="col-sm-12">
+
+            <h2>Précision sur les champs à remplir</h2>
+
+
+
+        </div>
+    </div>
+
+{% endif %}

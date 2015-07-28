@@ -28,6 +28,46 @@ _fo_spot_graph:
   defaults: { _controller: LaPoizWindBundle:FO:spotGraph }
   pattern: /spot/{id}
 
+_fo_spot_ask_create:
+  defaults: { _controller: LaPoizWindBundle:FO:spotAskCreate }
+  pattern: /fo/spot/ask/create
+
+_fo_ajax_spot_ask_create_structure:
+  defaults: { _controller: LaPoizWindBundle:FOAjaxAskCreateSpot:structure }
+  pattern: /fo/ajax/spot/ask/create/structure
+
+_fo_ajax_spot_ask_create_nav:
+  defaults: { _controller: LaPoizWindBundle:FOAjaxAskCreateSpot:nav }
+  pattern: /fo/ajax/spot/ask/create/nav
+
+_fo_ajax_spot_ask_create_step1:
+  defaults: { _controller: LaPoizWindBundle:FOAjaxAskCreateSpot:step1 }
+  pattern: /fo/ajax/spot/ask/create/step1
+
+_fo_ajax_spot_ask_create_step2:
+  defaults: { _controller: LaPoizWindBundle:FOAjaxAskCreateSpot:step2 }
+  pattern: /fo/ajax/spot/ask/create/step2/{idContact}
+
+_fo_ajax_spot_ask_create_step3:
+  defaults: { _controller: LaPoizWindBundle:FOAjaxAskCreateSpot:step3 }
+  pattern: /fo/ajax/spot/ask/create/step3/{idContact}/{id}
+
+_fo_ajax_spot_ask_create_step4:
+  defaults: { _controller: LaPoizWindBundle:FOAjaxAskCreateSpot:step4 }
+  pattern: /fo/ajax/spot/ask/create/step4/{idContact}/{id}
+
+_fo_ajax_spot_ask_create_step5:
+  defaults: { _controller: LaPoizWindBundle:FOAjaxAskCreateSpot:step5 }
+  pattern: /fo/ajax/spot/ask/create/step5/{idContact}/{id}
+
+_fo_ajax_spot_ask_create_send:
+  defaults: { _controller: LaPoizWindBundle:FOAjaxAskCreateSpot:send }
+  pattern: /fo/ajax/spot/ask/create/send/{idContact}/{id}
+
+_fo_ajax_spot_list_website:
+  defaults: { _controller: LaPoizWindBundle:FOJson:listWebsite }
+  pattern: /json/listeWebsite/spot/{id}
+
 _fo_json_spot_data:
   defaults: { _controller: LaPoizWindBundle:FOJson:get }
   pattern: /fo/json/spot/data/{id}
@@ -53,6 +93,13 @@ _bo_dataWindPrev:
   defaults: { _controller: LaPoizWindBundle:BO:dataWindPrev }
   pattern: /admin/spot/dataWindPrev/{id}
 
+_bo_ajax_spot_delete:
+  defaults: { _controller: LaPoizWindBundle:BOAjaxSpot:spotDelete }
+  pattern: /admin/BO/ajax/spot/delete/{id}
+
+_bo_ajax_spot_valid:
+  defaults: { _controller: LaPoizWindBundle:BOAjaxSpot:spotValid }
+  pattern: /admin/BO/ajax/spot/valid/{id}
 
 _bo_ajax_dataWindPrev_test_step1:
   defaults: { _controller: LaPoizWindBundle:BOAjaxDataWindPrev:testStep1 }
@@ -126,9 +173,6 @@ _bo_ajax_spot_edit:
   defaults: { _controller: LaPoizWindBundle:BOAjaxSpot:spotEdit }
   pattern: /admin/BO/ajax/spot/edit/{id}
 
-_bo_ajax_spot_delete:
-  defaults: { _controller: LaPoizWindBundle:BOAjaxSpot:spotDelete }
-  pattern: /admin/BO/ajax/spot/delete/{id}
 
 
 _bo_ajax_spot_add_site:

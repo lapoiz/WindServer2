@@ -4,7 +4,106 @@
 
     <div class="starter-template">
         <h1>Page d'accueil du Back office</h1>
-        <p class="lead">Toutes les actions possible pour le BO.</p>
+
+        <h2>Spots à valider</h2>
+
+        <form id="selectedValidSpotForm">
+            <table data-click-to-select="true">
+                <thead>
+                    <tr>
+                        <th data-field="spot" data-align="center">Spots</th>
+                        <th data-field="spot" data-align="center">Show</th>
+                        <th data-field="valid" data-align="center">Valid</th>
+                        <th data-field="delete" data-align="center">Effacer</th>
+                    </tr>
+                </thead>
+
+                <tbody id="bodyTablelistSpotNotValid">
+                    {% if listSpotNotValid is not null %}
+                        {% for spot in listSpotNotValid %}
+                            <tr id="line_spotID_{{ spot.id }}">
+                                <td>{{ spot.nom }}</td>
+                                <td><a onclick="showSpot({{ spot.id }})"><i class="icon-eye-open"></i></a></td>
+                                <td><input type="checkbox" name="valid" value="{{ spot.id }}"></td>
+                                <td><input type="checkbox" name="delete" value="{{ spot.id }}"></td>
+                            </tr>
+                        {% endfor %}
+                    {% endif %}
+                </tbody>
+            </table>
+
+            <button class="btn btn-primary" id="validButton">Valider</button>
+            <button class="btn btn-danger" id="deleteButton">Supprimer</button>
+        </form>
+
+        <script>
+            function showSpot(spotId) {
+                alert("show spot site id:"+spotId);
+            }
+
+            $("#deleteButton").click(function(event)
+            {
+                event.preventDefault(); // cancel default behavior
+
+                // Delete elements
+                $("input[type=checkbox]:checked").each(
+                        function() {
+                            var idSpot = $(this).attr("value");
+
+                            if ($(this).attr("name")=="delete") {
+                                var urlDelete = Routing.generate('_bo_ajax_spot_delete', { id: idSpot });
+
+                                $.ajax({
+                                    url: urlDelete,
+                                    type: "POST",
+                                    success: function(html) {
+                                        deleteLine(idSpot);
+                                    },
+                                    error : function(resultat, statut, erreur){
+                                        alert("Problème lors de l'opération !");
+                                    }
+                                });
+                            }
+                        }
+                    );
+                return false;
+            });
+
+
+            $("#validButton").click(function(event)
+            {
+                event.preventDefault(); // cancel default behavior
+
+                // Valid spots
+                $("input[type=checkbox]:checked").each(
+                        function() {
+                            var idSpot = $(this).attr("value");
+
+                            if ($(this).attr("name")=="valid") {
+                                var urlValid = Routing.generate('_bo_ajax_spot_valid', { id: idSpot });
+
+                                $.ajax({
+                                    url: urlValid,
+                                    type: "POST",
+                                    success: function(html) {
+                                        deleteLine(idSpot);
+                                    },
+                                    error : function(resultat, statut, erreur){
+                                        alert("Problème lors de l'opération !");
+                                    }
+                                });
+                            }
+                        }
+                );
+                return false;
+            });
+
+            function deleteLine(spotId) {
+                $("#line_spotID_"+spotId).remove();
+            }
+
+        </script>
+
     </div>
 
 {% endblock %}

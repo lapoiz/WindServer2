@@ -150,7 +150,7 @@ class BOAjaxMareeController extends Controller
                 }
             }
 
-            return $this->render('LaPoizWindBundle:BackOffice/Spot/Ajax/Maree:mareeEdit.html.twig', array(
+            return $this->render('LaPoizWindBundle:BothOffice/Spot/Ajax/Maree:mareeEdit.html.twig', array(
                     'form' => $form->createView(),
                     'spot' => $spot
                 ));

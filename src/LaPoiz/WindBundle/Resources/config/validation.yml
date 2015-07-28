@@ -4,8 +4,6 @@ LaPoiz\WindBundle\Entity\Spot:
       - NotBlank: ~
     description:
       - NotBlank: ~
-    googleMapURL:
-      - Url: ~      
     localisationDescription:
       - NotBlank: ~
     gpsLong:

@@ -25,4 +25,28 @@ class SpotRepository extends EntityRepository
 			return null;
 		}
 	}
+
+
+    public function findAllValid()
+    {
+        $queryBuilder = $this->createQueryBuilder('spot');
+        $queryBuilder->where('spot.isValide = TRUE');
+        try {
+            return $queryBuilder->getQuery()->getResult();
+        } catch (\Doctrine\ORM\NoResultException $e) {
+            return null;
+        }
+    }
+
+
+    public function findAllNotValid()
+    {
+        $queryBuilder = $this->createQueryBuilder('spot');
+        $queryBuilder->where('spot.isValide = FALSE');
+        try {
+            return $queryBuilder->getQuery()->getResult();
+        } catch (\Doctrine\ORM\NoResultException $e) {
+            return null;
+        }
+    }
 }

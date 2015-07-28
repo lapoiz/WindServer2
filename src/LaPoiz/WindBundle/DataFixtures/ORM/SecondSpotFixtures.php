@@ -39,7 +39,6 @@ class SecondSpotFixtures implements FixtureInterface
         $spot->setDescription("Spot mythique proche de Hyeres.");
         $spot->setIsKitePractice(true);
         $spot->setIsWindsurfPractice(true);
-        $spot->setGoogleMapURL('http://maps.google.fr/maps?ll=43.056244,6.133105&spn=0.019989,0.049567&z=15&msa=0&msid=205227836204694166614.0004a72c27fbff9038758');
         $spot->setLocalisationDescription('A Hyères suivre Giens (D559), puis prendre Route du sel. Le spot est balisé.');
         $spot->setGpsLong('43.056244');
         $spot->setGpsLat('6.133105');

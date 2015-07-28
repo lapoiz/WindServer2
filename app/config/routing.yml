@@ -5,3 +5,10 @@ la_poiz_wind:
 _welcome:
     pattern:  /
     defaults: { _controller: LaPoizWindBundle:FO:index }
+
+genemu_base64:
+    resource: "@GenemuFormBundle/Resources/config/routing/base64.xml"
+
+
+fos_js_routing:
+    resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"

@@ -1,0 +1,110 @@
+{% if spot is defined and spot is not null %}
+
+
+    <h2>Etape n°3: Sites de prévision</h2>
+
+    <div class="row">
+        <div class="col-sm-12" id="blockForm">
+            {{ form_start(form, {
+            'style': 'horizontal',
+            'label_col': 2,
+            'widget_col': 8,
+            'methode' : 'POST',
+            'action' : path('_fo_ajax_spot_ask_create_step3', {'id':spot.id, 'idContact':idContact})
+            })}}
+
+            {{ form_errors(form, { 'global_errors': true }) }}
+
+            {{ form_end(form) }}
+
+
+    <script>
+        // Envoie du formulaire
+        $("#dataWindPrev_form").on('submit', function(e){
+            var backupHTML = $('#blockForm').html();
+            $('#blockForm').html('<img src="{{ asset('bundles/lapoizwind/images/loading.gif') }}" alt="Loading Ajax data" />');
+
+            e.preventDefault();
+            var $this = $(this);
+
+            $.ajax({
+                url: $this.attr('action'),
+                type: $this.attr('method'),
+                data: $this.serialize(),
+                success: function(html) {
+                    $('#blockForm').html(html);
+                    reloadListWebSite();
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown) {
+                    alert("Erreur: La page lié à l'URL indiqué ne peut être scané, veuillez essayer avec une autre.");
+                    $('#blockForm').html(backupHTML);
+                }
+            });
+            return false;
+        });
+     </script>
+
+        </div>
+    </div>
+
+
+    <button class="btn-primary" onclick="step4()">4ème étape</button>
+
+    <script>
+        // Recharge les site Internet du spot dans le div #listSite
+        function reloadListWebSite() {
+            $.ajax({
+                url: "{{ path('_fo_ajax_spot_list_website', {'id':spot.id}) }}",
+                type: "GET",
+                success: function(listWebSite) {
+                    var html='';
+
+                    jQuery.each(listWebSite, function(index, website) {
+                        <!-- Boucle sur le JSON retourné -->
+                        html += '<li>';
+                        html += website;
+                        html += '</li>';
+                    });
+
+                    $('#listSite').html(html);
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown) {
+                    alert("Impossible de récuperer les sites web du spot...");
+                }
+            });
+            return false;
+        }
+
+        function step4() {
+            var htmlBackup =  $('#contentAskNewSpot').html();
+            $('#contentAskNewSpot').html('<img src="{{ asset('bundles/lapoizwind/images/loading.gif') }}" alt="Loading Ajax data" />');
+
+            $.ajax({
+                url : "{{ path('_fo_ajax_spot_ask_create_step4', {'id': spot.id, 'idContact':idContact}) }}",
+                type : 'GET',
+                success : function(code_html, statut){
+                    $('#contentAskNewSpot').html(code_html);
+                },
+                error : function(resultat, statut, erreur){
+                    alert("Problème de connexion !");
+                    $('#contentAskNewSpot').html(htmlBackup);
+                }
+            });
+            return false;
+        }
+
+        displayStep(3);
+    </script>
+
+
+    <div class="row">
+        <div class="col-sm-12">
+
+            <h2>Précision sur les champs à remplir</h2>
+
+
+
+        </div>
+    </div>
+
+{% endif %}

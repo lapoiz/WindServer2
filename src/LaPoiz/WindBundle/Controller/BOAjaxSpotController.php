@@ -83,7 +83,47 @@ class BOAjaxSpotController extends Controller
     /**
      * @Template()
      *
-     * http://localhost/WindServer/web/app_dev.php/admin/BO/ajax/spot/delete/1
+     * http://localhost/Wind/web/app_dev.php/admin/BO/ajax/spot/valid/1
+     */
+    public function spotValidAction($id=null)
+    {
+        $em = $this->container->get('doctrine.orm.entity_manager');
+
+        if (isset($id) && $id!=-1)
+        {
+            $spot = $em->find('LaPoizWindBundle:Spot', $id);
+            if (!$spot)
+            {
+                return $this->container->get('templating')->renderResponse(
+                    'LaPoizWindBundle:BackOffice:errorPage.html.twig',
+                    array('errMessage' => "No spot find !"));
+            }
+            $spot->setIsValide(true);
+            $em->persist($spot);
+            $em->flush();
+
+            $listSpot = $em->getRepository('LaPoizWindBundle:Spot')->findAllValid();
+            $listSpotNotValid = $em->getRepository('LaPoizWindBundle:Spot')->findAllNotValid();
+
+            return $this->container->get('templating')->renderResponse('LaPoizWindBundle:BackOffice:index.html.twig',
+                array(
+                    'listSpot' => $listSpot,
+                    'listSpotNotValid' => $listSpotNotValid,
+                )
+            );
+        } else {
+            return $this->container->get('templating')->renderResponse(
+                'LaPoizWindBundle:BackOffice:errorPage.html.twig',
+                array('errMessage' => "Miss id of dataWindPrev... !"));
+        }
+    }
+
+    /**
+     * @Template()
+     *
+     * http://localhost/Wind/web/app_dev.php/admin/BO/ajax/spot/delete/1
+     *
+     * Used for delete spot not valide
      */
     public function spotDeleteAction($id=null)
     {
@@ -101,11 +141,13 @@ class BOAjaxSpotController extends Controller
             $em->remove($spot);
             $em->flush();
 
-            $listSpot = $em->getRepository('LaPoizWindBundle:Spot')->findAll();
+            $listSpot = $em->getRepository('LaPoizWindBundle:Spot')->findAllValid();
+            $listSpotNotValid = $em->getRepository('LaPoizWindBundle:Spot')->findAllNotValid();
 
             return $this->container->get('templating')->renderResponse('LaPoizWindBundle:BackOffice:index.html.twig',
                 array(
-                    'listSpot' => $listSpot
+                    'listSpot' => $listSpot,
+                    'listSpotNotValid' => $listSpotNotValid,
                 )
             );
         } else {

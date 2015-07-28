@@ -4,6 +4,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 
+// A EFFACER ?
+
 /**
  * @ORM\Entity(repositoryClass="LaPoiz\WindBundle\Repository\DataSpotRepository")
  * @ORM\Table(name="windServer_DataSpot")

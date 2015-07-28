@@ -1,0 +1,91 @@
+
+<h2>Etape n°2: Le spot</h2>
+
+    <script type="text/javascript" src="{{ asset('bundles/lapoizwind/js/tinymce/tinymce.min.js') }}"></script>
+    {{ form_stylesheet(form) }}
+    {{ form_javascript(form) }}
+
+
+    <div class="row">
+        <div class="col-sm-8">
+            {{ form_start(form, {
+            'style': 'horizontal',
+            'label_col': 2,
+            'widget_col': 8,
+            'methode' : 'POST',
+            'action' : path('_fo_ajax_spot_ask_create_step2', {'idContact':idContact})
+            })}}
+
+            {{ form_errors(form, { 'global_errors': true }) }}
+
+            {{ form_end(form) }}
+        </div>
+
+        <div class="col-sm-4 centered" >
+            <h3>Rosace des vents de ce spot</h3>
+            {% from "LaPoizWindBundle:BackOffice/Spot/Ajax:rosaceWind.html.twig" import displayRosace %}
+            {{ displayRosace() }}
+
+            <p>
+                Pour notifier une orientation de vent, il suffit de cliquer sur la fléche dans la rosace.<br />
+                Vous passerez de vide (inconnu) à <span class="elemGreen">Vert</span> (orientation parfaite) à
+                <span class="elemOrange">Orange</span> (orientation possible mais il y a un mais ...) puis
+                <span class="elemRed">Rouge</span> (Orientation fortement déconseillé) pour revenir à vide.
+
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Envoie du formulaire
+        $("#spot_form").on('submit', function(e){
+
+            $('#contentAskNewSpot').html('<img src="{{ asset('bundles/lapoizwind/images/loading.gif') }}" alt="Loading Ajax data" />');
+
+            e.preventDefault();
+            var $this = $(this);
+
+            $.ajax({
+                url: $this.attr('action'),
+                type: $this.attr('method'),
+                data: $this.serialize(),
+                success: function(html) {
+                    $('#contentAskNewSpot').html(html);
+                }
+            });
+            return false;
+        });
+
+        displayStep(2);
+    </script>
+
+    {% from "LaPoizWindBundle:BackOffice/Spot/Ajax:rosaceWindJS.html.twig" import js %}
+    {{ js(spot) }}
+
+
+    <div class="row">
+        <div class="col-sm-12">
+
+            <h2>Précision sur les champs à remplir</h2>
+
+            <h3>Nom du spot</h3>
+            <p>
+                C'est le nom local du spot.<br />
+                Exemple: L'almannarre, et non Hyeres qui est la ville où se situe le spot. <br />
+            </p>
+
+            <h3>Description du spot</h3>
+            <p>
+                Cette partie est importante, vous devez indiquer toutes les informations que vous possédez sur le spot.<br />
+                C'est à dire, les dangers du spot, le niveau necessaire pour pratiquer, la présence de vague selon quelle orientation ...
+            </p>
+
+
+            <h3>Localisation</h3>
+            <p>
+                Vous devez indiquer comment se rendre au spot.<br />
+                Où se garer, et les coordonnées GPS (afin d'afficher la carte).
+            </p>
+
+        </div>
+    </div>

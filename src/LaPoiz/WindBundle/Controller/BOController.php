@@ -20,11 +20,14 @@ class BOController extends Controller
   {
     $em = $this->container->get('doctrine.orm.entity_manager');
     // récupere tous les spots
-    $listSpot = $em->getRepository('LaPoizWindBundle:Spot')->findAll();
+    $listSpot = $em->getRepository('LaPoizWindBundle:Spot')->findAllValid();
+    $listSpotNotValid = $em->getRepository('LaPoizWindBundle:Spot')->findAllNotValid();
+
 
     return $this->container->get('templating')->renderResponse('LaPoizWindBundle:BackOffice:index.html.twig',
         array(
-            'listSpot' => $listSpot
+            'listSpot' => $listSpot,
+            'listSpotNotValid' => $listSpotNotValid
         ));
   }
 
@@ -40,7 +43,7 @@ class BOController extends Controller
         $em = $this->container->get('doctrine.orm.entity_manager');
 
         // récupere tous les spots
-        $listSpot = $em->getRepository('LaPoizWindBundle:Spot')->findAll();
+        $listSpot = $em->getRepository('LaPoizWindBundle:Spot')->findAllValid();
 
         if (isset($id) && $id!=-1)
         {
@@ -71,7 +74,7 @@ class BOController extends Controller
         $em = $this->container->get('doctrine.orm.entity_manager');
 
         // récupere tous les spots
-        $listSpot = $em->getRepository('LaPoizWindBundle:Spot')->findAll();
+        $listSpot = $em->getRepository('LaPoizWindBundle:Spot')->findAllValid();
 
         $spot = new Spot();
         $form = $this->createForm('spot',$spot);
@@ -118,7 +121,7 @@ class BOController extends Controller
         $em = $this->container->get('doctrine.orm.entity_manager');
 
         // récupere tous les spots
-        $listSpot = $em->getRepository('LaPoizWindBundle:Spot')->findAll();
+        $listSpot = $em->getRepository('LaPoizWindBundle:Spot')->findAllValid();
 
         if (isset($id) && $id!=-1)
         {

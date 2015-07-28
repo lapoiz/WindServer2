@@ -79,3 +79,7 @@ swiftmailer:
 genemu_form:
     tinymce:
         theme:   modern
+    captcha: ~
+
+fos_js_routing:
+    routes_to_expose: [ _bo_ajax_spot_delete, _bo_ajax_spot_valid ]

@@ -17,14 +17,18 @@
     {% include 'BraincraftedBootstrapBundle::ie8-support.html.twig' %}
 
     <!-- Icons en plus -->
-    <link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+    <!--<link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">-->
+    <link href="{{ asset('bundles/lapoizwind/font/css/font-awesome.css') }}" rel="stylesheet">
     <link href="{{ asset('bundles/lapoizwind/font/css/fontello.css') }}" rel="stylesheet">
 
     <!-- Custom styles for this template -->
     <link href="{{ asset('bundles/lapoizwind/css/laPoizWind.css') }}" rel="stylesheet">
 
-    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <!--<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>-->
+    <script src="{{ asset('bundles/lapoizwind/js/jquery-1.10.2.min.js') }}"></script>
     <script src="{{ asset('bundles/lapoizwind/js/bootstrap.min.js') }}"></script>
+
+    <script src="http://code.highcharts.com/highcharts.js"></script>
 
     {% block javascriptsHeader %}   {% endblock %}
     {% block scriptGraph %}    {% endblock %}

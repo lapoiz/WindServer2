@@ -7,43 +7,49 @@
 
             {{ form_row(form.mareeURL) }}
 
-            <h3>Restrictions</h3>
-            <div class="restrictions" data-prototype="
-            {% filter escape %}
-                {{ include('LaPoizWindBundle:BackOffice/Spot/Ajax/Maree:prototype.html.twig', { 'form': form.mareeRestriction.vars.prototype }) }}
-            {% endfilter %}">
-
-            {#{{ form_widget(form.mareeRestriction.vars.prototype)|e }}">#}
-                {# itère sur chaque mareeRestriction existant et affiche ses champs : hauteurMax, hauteurMin et state #}
-                {% for restriction in form.mareeRestriction %}
-                <div class="row">
-                    <div class="col-sm-3">
-                        {{ form_row(restriction.hauteurMin) }}
-                    </div>
-                    <div class="col-sm-3">
-                        {{ form_row(restriction.hauteurMax) }}
-                    </div>
-                    <div class="col-sm-3">
-                        {{ form_row(restriction.state) }}
-                    </div>
+            <div class="row">
+                <div class="col-sm-12 margin-top-05">
+                    {% from "LaPoizWindBundle:BothOffice/Spot/Ajax/Maree:infoMaree.html.twig" import getInfoMaree %}
+                    {{ getInfoMaree() }}
                 </div>
-                {% endfor %}
             </div>
 
+            <div class="row">
+                <div class="col-sm-12">
+
+                    <h3>Restrictions</h3>
+                    <div class="restrictions" data-prototype="
+                    {% filter escape %}
+                        {{ include('LaPoizWindBundle:BackOffice/Spot/Ajax/Maree:prototype.html.twig', { 'form': form.mareeRestriction.vars.prototype }) }}
+                    {% endfilter %}">
+
+                    {#{{ form_widget(form.mareeRestriction.vars.prototype)|e }}">#}
+                        {# itère sur chaque mareeRestriction existant et affiche ses champs : hauteurMax, hauteurMin et state #}
+                        {% for restriction in form.mareeRestriction %}
+                        <div class="row">
+                            <div class="col-sm-3">
+                                {{ form_row(restriction.hauteurMin) }}
+                            </div>
+                            <div class="col-sm-3">
+                                {{ form_row(restriction.hauteurMax) }}
+                            </div>
+                            <div class="col-sm-3">
+                                {{ form_row(restriction.state) }}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
             {{ form_rest(form) }}
         </form>
     </div>
     <div class="col-sm-6">
-        {% from "LaPoizWindBundle:BackOffice/Spot/Ajax/Maree:graph.html.twig" import graphMaree %}
+        {% from "LaPoizWindBundle:BothOffice/Spot/Ajax/Maree:graph.html.twig" import graphMaree %}
         {{ graphMaree(spot) }}
     </div>
 </div>
-<div class="row">
-    <div class="col-sm-12 margin-top-05">
-        {% from "LaPoizWindBundle:BackOffice/Spot/Ajax/Maree:infoMaree.html.twig" import getInfoMaree %}
-        {{ getInfoMaree() }}
-    </div>
-</div>
+
 
 <script>
     // Récupère le div qui contient la collection de restrictions

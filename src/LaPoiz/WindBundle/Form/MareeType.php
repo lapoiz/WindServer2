@@ -15,7 +15,7 @@ class MareeType extends AbstractType
   
   public function buildForm(FormBuilderInterface $builder, array $options)
   {
-      $builder->add('mareeURL');
+      $builder->add('mareeURL', 'text', array('label' => 'ULR pour la marée (http://maree.info/)'));
       $builder->add('hauteurMBGrandeMaree','hidden');
       $builder->add('hauteurMHGrandeMaree','hidden');
       $builder->add('hauteurMBMoyenneMaree','hidden');

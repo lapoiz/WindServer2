@@ -30,21 +30,10 @@ class Spot
     
     
     /**
-     * @ORM\Column(type="boolean",nullable=true)
+     * @ORM\Column(type="boolean",nullable=false)
      */    
-    private $isKitePractice;
-    
-    /**
-     * @ORM\Column(type="boolean",nullable=true)
-     */    
-    private $isWindsurfPractice;
-    
-    
-    /**
-     * @ORM\Column(type="string",length=255,nullable=true)
-     */    
-    private $googleMapURL;
-    
+    private $isValide=false;
+
     
     /**
      * @ORM\Column(type="string",length=255,nullable=true)
@@ -284,74 +273,6 @@ class Spot
         return $this->description;
     }
 
-    /**
-     * Set isKitePractice
-     *
-     * @param boolean $isKitePractice
-     * @return Spot
-     */
-    public function setIsKitePractice($isKitePractice)
-    {
-        $this->isKitePractice = $isKitePractice;
-
-        return $this;
-    }
-
-    /**
-     * Get isKitePractice
-     *
-     * @return boolean 
-     */
-    public function getIsKitePractice()
-    {
-        return $this->isKitePractice;
-    }
-
-    /**
-     * Set isWindsurfPractice
-     *
-     * @param boolean $isWindsurfPractice
-     * @return Spot
-     */
-    public function setIsWindsurfPractice($isWindsurfPractice)
-    {
-        $this->isWindsurfPractice = $isWindsurfPractice;
-
-        return $this;
-    }
-
-    /**
-     * Get isWindsurfPractice
-     *
-     * @return boolean 
-     */
-    public function getIsWindsurfPractice()
-    {
-        return $this->isWindsurfPractice;
-    }
-
-    /**
-     * Set googleMapURL
-     *
-     * @param string $googleMapURL
-     * @return Spot
-     */
-    public function setGoogleMapURL($googleMapURL)
-    {
-        $this->googleMapURL = $googleMapURL;
-
-        return $this;
-    }
-
-    /**
-     * Get googleMapURL
-     *
-     * @return string 
-     */
-    public function getGoogleMapURL()
-    {
-        return $this->googleMapURL;
-    }
 
     /**
      * Set localisationDescription
@@ -769,5 +690,29 @@ class Spot
     public function getNotesDate()
     {
         return $this->notesDate;
+    }
+
+    /**
+     * Set isValide
+     *
+     * @param boolean $isValide
+     *
+     * @return Spot
+     */
+    public function setIsValide($isValide)
+    {
+        $this->isValide = $isValide;
+
+        return $this;
+    }
+
+    /**
+     * Get isValide
+     *
+     * @return boolean
+     */
+    public function getIsValide()
+    {
+        return $this->isValide;
     }
 }

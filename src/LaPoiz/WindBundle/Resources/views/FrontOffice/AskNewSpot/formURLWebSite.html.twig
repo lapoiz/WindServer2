@@ -1,0 +1,40 @@
+
+    {{ form_start(form, {
+        'style': 'horizontal',
+        'label_col': 2,
+        'widget_col': 8,
+        'methode' : 'POST',
+        'action' : path('_fo_spot_ask_create_step2', {'id':spot.id})
+    })}}
+
+    {{ form_errors(form, { 'global_errors': true }) }}
+
+    {{ form_end(form) }}
+
+
+
+    <script>
+        // Envoie du formulaire
+        $("#dataWindPrev_form").on('submit', function(e){
+            var backupHTML = $('#blockForm').html();
+            $('#blockForm').html('<img src="{{ asset('bundles/lapoizwind/images/loading.gif') }}" alt="Loading Ajax data" />');
+
+            e.preventDefault();
+            var $this = $(this);
+
+            $.ajax({
+                url: $this.attr('action'),
+                type: $this.attr('method'),
+                data: $this.serialize(),
+                success: function(html) {
+                    $('#blockForm').html(html);
+                    reloadListWebSite();
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown) {
+                    alert("Erreur: La page lié à l'URL indiqué ne peut être scané, veuillez essayer avec une autre.");
+                    $('#blockForm').html(backupHTML);
+                }
+            });
+            return false;
+        });
+    </script>

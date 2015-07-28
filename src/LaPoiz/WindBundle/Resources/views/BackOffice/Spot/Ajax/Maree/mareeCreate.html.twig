@@ -1,4 +1,7 @@
-    <h3>URL pour récupérer les prévisions de marées</h3>
+    <h3>URL pour récupérer les prévisions de marées</h3>*
+
+    JAMAIS UTILISE ?????????????????????????????
+
     <div class="row">
         <div class="col-sm-12">
             {{ form_start(form, {
@@ -31,7 +34,6 @@
                 success: function(html) {
                     $('#result').html(html);
                     if (create == 1) {
-                        alert('reload');
                         location.reload();
                     }
                 }

@@ -1,8 +1,5 @@
 {% extends 'LaPoizWindBundle:FrontOffice:base.html.twig' %}
 
-{% block scriptGraph %}
-    <script type="text/javascript" src="http://code.highcharts.com/highcharts.js"></script>
-{% endblock %}
 
 {% block bodyPage %}
 
@@ -59,7 +56,7 @@
     <div class="col-sm-6 centered">
         {% if spot.mareeURL|default is not empty %}
 
-            {% from "LaPoizWindBundle:BackOffice/Spot/Ajax/Maree:graph.html.twig" import graphMaree %}
+            {% from "LaPoizWindBundle:BothOffice/Spot/Ajax/Maree:graph.html.twig" import graphMaree %}
             {{ graphMaree(spot, "400px","300px" ) }}
 
             <script>

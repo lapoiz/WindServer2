@@ -105,6 +105,25 @@ class WebsiteGetData
 
 		return array($result,$chrono);
 	}
+
+
+    // return true if it's possible to parse the data from $dataWindPrev->URL, false else
+    function isdataWindPrevOK($dataWindPrev)
+    {
+        $url=$dataWindPrev->getUrl();
+        $ok = false;
+
+        try {
+            $result=$this->getDataURL($url);
+            $result=$this->analyseData($result,$url);
+            $this->transformData($result);
+            $ok = true;
+        } 	catch (\Exception $e) {
+            $ok = false;
+        }
+
+        return $ok;
+    }
 	
 	// save data from transforme data (transformDataFromTab) and return array of $prevDate and chrono 
 	function saveFromTransformData($transformData,$dataWindPrev,$entityManager)

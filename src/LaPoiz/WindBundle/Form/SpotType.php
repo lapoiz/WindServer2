@@ -19,9 +19,6 @@ class SpotType extends AbstractType
     //$builder->add('description','textarea', array('attr' => array('class' => 'ckeditor',)));
     $builder->add('description','genemu_tinymce');
 
-    $builder->add('isKitePractice');
-    $builder->add('isWindsurfPractice');
-    $builder->add('googleMapURL','text',array('label'=>'URL (googleMap)'));
     //$builder->add('localisationDescription','textarea',array('label'=>'Description','attr' => array('class' => 'ckeditor',)));
     $builder->add('localisationDescription','genemu_tinymce');
 
