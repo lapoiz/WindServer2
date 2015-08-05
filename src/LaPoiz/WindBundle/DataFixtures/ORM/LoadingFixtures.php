@@ -78,8 +78,6 @@ class LoadingFixtures implements FixtureInterface
         $spot=new Spot();
         $spot->setNom("Saint Aubin");
         $spot->setDescription("Spot avec grande plage, sans risque.");
-        $spot->setIsKitePractice(true);
-        $spot->setIsWindsurfPractice(true);
         $spot->setLocalisationDescription('Proche de Saint-Aubin-sur-mer prendre a gauche dans le début du village: route de Saussemare');
         $spot->setGpsLong('49.893141');
         $spot->setGpsLat('0.869551');
@@ -110,8 +108,6 @@ class LoadingFixtures implements FixtureInterface
         $spot=new Spot();
         $spot->setNom("Almanarre");
         $spot->setDescription("Spot mythique proche de Hyeres.");
-        $spot->setIsKitePractice(true);
-        $spot->setIsWindsurfPractice(true);
         $spot->setLocalisationDescription('A Hyères suivre Giens (D559), puis prendre Route du sel. Le spot est balisé.');
         $spot->setGpsLong('43.056244');
         $spot->setGpsLat('6.133105');

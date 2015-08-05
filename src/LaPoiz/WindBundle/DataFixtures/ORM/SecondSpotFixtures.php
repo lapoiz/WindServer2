@@ -37,8 +37,6 @@ class SecondSpotFixtures implements FixtureInterface
         $spot=new Spot();
         $spot->setNom("Almanarre");
         $spot->setDescription("Spot mythique proche de Hyeres.");
-        $spot->setIsKitePractice(true);
-        $spot->setIsWindsurfPractice(true);
         $spot->setLocalisationDescription('A Hyères suivre Giens (D559), puis prendre Route du sel. Le spot est balisé.');
         $spot->setGpsLong('43.056244');
         $spot->setGpsLat('6.133105');
