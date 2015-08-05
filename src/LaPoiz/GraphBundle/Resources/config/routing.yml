@@ -1,0 +1,8 @@
+la_poiz_graph_homepage:
+    path:     /hello/{name}
+    defaults: { _controller: LaPoizGraphBundle:Default:index }
+
+graph_test1:
+    path:     /test1
+    defaults: { _controller: LaPoizGraphBundle:WindGraph:test1 }
+

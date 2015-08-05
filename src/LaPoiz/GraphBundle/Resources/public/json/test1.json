@@ -1,0 +1,30 @@
+{
+    "spot": "Saint Aubin",
+    "listSites": [
+        {
+            "nom":  "Windguru",
+            "date": "02/08/2015 21:47",
+            "previsions": [
+                {
+                    "date": "02/08/2015",
+                    "previsions": [
+                        { "heure": "02",
+                            "wind": 4 },
+                        { "heure": "10",
+                            "wind": 15 },
+                        { "heure": "14",
+                            "wind": 20 },
+                        { "heure": "20",
+                            "wind": 30 },
+                        { "heure": "24",
+                            "wind": 40 }
+                    ]
+                }
+            ]
+        },
+        {
+            "nom":  "Windfinder",
+            "date": "02/08/2015 20:10"
+        }
+    ]
+}
