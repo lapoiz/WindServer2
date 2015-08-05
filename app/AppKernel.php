@@ -21,6 +21,7 @@ class AppKernel extends Kernel
             new Genemu\Bundle\FormBundle\GenemuFormBundle(),
             new Braincrafted\Bundle\BootstrapBundle\BraincraftedBootstrapBundle(),
             new FOS\JsRoutingBundle\FOSJsRoutingBundle(),
+            new LaPoiz\GraphBundle\LaPoizGraphBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
