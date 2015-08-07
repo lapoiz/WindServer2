@@ -72,6 +72,11 @@ _fo_json_spot_data:
   defaults: { _controller: LaPoizWindBundle:FOJson:get }
   pattern: /fo/json/spot/data/{id}
 
+_fo_json_lapoizGraph_spot_data:
+  defaults: { _controller: LaPoizWindBundle:FOJson:getLaPoizGraph }
+  pattern: /fo/json/lapoizgraph/spot/{id}
+
+
 
 
 
