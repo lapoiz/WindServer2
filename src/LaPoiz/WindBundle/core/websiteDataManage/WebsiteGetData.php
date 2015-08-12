@@ -199,9 +199,37 @@ class WebsiteGetData
 		$entityManager->flush();
 		return $result;
 	}
-	
+
+	/**
+	 * @param $windKmh : vent en Km/h
+	 * @return float : vitesse en knds (noeuds)
+	 */
 	static function transformeKmhByNoeud($windKmh) {
 		return round($windKmh/1.852,0);
+	}
+
+	/*
+	 * Determine comment afficher le resultat en fonction de l'étape des test
+	 */
+	static function typeDisplay($step) {
+		$result="text";
+		switch ($step) {
+			case 10: $result="text";break; // display error texte
+			case 0: $result="text";break;
+			case 1: $result="code";break;
+			case 2: $result="arrayOfArray";break;
+			case 3: $result="arrayOfArrayOfArray";break;
+			case 4: $result="prevDate";break;
+		}
+		return $result;
+	}
+
+	/**
+	 * @param $resulGetData: resultat de la fonction getDataURL
+	 * @return ce qu'on affiche
+	 */
+	static function displayGetData($resultGetDataURL) {
+		return $resultGetDataURL; // par defaut retourn un element lisible
 	}
 
 	static function transformeOrientation($orientation) {

@@ -48,7 +48,7 @@ class BOAjaxDataWindPrevController extends Controller
 					array(	'chrono' => $data[2],
 							'step' => $data[0],
 							'info' => $data[1],
-        					'typeDisplay' => BOAjaxDataWindPrevController::typeDisplay($data[0]),
+        					'typeDisplay' => $websiteGetData->typeDisplay($data[0]),
 							'dataWindPrev' => $dataWindPrev ));
 			} else {
 				$result="No find DataWindPrev.id=".$id;
@@ -64,29 +64,16 @@ class BOAjaxDataWindPrevController extends Controller
         		array(	'chrono' => 0,
         				'step' => 10,
         				'info' => $result,
-        				'typeDisplay' => BOAjaxDataWindPrevController::typeDisplay(-1),
+        				'typeDisplay' => WebsiteGetData::typeDisplay(-1),
         				'dataWindPrev' => $dataWindPrev ));
 	}
 
-	
-	static function typeDisplay($step) {
-		$result="text";
-		switch ($step) {
-			case 10: $result="text";break; // display error texte
-			case 0: $result="text";break;
-			case 1: $result="code";break;
-			case 2: $result="arrayOfArray";break;
-			case 3: $result="arrayOfArrayOfArray";break;
-			case 4: $result="prevDate";break;
-		}
-		return $result;
-	}
+
 	
 	/**
 	* @Template()
 	*/
-	// for testing: http://localhost/WindServer/web/app_dev.php/ajax/dataWindPrev/test/step1/1
-    // for testing: http://localhost/Wind/web/app_dev.php/admin/BO/ajax/spot/dataWindPrev/test/step1/7
+	// http://localhost/Wind/web/app_dev.php/admin/BO/ajax/spot/dataWindPrev/test/step1/3
 	public function testStep1Action($id=null)
 	{
 		try {
@@ -102,8 +89,8 @@ class BOAjaxDataWindPrevController extends Controller
 				return $this->container->get('templating')->renderResponse(
 					'LaPoizWindBundle:BackOffice/Spot/Ajax:testdataWindPrev.html.twig',
 					array(	'chrono' => $data[1],
-							'info' => $data[0],
-        					'typeDisplay' => BOAjaxDataWindPrevController::typeDisplay(1),
+							'info' => $websiteGetData->displayGetData($data[0]),
+        					'typeDisplay' => $websiteGetData->typeDisplay(1),
         					'step' => 1,
         					'dataWindPrev' => $dataWindPrev));
 			} else {
@@ -119,7 +106,7 @@ class BOAjaxDataWindPrevController extends Controller
         		array(	'chrono' => 0,
         				'step' => 10,
         				'info' => $result,
-        				'typeDisplay' => BOAjaxDataWindPrevController::typeDisplay(-1),
+        				'typeDisplay' => WebsiteGetData::typeDisplay(-1),
         				'dataWindPrev' => $dataWindPrev ));
 	}
 	
@@ -127,7 +114,7 @@ class BOAjaxDataWindPrevController extends Controller
 	/**
 	 * @Template()
 	 */
-	// for testing: http://localhost/WindServer/web/app_dev.php/ajax/dataWindPrev/test/step2/1
+	// http://localhost/Wind/web/app_dev.php/admin/BO/ajax/spot/dataWindPrev/test/step2/1
 	public function testStep2Action($id=null)
 	{
 		try {
@@ -147,7 +134,7 @@ class BOAjaxDataWindPrevController extends Controller
 							array(	
 								'chrono' => $analyse[1],
 								'info' => $analyse[0],
-	        					'typeDisplay' => BOAjaxDataWindPrevController::typeDisplay($step),
+	        					'typeDisplay' => $websiteGetData->typeDisplay($step),
 								'step' => $step,
 								'dataWindPrev' => $dataWindPrev));
 			} else {
@@ -163,7 +150,7 @@ class BOAjaxDataWindPrevController extends Controller
 					array(	'chrono' => 0,
 	        				'step' => 10,
 	        				'info' => $result,
-							'typeDisplay' => BOAjaxDataWindPrevController::typeDisplay(-1),
+							'typeDisplay' => WebsiteGetData::typeDisplay(-1),
 							'dataWindPrev' => $dataWindPrev ));
 	}
 	
@@ -192,7 +179,7 @@ class BOAjaxDataWindPrevController extends Controller
 								array(
 									'chrono' => $transformData[1],
 									'info' => $transformData[0],
-									'typeDisplay' => BOAjaxDataWindPrevController::typeDisplay($step),
+									'typeDisplay' => $websiteGetData->typeDisplay($step),
 									'step' => $step,
 									'dataWindPrev' => $dataWindPrev));
 			} else {
@@ -208,7 +195,7 @@ class BOAjaxDataWindPrevController extends Controller
 							array(	'chrono' => 0,
 		        				'step' => 10,
 		        				'info' => $result,
-								'typeDisplay' => BOAjaxDataWindPrevController::typeDisplay(-1),
+								'typeDisplay' => WebsiteGetData::typeDisplay(-1),
 								'dataWindPrev' => $dataWindPrev ));
 	}
 	
@@ -238,7 +225,7 @@ class BOAjaxDataWindPrevController extends Controller
 								array(
 										'chrono' => $saveData[1],
 										'info' => $saveData[0],
-										'typeDisplay' => BOAjaxDataWindPrevController::typeDisplay($step),
+										'typeDisplay' => WebsiteGetData::typeDisplay($step),
 										'step' => $step,
 										'dataWindPrev' => $dataWindPrev));
 			} else {
@@ -254,7 +241,7 @@ class BOAjaxDataWindPrevController extends Controller
 								array(	'chrono' => 0,
 			        				'step' => 10,
 									'info' => $result,
-									'typeDisplay' => BOAjaxDataWindPrevController::typeDisplay(-1),
+									'typeDisplay' => WebsiteGetData::typeDisplay(-1),
 									'dataWindPrev' => $dataWindPrev ));
 	}
 
