@@ -16,6 +16,10 @@ class WindguruProGetData extends WebsiteGetData
 	function getDataURL($url) 
 	{
         $client = new Client();
+        // Problème avec : cURL error 60: SSL certificate problem: self signed certificate in certificate chain
+        $guzzle = $client->getClient(); //You'll want to pull the Guzzle client out of Goutte to inherit its defaults
+        $guzzle->setDefaultOption('verify', false); //Set the certificate at @mtdowling recommends
+        $client->setClient($guzzle); //Tell Goutte to use your modified Guzzle client
 
         // On se connecte à WindGuruPro
         $crawler = $client->request('GET', WindguruProGetData::windguruProURLLogin);
