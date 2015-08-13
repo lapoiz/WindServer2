@@ -123,7 +123,7 @@ class PrevisionDateRepository extends EntityRepository
 			return null;
 		}
 	}
-
+/*
 	public  function findLastCreated($previsionDate) {
 
 		$queryStr = 'SELECT previsionDate FROM LaPoizWindBundle:PrevisionDate AS previsionDate ';
@@ -140,7 +140,7 @@ class PrevisionDateRepository extends EntityRepository
 
 		return $query->getResult();
 	}
-
+*/
 	/**
 	 * Return list of LAST PrevisionDate for next days (after now) for the spot and website of DataWindPrev
 	 * @param DataWindPrev $dataWindPrev
@@ -152,23 +152,28 @@ class PrevisionDateRepository extends EntityRepository
 
         $lastPrevisionDate=$this->getTheLastPrevDateForWebSiteSpot($dataWindPrev);
 
-		$queryBuilder = $this->createQueryBuilder('previsionDate');
+		if (isset($lastPrevisionDate)) {
+			$queryBuilder = $this->createQueryBuilder('previsionDate');
 
-		$queryBuilder->innerJoin('previsionDate.dataWindPrev', 'dataWindPrev');
-        $queryBuilder->addSelect('dataWindPrev');
+			$queryBuilder->innerJoin('previsionDate.dataWindPrev', 'dataWindPrev');
+			$queryBuilder->addSelect('dataWindPrev');
 
-         $queryBuilder->where($queryBuilder->expr()->andx(
-		        $queryBuilder->expr()->eq('dataWindPrev.id',$dataWindPrev->getId()),
-                $queryBuilder->expr()->eq('previsionDate.created',"'".$lastPrevisionDate->getCreated()->format('Y-m-d H:i:s')."'"),
-		        $queryBuilder->expr()->gte('previsionDate.datePrev',"'".$today->format('Y-m-d H:i:s')."'")));
+			$queryBuilder->where($queryBuilder->expr()->andx(
+				$queryBuilder->expr()->eq('dataWindPrev.id', $dataWindPrev->getId()),
+				$queryBuilder->expr()->eq('previsionDate.created', "'" . $lastPrevisionDate->getCreated()->format('Y-m-d H:i:s') . "'"),
+				$queryBuilder->expr()->gte('previsionDate.datePrev', "'" . $today->format('Y-m-d H:i:s') . "'")));
 
-        //$queryBuilder->groupBy('previsionDate.datePrev');
+			//$queryBuilder->groupBy('previsionDate.datePrev');
 
-		try {
-			return $queryBuilder->getQuery()->getResult();
-		} catch (\Doctrine\ORM\NoResultException $e) {
+			try {
+				return $queryBuilder->getQuery()->getResult();
+			} catch (\Doctrine\ORM\NoResultException $e) {
+				return null;
+			}
+		} else {
 			return null;
 		}
+
 	}
 
 
@@ -204,7 +209,10 @@ class PrevisionDateRepository extends EntityRepository
 	{
         $result = array();
         foreach ($spot->getDataWindPrev() as $dataWindPrev) {
-            $result=array_merge($result,$this->getPrevDateOneWebSiteNextDays($dataWindPrev));
+			$prevDateNextDays=$this->getPrevDateOneWebSiteNextDays($dataWindPrev);
+			if (isset($prevDateNextDays)) {
+				$result = array_merge($result,$prevDateNextDays);
+			}
         }
         return $result;
 	}

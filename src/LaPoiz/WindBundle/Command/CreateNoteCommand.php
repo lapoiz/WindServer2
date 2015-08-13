@@ -18,8 +18,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class CreateNoteCommand extends ContainerAwareCommand  {
 
-    const HEURE_MATIN = 9;
-    const HEURE_SOIR = 19;
+    const HEURE_MATIN = 8;
+    const HEURE_SOIR = 20;
 
  	protected function configure()
     {

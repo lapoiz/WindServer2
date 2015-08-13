@@ -18,8 +18,12 @@ use Symfony\Component\Validator\Constraints\Url;
 class FOAjaxAskCreateSpotController extends Controller
 
 {
-
-
+    /**
+     * FOAjaxAskCreateSpotController constructor.
+     */
+    public function __construct()
+    {
+    }
 
 
     /**
@@ -184,14 +188,15 @@ class FOAjaxAskCreateSpotController extends Controller
                         if ($webSite->isDataWindPrevOK($dataWindPrev)) {
                             // Il est possible de parser le site de cet URL
 
-                            $spot->addDataWindPrev($dataWindPrev);
-                            $site = $dataWindPrev->getWebsite();
-                            $site->addDataWindPrev($dataWindPrev);
+                            if ($dataWindPrev->getWebsite()->getNom() == WebsiteGetData::windguruName) {
+                                $dataWindPrevWindGuruPro = clone $dataWindPrev;
+                                $dataWindPrevWindGuruPro->getWebsite()->removeDataWindPrev($dataWindPrevWindGuruPro);
+                                $windGuruProWebsite = $em->getRepository('LaPoizWindBundle:WebSite')->findByNom(WebsiteGetData::windguruProName)[0];
+                                $dataWindPrevWindGuruPro->setWebsite($windGuruProWebsite);
+                                $this->saveDataWindPrev($spot, $dataWindPrevWindGuruPro, $em);
+                            }
 
-                            $em->persist($dataWindPrev);
-                            $em->persist($site);
-                            $em->persist($spot);
-                            $em->flush();
+                            $this->saveDataWindPrev($spot, $dataWindPrev, $em);
 
                             // clean the form and display it
                             $dataWindPrev = new DataWindPrev();
@@ -373,8 +378,21 @@ class FOAjaxAskCreateSpotController extends Controller
             ));
     }
 
+    /**
+     * @param $spot
+     * @param $dataWindPrev
+     * @param $em
+     */
+    public function saveDataWindPrev($spot, $dataWindPrev, $em)
+    {
+        $spot->addDataWindPrev($dataWindPrev);
+        $site = $dataWindPrev->getWebsite();
+        $site->addDataWindPrev($dataWindPrev);
 
-
-
+        $em->persist($dataWindPrev);
+        $em->persist($site);
+        $em->persist($spot);
+        $em->flush();
+    }
 
 }

@@ -1,6 +1,8 @@
 <?php
 namespace LaPoiz\WindBundle\Controller;
 
+
+use LaPoiz\WindBundle\core\websiteDataManage\WebsiteGetData;
 use LaPoiz\WindBundle\core\note\ManageNote;
 use LaPoiz\WindBundle\Entity\DataWindPrev;
 use LaPoiz\WindBundle\Entity\NotesDate;
@@ -56,14 +58,16 @@ class BOAjaxSiteController extends Controller
                 if ($form->isValid()) {
                     // form submit
                     $dataWindPrev = $form->getData();
-                    $spot->addDataWindPrev($dataWindPrev);
-                    $site = $dataWindPrev->getWebsite();
-                    $site->addDataWindPrev($dataWindPrev);
 
-                    $em->persist($dataWindPrev);
-                    $em->persist($site);
-                    $em->persist($spot);
-                    $em->flush();
+                    if ($dataWindPrev->getWebsite()->getNom() == WebsiteGetData::windguruName) {
+                        $dataWindPrevWindGuruPro = clone $dataWindPrev;
+                        $dataWindPrevWindGuruPro->getWebsite()->removeDataWindPrev($dataWindPrevWindGuruPro);
+                        $windGuruProWebsite = $em->getRepository('LaPoizWindBundle:WebSite')->findByNom(WebsiteGetData::windguruProName)[0];
+                        $dataWindPrevWindGuruPro->setWebsite($windGuruProWebsite);
+                        $this->saveDataWindPrev($spot, $dataWindPrevWindGuruPro, $em);
+                    }
+
+                    $this->saveDataWindPrev($spot, $dataWindPrev, $em);
 
                     return $this->forward('LaPoizWindBundle:BO:editSpot', array(
                             'id'  => $spot->getId()
@@ -322,5 +326,22 @@ class BOAjaxSiteController extends Controller
                 'message' => "",
                 'saveSuccess' => true
             ));
+    }
+
+    /**
+     * @param $spot
+     * @param $dataWindPrev
+     * @param $em
+     */
+    public function saveDataWindPrev($spot, $dataWindPrev, $em)
+    {
+        $spot->addDataWindPrev($dataWindPrev);
+        $site = $dataWindPrev->getWebsite();
+        $site->addDataWindPrev($dataWindPrev);
+
+        $em->persist($dataWindPrev);
+        $em->persist($site);
+        $em->persist($spot);
+        $em->flush();
     }
 }

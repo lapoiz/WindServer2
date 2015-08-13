@@ -76,6 +76,9 @@ _fo_json_lapoizGraph_spot_data:
   defaults: { _controller: LaPoizWindBundle:FOJson:getLaPoizGraph }
   pattern: /fo/json/lapoizgraph/spot/{id}
 
+_fo_json_lapoizGraph_maree_data:
+  defaults: { _controller: LaPoizWindBundle:FOJsonMaree:getPlageNavigation }
+  pattern: /fo/json/lapoizgraph/plage/maree/spot/{id}
 
 
 
