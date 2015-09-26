@@ -1,8 +1,9 @@
 <?php
 namespace LaPoiz\WindBundle\Entity;
+
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
-
+use LaPoiz\WindBundle\core\websiteDataManage\WebsiteGetData;
 /**
  * @ORM\Entity
  * @ORM\Table(name="windServer_WindOrientation")
@@ -22,6 +23,13 @@ class WindOrientation
      * "nord", "nord-nord-est",...
      */    
     private $orientation;
+
+    /**
+     * @ORM\Column(type="decimal", scale=1)
+     * @Assert\NotBlank()
+     * 0, 22.5, ...
+     */
+    private $orientationDeg;
 
     /**
      * @ORM\Column(type="string",length=20, nullable=true)
@@ -54,6 +62,7 @@ class WindOrientation
     public function setOrientation($orientation)
     {
         $this->orientation = $orientation;
+        $this->orientationDeg=WebsiteGetData::transformeOrientationDeg($orientation);
 
         return $this;
     }
@@ -112,5 +121,30 @@ class WindOrientation
     public function getSpot()
     {
         return $this->spot;
+    }
+
+    /**
+     * Set orientationDeg
+     *
+     * @param string $orientationDeg
+     *
+     * @return WindOrientation
+     */
+    public function setOrientationDeg($orientationDeg)
+    {
+        $this->orientationDeg = $orientationDeg;
+        $this->orientation=WebsiteGetData::transformeOrientationDegToNom($orientationDeg);
+
+        return $this;
+    }
+
+    /**
+     * Get orientationDeg
+     *
+     * @return string
+     */
+    public function getOrientationDeg()
+    {
+        return $this->orientationDeg;
     }
 }

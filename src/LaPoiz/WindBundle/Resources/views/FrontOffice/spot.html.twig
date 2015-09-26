@@ -1,23 +1,37 @@
 {% extends 'LaPoizWindBundle:FrontOffice:base.html.twig' %}
 
 
+    {% block scriptGraph %}
+        <script src="{{ asset('bundles/lapoizgraph/js/moment.min.js') }}"></script>
+        <script src="{{ asset('bundles/lapoizgraph/js/spline.js') }}"></script>
+        <script src="{{ asset('bundles/lapoizgraph/js/Graph.js') }}"></script>
+        <script src="{{ asset('bundles/lapoizgraph/js/WindGraph.js') }}"></script>
+        <script src="{{ asset('bundles/lapoizgraph/js/LegendGraph.js') }}"></script>
+        <script src="{{ asset('bundles/lapoizgraph/js/Legend.js') }}"></script>
+        <script src="{{ asset('bundles/lapoizgraph/js/graphSpot.js') }}"></script>
+    {% endblock %}
+
+    {% block stylesheets %}
+        <link href="{{ asset('bundles/lapoizgraph/css/graphSpot.css') }}" rel="stylesheet" media="screen">
+    {% endblock %}
+
 {% block bodyPage %}
 
 <h1>Prévisions météo et détails du spot: {{ spot.nom }}</h1>
 
-<div class="row">
-    <div class="col-sm-12">
-        {% from "LaPoizWindBundle:FrontOffice/spot:graph.html.twig" import graph %}
-        {{ graph(spot) }}
+
+    <div class="row">
+        <div class="col-sm-12">
+            {% from "LaPoizGraphBundle:Wind:graph.html.twig" import graph %}
+            {{ graph(spot) }}
+        </div>
     </div>
-</div>
 
 <div class="row">
-
-    <div class="col-sm-6 center-block text-center">
+    <div class="col-sm-6 center-block text-center" heigth="300px">
         <h3 class="titreSVG">Rosace du vent à {{ spot.nom }}</h3>
         {% from "LaPoizWindBundle:BackOffice/Spot/Ajax:rosaceWind.html.twig" import displayRosace %}
-        {{ displayRosace() }}
+        {{ displayRosace("200px","200px") }}
 
 
 
@@ -40,13 +54,6 @@
 
                 svgLoad(tabOrientationState, true);
             }
-
-
-            //$('#rosaceWindSVG').setAttributeNS(null, "width", "500");
-            //var rosace = document.getElementById("rosaceWindSVG");
-            //rosace.setAttributeNS(null, "width", "50");
-            //$('#rosaceWindSVG').attr("viewBox", "500 500 1000 1000");
-            //window.svgDocument.scale(0.5);
 
         </script>
 

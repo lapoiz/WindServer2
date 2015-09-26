@@ -35,8 +35,8 @@ class Balise
     
     
     /**
-    * @ORM\OneToOne(targetEntity="Spot", cascade={"persist", "remove"} )
-    * @ORM\JoinColumn(name="spot_id", referencedColumnName="id")
+    * @ORM\OneToOne(targetEntity="Spot" )
+    * @ORM\JoinColumn(name="spot_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
     */
     private $spot;
     

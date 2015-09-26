@@ -6,3 +6,6 @@ graph_test1:
     path:     /test1
     defaults: { _controller: LaPoizGraphBundle:WindGraph:test1 }
 
+garph_spot:
+    path:     /spot/{id}
+    defaults: { _controller: LaPoizGraphBundle:WindGraph:spot }

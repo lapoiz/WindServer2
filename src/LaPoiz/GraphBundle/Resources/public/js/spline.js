@@ -7,18 +7,24 @@ function Spline(svgChart,websiteCode) {
 
 	this.spline=new Array(); /*splines*/
 	this.points=new Array(); /*vertices*/
+	this.arrayOfPoints=new Array();
 }
 
 Spline.prototype.addPoint = function(x,y){
-	/*create control points*/
-	var point=this.svgChart.newCircleSVGElement(x,y,2,"point"+this.websiteCode);
-	this.points.push(point);
-	return point;
+	this.arrayOfPoints.push([x,y]);
 }
 
 Spline.prototype.drawSpline = function() {
-	for (i=0;i<this.points.length;i++) {
-		this.spline.push(this.svgChart.newPathSVGElement(null, "courbePrev" + this.websiteCode));
+	// On dessine d'abord les lignes
+	for (i=0;i<this.arrayOfPoints.length;i++) {
+		this.spline.push(this.svgChart.newPathSVGElement(null, "courbePrev" + this.websiteCode,this.svgChart.splineGroup));
+	}
+	// Puis tous les points
+	for (i=0;i<this.arrayOfPoints.length;i++) {
+		var point=this.svgChart.newCircleSVGElement(this.arrayOfPoints[i][0],this.arrayOfPoints[i][1],1.5,"point"+this.websiteCode,null,this.svgChart.pointsGroup);
+		point.addEventListener("mouseover", showTooltip, false);
+		point.addEventListener("mouseout", hideTooltip, false);
+		this.points.push(point);
 	}
 	this.updateSplines();
 }

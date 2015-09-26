@@ -36,6 +36,10 @@ class TransformeToLaPoizGraphDataTabForJson   {
                     if ($prevision->getOrientation()!='?') {
 						$previ["orientation"]= new WindOrientation($prevision->getOrientation());
                     }
+                    /*
+					if ($prevision->getOrientationDeg()!='?') {
+						$previ["orientationDeg"]= $prevision->getOrientationDeg();
+					}*/
                     if ($prevision->getMeteo()!=null && $prevision->getMeteo()!='?') {
 						$previ["meteo"]= $prevision->getMeteo();
                     }

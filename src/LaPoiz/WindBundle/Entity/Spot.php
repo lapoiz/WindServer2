@@ -1,6 +1,7 @@
 <?php
 namespace LaPoiz\WindBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
+use LaPoiz\WindBundle\core\websiteDataManage\WebsiteGetData;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -137,82 +138,98 @@ class Spot
 
         $windOrientation = new WindOrientation();
         $windOrientation->setSpot($this);
-        $windOrientation->setOrientation("nord");
+        $windOrientation->setOrientation("n");
+        //$windOrientation->setOrientationDeg(WebsiteGetData::transformeOrientationNomLongDeg($windOrientation->getOrientation()));
         $this->windOrientation->add($windOrientation);
 
         $windOrientation = new WindOrientation();
         $windOrientation->setSpot($this);
-        $windOrientation->setOrientation("nord-nord-est");
+        $windOrientation->setOrientation("nne");
+        //$windOrientation->setOrientationDeg(WebsiteGetData::transformeOrientationNomLongDeg($windOrientation->getOrientation()));
         $this->windOrientation->add($windOrientation);
 
         $windOrientation = new WindOrientation();
         $windOrientation->setSpot($this);
-        $windOrientation->setOrientation("nord-est");
+        $windOrientation->setOrientation("ne");
+        //$windOrientation->setOrientationDeg(WebsiteGetData::transformeOrientationNomLongDeg($windOrientation->getOrientation()));
         $this->windOrientation->add($windOrientation);
 
         $windOrientation = new WindOrientation();
         $windOrientation->setSpot($this);
-        $windOrientation->setOrientation("est-nord-est");
+        $windOrientation->setOrientation("ene");
+        //$windOrientation->setOrientationDeg(WebsiteGetData::transformeOrientationNomLongDeg($windOrientation->getOrientation()));
         $this->windOrientation->add($windOrientation);
 
         $windOrientation = new WindOrientation();
         $windOrientation->setSpot($this);
-        $windOrientation->setOrientation("est");
+        $windOrientation->setOrientation("e");
+        //$windOrientation->setOrientationDeg(WebsiteGetData::transformeOrientationNomLongDeg($windOrientation->getOrientation()));
         $this->windOrientation->add($windOrientation);
 
         $windOrientation = new WindOrientation();
         $windOrientation->setSpot($this);
-        $windOrientation->setOrientation("est-sud-est");
+        $windOrientation->setOrientation("ese");
+        //$windOrientation->setOrientationDeg(WebsiteGetData::transformeOrientationNomLongDeg($windOrientation->getOrientation()));
         $this->windOrientation->add($windOrientation);
 
         $windOrientation = new WindOrientation();
         $windOrientation->setSpot($this);
-        $windOrientation->setOrientation("sud-est");
+        $windOrientation->setOrientation("se");
+        //$windOrientation->setOrientationDeg(WebsiteGetData::transformeOrientationNomLongDeg($windOrientation->getOrientation()));
         $this->windOrientation->add($windOrientation);
 
         $windOrientation = new WindOrientation();
         $windOrientation->setSpot($this);
-        $windOrientation->setOrientation("sud-sud-est");
+        $windOrientation->setOrientation("sse");
+        //$windOrientation->setOrientationDeg(WebsiteGetData::transformeOrientationNomLongDeg($windOrientation->getOrientation()));
         $this->windOrientation->add($windOrientation);
 
         $windOrientation = new WindOrientation();
         $windOrientation->setSpot($this);
-        $windOrientation->setOrientation("sud");
+        $windOrientation->setOrientation("s");
+        //$windOrientation->setOrientationDeg(WebsiteGetData::transformeOrientationNomLongDeg($windOrientation->getOrientation()));
         $this->windOrientation->add($windOrientation);
 
         $windOrientation = new WindOrientation();
         $windOrientation->setSpot($this);
-        $windOrientation->setOrientation("sud-sud-west");
+        $windOrientation->setOrientation("ssw");
+        //$windOrientation->setOrientationDeg(WebsiteGetData::transformeOrientationNomLongDeg($windOrientation->getOrientation()));
         $this->windOrientation->add($windOrientation);
 
         $windOrientation = new WindOrientation();
         $windOrientation->setSpot($this);
-        $windOrientation->setOrientation("sud-west");
+        $windOrientation->setOrientation("sw");
+        //$windOrientation->setOrientationDeg(WebsiteGetData::transformeOrientationNomLongDeg($windOrientation->getOrientation()));
         $this->windOrientation->add($windOrientation);
 
         $windOrientation = new WindOrientation();
         $windOrientation->setSpot($this);
-        $windOrientation->setOrientation("west-sud-west");
+        $windOrientation->setOrientation("wsw");
+        //$windOrientation->setOrientationDeg(WebsiteGetData::transformeOrientationNomLongDeg($windOrientation->getOrientation()));
         $this->windOrientation->add($windOrientation);
 
         $windOrientation = new WindOrientation();
         $windOrientation->setSpot($this);
-        $windOrientation->setOrientation("west");
+        $windOrientation->setOrientation("w");
+        //$windOrientation->setOrientationDeg(WebsiteGetData::transformeOrientationNomLongDeg($windOrientation->getOrientation()));
         $this->windOrientation->add($windOrientation);
 
         $windOrientation = new WindOrientation();
         $windOrientation->setSpot($this);
-        $windOrientation->setOrientation("west-nord-west");
+        $windOrientation->setOrientation("wnw");
+        //$windOrientation->setOrientationDeg(WebsiteGetData::transformeOrientationNomLongDeg($windOrientation->getOrientation()));
         $this->windOrientation->add($windOrientation);
 
         $windOrientation = new WindOrientation();
         $windOrientation->setSpot($this);
-        $windOrientation->setOrientation("nord-west");
+        $windOrientation->setOrientation("nw");
+        //$windOrientation->setOrientationDeg(WebsiteGetData::transformeOrientationNomLongDeg($windOrientation->getOrientation()));
         $this->windOrientation->add($windOrientation);
 
         $windOrientation = new WindOrientation();
         $windOrientation->setSpot($this);
-        $windOrientation->setOrientation("nord-nord-west");
+        $windOrientation->setOrientation("nnw");
+        //$windOrientation->setOrientationDeg(WebsiteGetData::transformeOrientationNomLongDeg($windOrientation->getOrientation()));
         $this->windOrientation->add($windOrientation);
     }
 

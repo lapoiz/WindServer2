@@ -34,7 +34,7 @@ class MareeGetData {
 
         $lastMareeDate = $entityManager->getRepository('LaPoizWindBundle:MareeDate')->findLast($spot);
         $beginDate = null;
-        if ($lastMareeDate != null) {
+        if ($lastMareeDate != null && !$lastMareeDate->getListPrevision()->isEmpty( )) {
             $beginDate = date_add($lastMareeDate->getDatePrev(), new \DateInterval('P1D'));// DatePrev est à 00h00m00s -> jour +1 pour comparaison
         }
 

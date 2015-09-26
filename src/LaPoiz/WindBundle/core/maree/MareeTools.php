@@ -59,25 +59,7 @@ class MareeTools {
         $timeRestriction=0;
         $timeTab = array();
 
-        $hMaxRestriction=$mareeRestriction->getHauteurMax();
-        $hMinRestriction=$mareeRestriction->getHauteurMin();
-
-        $previsionMaree=$listePrevisionMaree->first();
-
-        $dayBegin= new \DateTime($previsionMaree->getMareeDate()->getDatePrev()->format('Y-m-d'));
-        $dayBegin->modify('+'.CreateNoteCommand::HEURE_MATIN.' hours');
-        $dayEnd= new \DateTime($previsionMaree->getMareeDate()->getDatePrev()->format('Y-m-d'));
-        $dayEnd->modify('+'.CreateNoteCommand::HEURE_SOIR.' hours');
-
-        $tBegin=$dayBegin->getTimestamp();
-        $tEnd=$dayEnd->getTimestamp();
-
-        $tabDataSinu = MareeTools::buildSinusoidal($listePrevisionMaree, $tBegin);
-        $periode = $tabDataSinu['periode'];
-        $tyMax = $tabDataSinu['tyMax'];
-        $tyMin = $tabDataSinu['tyMin'];
-        $yMax = $tabDataSinu['yMax'];
-        $yMin = $tabDataSinu['yMin'];
+        list($hMaxRestriction, $hMinRestriction, $tBegin, $tEnd, $tabDataSinu, $periode, $tyMax, $tyMin, $yMax, $yMin) = self::generateSinousoidal($mareeRestriction, $listePrevisionMaree);       // hauteur min de la sinousoidal
 
 
         if ($hMaxRestriction>=$yMax) {
@@ -89,6 +71,7 @@ class MareeTools {
                 $timeRestriction=$tEnd-$tBegin;
                 $timeTab[]=array("begin"=>date("H:i:s", $tBegin), "end"=>date("H:i:s", $tEnd));
             } else {
+                // courbe au dessous de la restriction max et min -> intersection entre la restriction min et la courbe
                 $c=$hMinRestriction; // intersection avec la droite $y=$c
                 //tous ce qui est au dessus de $hmin est à comptabiliser ($hMin coupe la courbe sinusoidale de la marée)
 
@@ -165,6 +148,7 @@ class MareeTools {
                             if (($tInter+$i*$periode)<=$tEnd) { // debut de la période OK, mais la fin dépasse l'heure de la fin de la session
                                 $timeRestriction += $tEnd-($tInter+$i*$periode);
                                 $timeTab[]=array("begin"=>date("H:i:s", ($tInter+$i*$periode)), "end"=>date("H:i:s", $tEnd));
+                                //***************** ICI EST l ERREUR *********************
                             }
                         }
                     }
@@ -216,7 +200,10 @@ class MareeTools {
                             // On est calé sur tInterMin en pente montante
                             // Nickel on ne fait rien
                             $timeToAdd = $tInterMax-$tInterMin;
-                            $timeInter2tInterMax=2*($timeToAdd+$tyMax-$tInterMin); //prend un crayon pour t'en assurer...
+                            // On est en pente montante, tInterMax est l'interception avec restriction haute et la courbe
+                            // -> prochaine interception courbe descendante symétrique avec le sommet qui est en tyMax
+                            $timeInter2tInterMax=2*($tyMax-$tInterMax); //prend un crayon pour t'en assurer...
+                            //$timeInter2tInterMax=2*($timeToAdd+$tyMax-$tInterMin); //prend un crayon pour t'en assurer...Mais c'est faux...
 
                         } else {
                             // pente descendante
@@ -230,7 +217,7 @@ class MareeTools {
                             $timeInter2tInterMin=($tyMin-$tInterMin)*2;
                             $tInterMin = $tInterMin + $timeInter2tInterMin;
                             $timeToAdd = $tInterMax-$tInterMin;
-                            $timeInter2tInterMax=$periode-2*$timeToAdd-$timeInter2tInterMin; //prend un crayon pour t'en assurer...
+                            $timeInter2tInterMax=$periode-2*$timeToAdd-$timeInter2tInterMin; //prend un crayon pour t'en assurer... Mais c'est faux ???
                         }
                     }
 
@@ -246,11 +233,11 @@ class MareeTools {
 
 
     /**
-     * @param $tabDataSinu
-     * @param $tInter
-     * @param $tBegin
-     * @param $y
-     * @return array of $k and new value of tItner
+     * @param $tabDataSinu: tableau des données de la sinusoidal
+     * @param $tInter: time de la dernier intersection
+     * @param $tBegin: temps à partir duquel on regarde lorsqu'il y a intersection
+     * @param $y : ligne de l'intersection avec la sinousoidal
+     * @return array of $k and new value of tInter
      * Le but est de trouver la 1er intersection après tBegin
      */
     static function findTInterBegin($tabDataSinu, $k, $tInter, $tBegin, $y) {
@@ -375,6 +362,12 @@ class MareeTools {
     }
 
 
+    /**
+     * @param $tabDataSinu: tableau des valeur de la sinousoidal
+     * @param $k : facteur période de la courbe
+     * @param $yInter: valeur y de l'intersection
+     * @return l'heure de l'intersection (x)
+     */
     static function getInter($tabDataSinu, $k, $yInter) {
         $y=doubleval($yInter);
         if ($k % 2 == 0) {
@@ -388,5 +381,34 @@ class MareeTools {
             return (pi()-asin(round(($y-$tabDataSinu['b'])/$tabDataSinu['a'],16))-$tabDataSinu['phi'] + $k*2*pi())/$tabDataSinu['w'];
         }
 
+    }
+
+    /**
+     * @param $mareeRestriction
+     * @param $listePrevisionMaree
+     * @return array
+     */
+    public static function generateSinousoidal($mareeRestriction, $listePrevisionMaree)
+    {
+        $hMaxRestriction = $mareeRestriction->getHauteurMax(); // hauteur haute de la restriction
+        $hMinRestriction = $mareeRestriction->getHauteurMin(); // hauteur basse de la restriction
+
+        $previsionMaree = $listePrevisionMaree->first();
+
+        $dayBegin = new \DateTime($previsionMaree->getMareeDate()->getDatePrev()->format('Y-m-d'));
+        $dayBegin->modify('+' . CreateNoteCommand::HEURE_MATIN . ' hours');
+        $dayEnd = new \DateTime($previsionMaree->getMareeDate()->getDatePrev()->format('Y-m-d'));
+        $dayEnd->modify('+' . CreateNoteCommand::HEURE_SOIR . ' hours');
+
+        $tBegin = $dayBegin->getTimestamp(); // jour J à 8h00
+        $tEnd = $dayEnd->getTimestamp();     // jour J à 20h00
+
+        $tabDataSinu = MareeTools::buildSinusoidal($listePrevisionMaree, $tBegin);
+        $periode = $tabDataSinu['periode']; //  Periode de la sinousoidal
+        $tyMax = $tabDataSinu['tyMax'];     // heure lorsque hauteur max de la sinousoidal après 8h
+        $tyMin = $tabDataSinu['tyMin'];     // heure lorsque hauteur min de la sinousoidal après 8h
+        $yMax = $tabDataSinu['yMax'];       // hauteur max de la sinousoidal
+        $yMin = $tabDataSinu['yMin'];
+        return array($hMaxRestriction, $hMinRestriction, $tBegin, $tEnd, $tabDataSinu, $periode, $tyMax, $tyMin, $yMax, $yMin);
     }
 }

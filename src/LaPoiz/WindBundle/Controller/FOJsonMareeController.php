@@ -30,7 +30,8 @@ class FOJsonMareeController extends Controller {
             foreach ($listMaree as $mareeDate) {
                 $tabPlageRestriction1Day = FOJsonMareeController::getPlageRestriction($spot, $mareeDate);
                 $keyDate=$mareeDate->getDatePrev()->format('Y-m-d');
-                $tabPlageRestriction[$keyDate]=$tabPlageRestriction1Day;
+                $plageRestriction=array("date"=>$keyDate, "restrictions"=>$tabPlageRestriction1Day);
+                $tabPlageRestriction[]=$plageRestriction;
             }
             return new JsonResponse(array(
                 'success' => true,
@@ -57,18 +58,11 @@ class FOJsonMareeController extends Controller {
         $mareeStateArray=array();
         $listePrevisionMaree=$mareeDate->getListPrevision();
         if ($listePrevisionMaree!=null && count($listePrevisionMaree)>=2) {
-            // *** Calcul de la formule de la courbe: y = a  sin(wt + Phi) + b ***
-            // t=time en seconde, y=hauteur en metre, w: phase 2 pi / T , T: fréquence
-            // résolution de l'équation
 
             // pour chaque $restriction de  $spot->getMareeRestriction()
             foreach ($spot->getMareeRestriction() as $mareeRestriction) {
-                // calcul l'heure (minute) d'intersection pour calculer le temps dans l'etat
                 list($timeInState, $timeTab)=MareeTools::calculTimeInState($mareeRestriction, $listePrevisionMaree);
-                if (isset($mareeStateArray[$mareeRestriction->getState()])) {
-                    $mareeStateArray[$mareeRestriction->getState()]=array();
-                }
-                $mareeStateArray[$mareeRestriction->getState()][]=$timeTab;
+                $mareeStateArray[$mareeRestriction->getState()]=$timeTab;
             }
         }
         return $mareeStateArray;

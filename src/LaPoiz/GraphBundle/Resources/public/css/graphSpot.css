@@ -1,0 +1,254 @@
+#graph svg {
+    width:100%;
+    height:100%;
+}
+/*******************
+ Axes du graph
+ *******************/
+.axesGraph {
+    fill:transparent;
+    stroke:black;
+    stroke-width:2;
+}
+.dateAxesGraph {
+    text-anchor:middle;
+    font-size: small;
+    marker-end:url(markers.svg#fleche);
+}
+.subAxesDateGraph {
+    fill:transparent;
+    stroke:black;
+    stroke-width:0.5;
+    stroke-dasharray: 2, 2;
+}
+.subAxesDateMidiGraph {
+    fill:transparent;
+    stroke:black;
+    stroke-width:0.2;
+    stroke-dasharray: 1, 2;
+}
+.heureAxesGraph {
+    text-anchor:middle;
+    font-size: 6px;
+}
+.subAxesNdsGraph {
+    fill:transparent;
+    stroke:black;
+    stroke-width:0.5;
+    stroke-dasharray: 2, 2;
+}
+/* Axes des y: label des noeuds principaux (10, 20 ...) */
+.ndsAxesGraph {
+    text-anchor:middle;
+    font-size: small;
+}
+/* Axes des y: label des noeuds secondaires (15, 25 ...) */
+.ndsSubAxesGraph {
+    text-anchor:middle;
+    font-size: 7px;
+}
+.subSubAxesNdsGraph {
+    fill:transparent;
+    stroke:black;
+    stroke-width:0.2;
+    stroke-dasharray: 1, 1;
+}
+/**********************
+ Deco du graph (nuit, titre ...)
+ ***********************/
+
+.titleGrap {
+    text-anchor:middle;
+    font-size: large;
+    font-weight: bold;
+}
+
+.nuitGraph{
+    stroke:transparent;
+    stroke-width:0px;
+}
+#stop1{
+    stop-color:midnightblue;
+    stop-opacity:1;
+}
+#stop2{
+    stop-color:transparent;
+    stop-opacity:0.5;
+}
+#stop3{
+    stop-color:transparent;
+    stop-opacity:0.5;
+}
+#stop4{
+    stop-color:midnightblue;
+    stop-opacity:0.5;
+}
+/* Ligne indiquant le minimu pour naviguer */
+.ligneNdsMinForNav {
+    fill:transparent;
+    stroke:red;
+    stroke-width:0.5;
+    stroke-dasharray: 1, 1;
+}
+/* Texte indiquant le minimu pour naviguer */
+.texteNdsMinForNav {
+    font-size: 7px;
+    font-style: italic;
+    fill: red;
+}
+.ligneNdsGoodForNav {
+    fill:transparent;
+    stroke:green;
+    stroke-width:0.5;
+    /*stroke-dasharray: 1, 1;*/
+}
+/* Texte indiquant le minimu pour naviguer */
+.texteNdsGoodForNav {
+    font-size: 7px;
+    font-style: italic;
+    fill: green;
+}
+/************************
+Courbe de prévision du vent
+*************************/
+.pointWindguru {
+    fill: rgba(255,0,0,0.5);
+    stroke:red;
+    stroke-width:1;
+}
+.pointWindguru:hover {
+     fill: rgba(255,0,0,0.5);
+     stroke:red;
+     stroke-width:2;
+ }
+.courbePrevWindguru {
+    fill: none;
+    stroke:rgba(255,0,0,0.5);
+    stroke-width:2;
+}
+.legend_label_Windguru {
+    color: rgba(255,0,0,0.5);
+}
+.pointWindguruPro {
+    fill: rgba(255,0,0,1);
+    stroke:red;
+    stroke-width:1;
+}
+.pointWindguruPro:hover {
+    fill: red;
+    stroke:purple;
+    stroke-width:2;
+}
+.courbePrevWindguruPro {
+    fill: none;
+    stroke:rgba(255,0,0,1);
+    stroke-width:2;
+}
+.legend_label_WindguruPro {
+    color: rgba(255,0,0,1);
+}
+
+.pointWindFinder {
+    fill: blue;
+    stroke:blue;
+    stroke-width:1;
+}
+.pointWindFinder:hover {
+    fill: blue;
+    stroke:darkblue;
+    stroke-width:2;
+}
+
+.courbePrevWindFinder {
+    fill: none;
+    stroke:blue;
+    stroke-width:2;
+}
+.legend_label_WindFinder {
+    color: blue;
+}
+
+.pointMeteoFrance {
+    fill: grey;
+    stroke:grey;
+    stroke-width:1;
+}
+.pointMeteoFrance:hover {
+    fill: grey;
+    stroke:black;
+    stroke-width:2;
+}
+.courbePrevMeteoFrance {
+    fill: none;
+    stroke:grey;
+    stroke-width:2;
+}
+.legend_label_MeteoFrance {
+    color: grey;
+}
+
+/********************
+    Maree
+**********************/
+.restrictionMareeOK {
+    fill:rgba(0,255,0,0.2);
+    stroke: none;
+}
+.restrictionMareewarn {
+    fill:rgba(255,153,0,0.2);
+    stroke: none;
+}
+.restrictionMareeKO {
+    fill:rgba(255,0,0,0.4);
+    stroke: none;
+}
+
+/********************
+    Legende HTML
+**********************/
+
+#legendGraph {
+    border:2px solid black;
+    border-radius:7px;
+    padding: 2px;
+}
+.siteUpdateLegend {
+    font-size: xx-small;
+    font-style: italic;
+}
+
+
+/********************
+    Tooltip
+**********************/
+.tooltipText {
+    font-size: 9px;
+}
+.tootltipNds {
+    font-weight: bold;
+}
+.tooltip_bg {
+    fill: white;
+    stroke: black;
+    stroke-width: 1;
+    opacity: 0.85;
+}
+
+/********************
+    Fleche
+**********************/
+.flecheOrientationGraphOK {
+    fill: green;
+    stroke: black;
+    stroke-width: 1;
+}
+.flecheOrientationGraphwarn {
+    fill: orange;
+    stroke: black;
+    stroke-width: 1;
+}
+.flecheOrientationGraphKO {
+    fill: red;
+    stroke: black;
+    stroke-width: 1;
+}

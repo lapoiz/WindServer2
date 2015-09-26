@@ -32,7 +32,7 @@ class DataSpot
     private $balise;
     
     /**
-     * @ORM\OneToMany(targetEntity="DataWindSpot", mappedBy="dataSpot")
+     * @ORM\OneToMany(targetEntity="DataWindSpot", mappedBy="dataSpot", cascade={"remove"})
      */
     private $listDataWindSpot;
 

@@ -1,0 +1,57 @@
+{% macro graph(spot) %}
+
+        <div class="row">
+            <div id="graph" class="col-sm-12">
+                <svg id="graphSVG"
+                     height="200" width="600"
+                        ></svg>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-3"></div>
+            <div class="col-sm-6">
+                <div id="legendGraph">
+                    <div class="row">
+                        <div id="legend_listWebsite" class="col-sm-6"><!-- Liste des sites --></div>
+                        <div id="legend_btnActions" class="col-sm-6"><!-- btn d'actions (marée, mise à jour ...) --></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3"></div>
+        </div>
+
+        <script>
+            orientationVentSpot=[];
+            {% for windOrientation in spot.windOrientation %}
+            orientationVentSpot["{{ windOrientation.orientationDeg|e }}"]="{{ windOrientation.state|e }}";
+            {% endfor %}
+
+
+
+            $( document ).ready(function() {
+                initGraph();
+                getJson();
+            });
+
+            function getJson() {
+                $('#legend_listWebsite').html('<img src="{{ asset('bundles/lapoizwind/images/loading.gif') }}" alt="Loading Ajax data" />');
+                $.getJSON( "{{ path('_fo_json_lapoizGraph_spot_data',{ 'id':spot.id }) }}", function( json ) {
+                    putOnGraph(json);
+                    getMaree();
+                });
+            }
+            function getMaree() {
+                $('#legend_btnActions').html('<img src="{{ asset('bundles/lapoizwind/images/loading.gif') }}" alt="Loading Ajax data" />');
+                $.getJSON( "{{ path('_fo_json_lapoizGraph_maree_data',{ 'id':spot.id }) }}", function( json ) {
+                    if (json.success) {
+                        loadMareeOnGraph(json.data);
+                        displayBoutonMarree();
+                    } else {
+                        $('#legend_btnActions').html('');
+                    }
+                });
+            }
+        </script>
+
+{% endmacro %}

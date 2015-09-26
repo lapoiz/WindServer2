@@ -53,10 +53,11 @@ class LoadingFixtures implements FixtureInterface
         $manager->persist($webSiteMF);
         $manager->flush();
         
-        $balise=new Balise();
+        /*$balise=new Balise();
         $balise->setNom('Balise FFVL de St Aubin');
         $balise->setUrl('http://balisemeteo.com/balise.php?idBalise=56');
         $balise->setDescription('Balise de la Federation Francais de Vol Libre');
+        */
 
         $dataWindPrevWG = new DataWindPrev();
         $dataWindPrevWG->setUrl('http://www.windguru.cz/fr/index.php?sc=3627');
@@ -81,8 +82,8 @@ class LoadingFixtures implements FixtureInterface
         $spot->setLocalisationDescription('Proche de Saint-Aubin-sur-mer prendre a gauche dans le début du village: route de Saussemare');
         $spot->setGpsLong('49.893141');
         $spot->setGpsLat('0.869551');
-        $spot->setBalise($balise);
-        $balise->setSpot($spot);
+        //$spot->setBalise($balise);
+        //$balise->setSpot($spot);
         
         $dataWindPrevWG->setSpot($spot);
         $dataWindPrevWF->setSpot($spot);
@@ -97,7 +98,7 @@ class LoadingFixtures implements FixtureInterface
         $manager->persist($dataWindPrevWF);
         $manager->persist($dataWindPrevMF);
         $manager->persist($spot);
-        $manager->persist($balise);
+        //$manager->persist($balise);
 
 
 
