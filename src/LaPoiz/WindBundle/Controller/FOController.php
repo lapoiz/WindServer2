@@ -82,6 +82,7 @@ class FOController extends Controller
                 'LaPoizWindBundle:FrontOffice:errorPage.html.twig',
                 array('errMessage' => "No spot find !"));
         }
+        // Here modif
         return $this->render('LaPoizWindBundle:FrontOffice:spot.html.twig', array(
                 'spot' => $spot,
                 'listSpot' => $listSpot
