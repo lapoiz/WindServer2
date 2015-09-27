@@ -80,8 +80,8 @@ class LoadingFixtures implements FixtureInterface
         $spot->setNom("Saint Aubin");
         $spot->setDescription("Spot avec grande plage, sans risque.");
         $spot->setLocalisationDescription('Proche de Saint-Aubin-sur-mer prendre a gauche dans le début du village: route de Saussemare');
-        $spot->setGpsLong('49.893141');
-        $spot->setGpsLat('0.869551');
+        $spot->setGpsLong('0.862329');
+        $spot->setGpsLat('49.892945');
         //$spot->setBalise($balise);
         //$balise->setSpot($spot);
         
