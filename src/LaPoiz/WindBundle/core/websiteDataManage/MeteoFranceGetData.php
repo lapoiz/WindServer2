@@ -33,7 +33,7 @@ class MeteoFranceGetData extends WebsiteGetData
 			if (empty($section)){
 				echo '<br />Element not find is section id="'.MeteoFranceGetData::goodSectionId.'" ... Meteo France change the page ?<br />';
 			} else {
-
+				$text=$section->text(); // Only for watch the section value
 				/* <div id="detail-day-01" */
 				for ($numDay = 1; $numDay <= MeteoFranceGetData::nbJoursPrev; $numDay++) {
 					$divDay = $section->filter('#' . MeteoFranceGetData::idNameDivDay . $numDay);
@@ -83,6 +83,10 @@ class MeteoFranceGetData extends WebsiteGetData
 
 					// ************* Température *************
 					$trTemp = $tr->eq(7);
+					if ($tr->count()>12) {
+						$trTemp = $tr->eq(9);
+					}
+
 					$tdTemp=$trTemp->filterXPath('//td/span');
 					$numCol=0;
 					foreach ($tdTemp as $domTdTemp) {
