@@ -3,6 +3,7 @@
 namespace LaPoiz\WindBundle\core\note;
 
 
+use LaPoiz\WindBundle\Entity\NbHoureNav;
 use LaPoiz\WindBundle\Entity\NotesDate;
 use Symfony\Component\Validator\Constraints\DateTime;
 
@@ -30,7 +31,6 @@ class ManageNote {
             }
             $em->flush();
         }
-
     }
 
     /**
@@ -40,7 +40,6 @@ class ManageNote {
      */
     static function getNotesDate($spot, $datePrev, $em) {
         $datePrev->setTime(0, 0, 0);
-
 
         $noteDatesFind = null;
         $listeNotesDate = $spot->getNotesDate();
@@ -63,11 +62,35 @@ class ManageNote {
     }
 
     /**
-     * @param $spot
-     * @param $datePrev avec heure=0 minute=0 sec=0
-     * @return la NotesDate, null si elle n'existe pas
+     * @param $noteDates : l'objet NoteDates
+     * @param $webSiteName : string
+     * @param $em
+     * @return renvoie la nbHoureNav de $noteDates du $webSite, ou une nouvelle instance si elle n'existe pas
      */
-    static function getNoteDateInSpot($spot, $datePrev) {
+    static function getNbHoureNav($noteDates, $webSiteName, $em) {
+        $findWebSite=false;
+        $nbHoureNav=null;
+        foreach ($noteDates->getNbHoureNav() as $nbHoureNavElem) {
+            if ($nbHoureNavElem->getWebsite()->getNom()==$webSiteName) {
+                $findWebSite=true;
+                $nbHoureNav=$nbHoureNavElem;
+            }
+        }
+        if (!$findWebSite) {
+            // pas trouvé -> il faut le créer
+            $nbHoureNav = new NbHoureNav();
+            $webSite=$em->getRepository('LaPoizWindBundle:WebSite')->findWithName($webSiteName);
+            $nbHoureNav->setWebsite($webSite);
+
+            $noteDates->addNbHoureNav($nbHoureNav);
+            $nbHoureNav->setNotesDate($noteDates);
+
+            $em->persist($nbHoureNav);
+            $em->persist($noteDates);
+            $em->flush();
+        }
+
+        return $nbHoureNav;
     }
 
 } 

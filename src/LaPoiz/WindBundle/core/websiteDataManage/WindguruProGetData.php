@@ -110,6 +110,7 @@ class WindguruProGetData extends WebsiteGetData
 	function transformData($tableauData) {
 		// $tableauData
 		// wind  -> 17.5 | 12 | 10 | 14.5 | 15
+		// orientation  -> 198 | 172 | 170 | 180 | 188
 		// heure -> 13   | 19 | 22 | 01   | 04
 		// date  -> 04   | 04 | 04 | 05   | 05
 		
@@ -131,7 +132,11 @@ class WindguruProGetData extends WebsiteGetData
 			$dataPrev=array();
 			$dataPrev["wind"]=$tableauData['wind'][$key];
 			$dataPrev["heure"]=$tableauData['heure'][$key];
-			$dataPrev["orientation"]=WebsiteGetData::transformeOrientationDeg($tableauData['orientation'][$key]);
+			if (isset($tableauData['orientation'][$key])) {
+				$dataPrev["orientation"] = WebsiteGetData::transformeOrientationDegToNom($tableauData['orientation'][$key]);
+			} else {
+				$dataPrev["orientation"] = '?';
+			}
 			$currenteLine[$tableauData['heure'][$key]]=$dataPrev;
 			$currentDate=$date;
 			//$indexCol++;

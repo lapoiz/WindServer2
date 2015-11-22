@@ -9,6 +9,7 @@ class WindguruGetData extends WebsiteGetData
 	
 	const exprLineOK = 'var wg_fcst_tab_data_1 = {';
 	const exprWindPart = 'WINDSPD';
+	const exprWindDirPart = 'WINDDIR';
 	const windguruFilePageName='windguruPage.txt';
   
 	
@@ -31,7 +32,10 @@ class WindguruGetData extends WebsiteGetData
 		foreach ($tabData as $line) {
   			if (WindguruGetData::isGoodLine($line)) {  // choose good line where every data is			    
   				$windPart=WindguruGetData::getPart(WindguruGetData::exprWindPart,$line); // get wind part in line				
-  				$tableauData['wind']=WindguruGetData::getElemeInPart($windPart);// transforme to tab		 		
+  				$tableauData['wind']=WindguruGetData::getElemeInPart($windPart);// transforme to tab
+
+				$windDirPart=WindguruGetData::getPart(WindguruGetData::exprWindDirPart,$line); // get wind direction part in line
+				$tableauData['orientation']=WindguruGetData::getElemeInPart($windDirPart);// transforme to tab
   				
   				$hourePart=WindguruGetData::getHourePart($line);				
   				$tableauData['heure']=WindguruGetData::getElemeInPart($hourePart);// transforme to tab
@@ -48,6 +52,7 @@ class WindguruGetData extends WebsiteGetData
 	function transformData($tableauData) {
 		// $tableauData
 		// wind  -> 17.5 | 12 | 10 | 14.5 | 15
+		// orientation  -> 198 | 172 | 170 | 180 | 188
 		// heure -> 13   | 19 | 22 | 01   | 04
 		// date  -> 04   | 04 | 04 | 05   | 05
 		
@@ -69,7 +74,11 @@ class WindguruGetData extends WebsiteGetData
 			$dataPrev=array();
 			$dataPrev["wind"]=$tableauData['wind'][$key];
 			$dataPrev["heure"]=$tableauData['heure'][$key];
-			$dataPrev["orientation"]="?";
+            if (isset($tableauData['orientation'][$key])) {
+                $dataPrev["orientation"] = WebsiteGetData::transformeOrientationDegToNom($tableauData['orientation'][$key]);
+            } else {
+                $dataPrev["orientation"] = '?';
+            }
 			$currenteLine[$tableauData['heure'][$key]]=$dataPrev;
 			$currentDate=$date;
 			//$indexCol++;

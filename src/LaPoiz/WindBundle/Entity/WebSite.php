@@ -4,7 +4,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="LaPoiz\WindBundle\Repository\WebSiteRepository")
  * @ORM\Table(name="windServer_WebSite")
  */
 class WebSite 

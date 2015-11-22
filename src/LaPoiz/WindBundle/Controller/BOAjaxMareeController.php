@@ -41,7 +41,8 @@ class BOAjaxMareeController extends Controller
                     'LaPoizWindBundle:BackOffice:errorPage.html.twig',
                     array('errMessage' => "No spot find !"));
             }
-            $prevMaree=MareeGetData::getMaree($spot->getMareeURL());
+            //$prevMaree=MareeGetData::getMaree($spot->getMareeURL());
+            $prevMaree=MareeGetData::getMareeForXDays($spot->getMareeURL(),10);
 
             return $this->render('LaPoizWindBundle:BackOffice/Spot/Ajax/Maree:prevMaree.html.twig', array(
                     'prevMaree' => $prevMaree,

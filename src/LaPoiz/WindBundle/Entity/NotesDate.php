@@ -23,86 +23,52 @@ class NotesDate
     private $datePrev;
 
     /**
-     * @ORM\Column(type="decimal", scale=2, nullable=true)
+     * @ORM\OneToMany(targetEntity="NbHoureNav", mappedBy="notesDate", cascade={"remove", "persist"} , orphanRemoval=true)
      */
-    private $noteWind;
+    private $nbHoureNav;
+
 
     /**
      * @ORM\Column(type="decimal", scale=2, nullable=true)
      */
-    private $wind;
+    private $tempMax;
 
     /**
      * @ORM\Column(type="decimal", scale=2, nullable=true)
      */
-    private $noteOrientationWind;
+    private $tempMin;
 
     /**
-     * @ORM\Column(type="time", nullable=true)
+     * @ORM\Column(type="string",length=10, nullable=true)
      */
-    private $timeOrientationOK;
+    private $meteoBest;
 
     /**
-     * @ORM\Column(type="decimal", scale=2, nullable=true)
+     * @ORM\Column(type="string",length=10, nullable=true)
      */
-    private $noteTemp;
+    private $meteoWorst;
 
     /**
-     * @ORM\Column(type="decimal", scale=2, nullable=true)
-     */
-    private $temperature;
-
-    /**
-     * @ORM\Column(type="decimal", scale=2, nullable=true)
-     */
-    private $noteWaterTemp;
-
-    /**
-     * @ORM\Column(type="decimal", scale=2, nullable=true)
-     */
-    private $waterTemperature;
-
-    /**
-     * @ORM\Column(type="decimal", scale=2, nullable=true)
-     */
-    private $noteMaree;
-
-    /**
-     * @ORM\Column(type="time", nullable=true)
-     */
-    private $timeMareeOK;
-
-    /**
-     * @ORM\Column(type="decimal", scale=2, nullable=true)
-     */
-    private $notePrecipitation;
-
-    /**
-     * @ORM\Column(type="time", nullable=true)
-     */
-    private $timePrecipitation;
-
-    /**
-     * @ORM\Column(type="decimal", scale=2, nullable=true)
-     */
-    private $noteMeteo;
-
-    /**
-     * @ORM\Column(type="time", nullable=true)
-     */
-    private $timeMeteo;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Spot", inversedBy="mareeRestriction", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Spot", inversedBy="notesDate", cascade={"persist"})
      * @ORM\JoinColumn(name="spot_id", referencedColumnName="id")
      */
     private $spot;   
 
 
+
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->nbHoureNav = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -113,6 +79,7 @@ class NotesDate
      * Set datePrev
      *
      * @param \DateTime $datePrev
+     *
      * @return NotesDate
      */
     public function setDatePrev($datePrev)
@@ -125,7 +92,7 @@ class NotesDate
     /**
      * Get datePrev
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDatePrev()
     {
@@ -133,101 +100,10 @@ class NotesDate
     }
 
     /**
-     * Set noteWind
-     *
-     * @param string $noteWind
-     * @return NotesDate
-     */
-    public function setNoteWind($noteWind)
-    {
-        $this->noteWind = $noteWind;
-
-        return $this;
-    }
-
-    /**
-     * Get noteWind
-     *
-     * @return string 
-     */
-    public function getNoteWind()
-    {
-        return $this->noteWind;
-    }
-
-    /**
-     * Set wind
-     *
-     * @param string $wind
-     * @return NotesDate
-     */
-    public function setWind($wind)
-    {
-        $this->wind = $wind;
-
-        return $this;
-    }
-
-    /**
-     * Get wind
-     *
-     * @return string 
-     */
-    public function getWind()
-    {
-        return $this->wind;
-    }
-
-    /**
-     * Set noteOrientationWind
-     *
-     * @param string $noteOrientationWind
-     * @return NotesDate
-     */
-    public function setNoteOrientationWind($noteOrientationWind)
-    {
-        $this->noteOrientationWind = $noteOrientationWind;
-
-        return $this;
-    }
-
-    /**
-     * Get noteOrientationWind
-     *
-     * @return string 
-     */
-    public function getNoteOrientationWind()
-    {
-        return $this->noteOrientationWind;
-    }
-
-    /**
-     * Set timeOrientationOK
-     *
-     * @param \DateTime $timeOrientationOK
-     * @return NotesDate
-     */
-    public function setTimeOrientationOK($timeOrientationOK)
-    {
-        $this->timeOrientationOK = $timeOrientationOK;
-
-        return $this;
-    }
-
-    /**
-     * Get timeOrientationOK
-     *
-     * @return \DateTime 
-     */
-    public function getTimeOrientationOK()
-    {
-        return $this->timeOrientationOK;
-    }
-
-    /**
      * Set noteTemp
      *
      * @param string $noteTemp
+     *
      * @return NotesDate
      */
     public function setNoteTemp($noteTemp)
@@ -240,7 +116,7 @@ class NotesDate
     /**
      * Get noteTemp
      *
-     * @return string 
+     * @return string
      */
     public function getNoteTemp()
     {
@@ -248,216 +124,44 @@ class NotesDate
     }
 
     /**
-     * Set temperature
+     * Add nbHoureNav
      *
-     * @param string $temperature
+     * @param \LaPoiz\WindBundle\Entity\NbHoureNav $nbHoureNav
+     *
      * @return NotesDate
      */
-    public function setTemperature($temperature)
+    public function addNbHoureNav(\LaPoiz\WindBundle\Entity\NbHoureNav $nbHoureNav)
     {
-        $this->temperature = $temperature;
+        $this->nbHoureNav[] = $nbHoureNav;
 
         return $this;
     }
 
     /**
-     * Get temperature
+     * Remove nbHoureNav
      *
-     * @return string 
+     * @param \LaPoiz\WindBundle\Entity\NbHoureNav $nbHoureNav
      */
-    public function getTemperature()
+    public function removeNbHoureNav(\LaPoiz\WindBundle\Entity\NbHoureNav $nbHoureNav)
     {
-        return $this->temperature;
+        $this->nbHoureNav->removeElement($nbHoureNav);
     }
 
     /**
-     * Set noteWaterTemp
+     * Get nbHoureNav
      *
-     * @param string $noteWaterTemp
-     * @return NotesDate
+     * @return \Doctrine\Common\Collections\Collection
      */
-    public function setNoteWaterTemp($noteWaterTemp)
+    public function getNbHoureNav()
     {
-        $this->noteWaterTemp = $noteWaterTemp;
-
-        return $this;
-    }
-
-    /**
-     * Get noteWaterTemp
-     *
-     * @return string 
-     */
-    public function getNoteWaterTemp()
-    {
-        return $this->noteWaterTemp;
-    }
-
-    /**
-     * Set waterTemperature
-     *
-     * @param string $waterTemperature
-     * @return NotesDate
-     */
-    public function setWaterTemperature($waterTemperature)
-    {
-        $this->waterTemperature = $waterTemperature;
-
-        return $this;
-    }
-
-    /**
-     * Get waterTemperature
-     *
-     * @return string 
-     */
-    public function getWaterTemperature()
-    {
-        return $this->waterTemperature;
-    }
-
-    /**
-     * Set noteMaree
-     *
-     * @param string $noteMaree
-     * @return NotesDate
-     */
-    public function setNoteMaree($noteMaree)
-    {
-        $this->noteMaree = $noteMaree;
-
-        return $this;
-    }
-
-    /**
-     * Get noteMaree
-     *
-     * @return string 
-     */
-    public function getNoteMaree()
-    {
-        return $this->noteMaree;
-    }
-
-    /**
-     * Set timeMareeOK
-     *
-     * @param \DateTime $timeMareeOK
-     * @return NotesDate
-     */
-    public function setTimeMareeOK($timeMareeOK)
-    {
-        $this->timeMareeOK = $timeMareeOK;
-
-        return $this;
-    }
-
-    /**
-     * Get timeMareeOK
-     *
-     * @return \DateTime 
-     */
-    public function getTimeMareeOK()
-    {
-        return $this->timeMareeOK;
-    }
-
-    /**
-     * Set notePrecipitation
-     *
-     * @param string $notePrecipitation
-     * @return NotesDate
-     */
-    public function setNotePrecipitation($notePrecipitation)
-    {
-        $this->notePrecipitation = $notePrecipitation;
-
-        return $this;
-    }
-
-    /**
-     * Get notePrecipitation
-     *
-     * @return string 
-     */
-    public function getNotePrecipitation()
-    {
-        return $this->notePrecipitation;
-    }
-
-    /**
-     * Set timePrecipitation
-     *
-     * @param \DateTime $timePrecipitation
-     * @return NotesDate
-     */
-    public function setTimePrecipitation($timePrecipitation)
-    {
-        $this->timePrecipitation = $timePrecipitation;
-
-        return $this;
-    }
-
-    /**
-     * Get timePrecipitation
-     *
-     * @return \DateTime 
-     */
-    public function getTimePrecipitation()
-    {
-        return $this->timePrecipitation;
-    }
-
-    /**
-     * Set noteMeteo
-     *
-     * @param string $noteMeteo
-     * @return NotesDate
-     */
-    public function setNoteMeteo($noteMeteo)
-    {
-        $this->noteMeteo = $noteMeteo;
-
-        return $this;
-    }
-
-    /**
-     * Get noteMeteo
-     *
-     * @return string 
-     */
-    public function getNoteMeteo()
-    {
-        return $this->noteMeteo;
-    }
-
-    /**
-     * Set timeMeteo
-     *
-     * @param \DateTime $timeMeteo
-     * @return NotesDate
-     */
-    public function setTimeMeteo($timeMeteo)
-    {
-        $this->timeMeteo = $timeMeteo;
-
-        return $this;
-    }
-
-    /**
-     * Get timeMeteo
-     *
-     * @return \DateTime 
-     */
-    public function getTimeMeteo()
-    {
-        return $this->timeMeteo;
+        return $this->nbHoureNav;
     }
 
     /**
      * Set spot
      *
      * @param \LaPoiz\WindBundle\Entity\Spot $spot
+     *
      * @return NotesDate
      */
     public function setSpot(\LaPoiz\WindBundle\Entity\Spot $spot = null)
@@ -470,10 +174,106 @@ class NotesDate
     /**
      * Get spot
      *
-     * @return \LaPoiz\WindBundle\Entity\Spot 
+     * @return \LaPoiz\WindBundle\Entity\Spot
      */
     public function getSpot()
     {
         return $this->spot;
+    }
+
+    /**
+     * Set tempMax
+     *
+     * @param string $tempMax
+     *
+     * @return NotesDate
+     */
+    public function setTempMax($tempMax)
+    {
+        $this->tempMax = $tempMax;
+
+        return $this;
+    }
+
+    /**
+     * Get tempMax
+     *
+     * @return string
+     */
+    public function getTempMax()
+    {
+        return $this->tempMax;
+    }
+
+    /**
+     * Set tempMin
+     *
+     * @param string $tempMin
+     *
+     * @return NotesDate
+     */
+    public function setTempMin($tempMin)
+    {
+        $this->tempMin = $tempMin;
+
+        return $this;
+    }
+
+    /**
+     * Get tempMin
+     *
+     * @return string
+     */
+    public function getTempMin()
+    {
+        return $this->tempMin;
+    }
+
+    /**
+     * Set meteoBest
+     *
+     * @param string $meteoBest
+     *
+     * @return NotesDate
+     */
+    public function setMeteoBest($meteoBest)
+    {
+        $this->meteoBest = $meteoBest;
+
+        return $this;
+    }
+
+    /**
+     * Get meteoBest
+     *
+     * @return string
+     */
+    public function getMeteoBest()
+    {
+        return $this->meteoBest;
+    }
+
+    /**
+     * Set meteoWorst
+     *
+     * @param string $meteoWorst
+     *
+     * @return NotesDate
+     */
+    public function setMeteoWorst($meteoWorst)
+    {
+        $this->meteoWorst = $meteoWorst;
+
+        return $this;
+    }
+
+    /**
+     * Get meteoWorst
+     *
+     * @return string
+     */
+    public function getMeteoWorst()
+    {
+        return $this->meteoWorst;
     }
 }

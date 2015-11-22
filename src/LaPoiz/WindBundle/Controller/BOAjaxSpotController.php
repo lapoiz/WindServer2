@@ -1,6 +1,13 @@
 <?php
 namespace LaPoiz\WindBundle\Controller;
 
+use LaPoiz\WindBundle\Command\CreateNbHoureCommand;
+use LaPoiz\WindBundle\core\maree\MareeTools;
+use LaPoiz\WindBundle\core\nbHoure\NbHoureMaree;
+use LaPoiz\WindBundle\core\nbHoure\NbHoureMeteo;
+use LaPoiz\WindBundle\core\nbHoure\NbHoureNav;
+use LaPoiz\WindBundle\core\nbHoure\NbHoureWind;
+use LaPoiz\WindBundle\core\note\ManageNote;
 use LaPoiz\WindBundle\Entity\DataWindPrev;
 use LaPoiz\WindBundle\Entity\WebSite;
 use LaPoiz\WindBundle\Form\SpotType;
@@ -156,4 +163,118 @@ class BOAjaxSpotController extends Controller
                 array('errMessage' => "Miss id of dataWindPrev... !"));
         }
     }
+
+
+    /**
+     * @Template()
+     *
+     * http://localhost/Wind/web/app_dev.php/admin/BO/ajax/spot/nbHoureNav/1
+     */
+    public function calculNbHoureNavAction($id=null)
+    {
+        $em = $this->container->get('doctrine.orm.entity_manager');
+        $spot = $em->find('LaPoizWindBundle:Spot', $id);
+
+        if (!$spot) {
+            return $this->container->get('templating')->renderResponse(
+                'LaPoizWindBundle:Default:errorBlock.html.twig',
+                array('errMessage' => "Spot not find !"));
+        }
+
+        list($tabDataNbHoureNav,$tabDataMeteo)=NbHoureNav::createTabNbHoureNav($spot, $em);
+        $tabNbHoureNav=NbHoureNav::calculateNbHourNav($tabDataNbHoureNav);
+        $tabMeteo=NbHoureMeteo::calculateMeteoNav($tabDataMeteo);
+
+        return $this->container->get('templating')->renderResponse('LaPoizWindBundle:BackOffice/Test:nbHoureNav.html.twig',
+            array(
+                'spot' => $spot,
+                'tabNbHoure' => $tabNbHoureNav,
+                'tabMeteo' => $tabMeteo,
+                'message' => "",
+                'saveSuccess' => true
+            ));
+    }
+
+    /**
+     * @Template()
+     *
+     * http://localhost/Wind/web/app_dev.php/admin/BO/ajax/spot/save/nbHoureNav/1
+     */
+    public function saveNbHoureNavAction($id=null)
+    {
+        $em = $this->container->get('doctrine.orm.entity_manager');
+        $spot = $em->find('LaPoizWindBundle:Spot', $id);
+
+        if (!$spot) {
+            return $this->container->get('templating')->renderResponse(
+                'LaPoizWindBundle:Default:errorBlock.html.twig',
+                array('errMessage' => "Spot not find !"));
+        }
+
+        list($tabDataNbHoureNav,$tabDataMeteo)=NbHoureNav::createTabNbHoureNav($spot, $em);
+        $tabNbHoureNav=NbHoureNav::calculateNbHourNav($tabDataNbHoureNav);
+        $tabMeteo=NbHoureMeteo::calculateMeteoNav($tabDataMeteo);
+
+        // Save nbHoure on spot
+        foreach ($tabNbHoureNav as $keyDate=>$tabWebSite) {
+            foreach ($tabWebSite as $keyWebSite=>$nbHoureNav) {
+                $noteDates=ManageNote::getNotesDate($spot, \DateTime::createFromFormat('Y-m-d',$keyDate), $em);
+                $nbHoureNavObj=ManageNote::getNbHoureNav($noteDates, $keyWebSite, $em);
+                $nbHoureNavObj->setNbHoure($nbHoureNav);
+                $em->persist($nbHoureNavObj);
+                $em->persist($noteDates);
+            }
+        }
+
+        // Save meteo
+        foreach ($tabMeteo as $keyDate=>$tabMeteoDay) {
+            $noteDates=ManageNote::getNotesDate($spot, \DateTime::createFromFormat('Y-m-d',$keyDate), $em);
+            $noteDates->setTempMax($tabMeteoDay["tempMax"]);
+            $noteDates->setTempMin($tabMeteoDay["tempMin"]);
+            $noteDates->setMeteoBest($tabMeteoDay["meteoBest"]);
+            $noteDates->setMeteoWorst($tabMeteoDay["meteoWorst"]);
+
+            $em->persist($noteDates);
+        }
+
+        $em->flush();
+
+        return $this->container->get('templating')->renderResponse('LaPoizWindBundle:BackOffice/Test:nbHoureNav.html.twig',
+            array(
+                'spot' => $spot,
+                'tabNbHoure' => $tabNbHoureNav,
+                'tabMeteo' => $tabMeteo,
+                'message' => "",
+                'saveSuccess' => true
+            ));
+    }
+
+    /**
+     * @Template()
+     *
+     * http://localhost/Wind/web/app_dev.php/admin/BO/ajax/spot/dataHoureNav/1
+     */
+    public function tabDataHoureNavAction($id=null)
+    {
+        $em = $this->container->get('doctrine.orm.entity_manager');
+        $spot = $em->find('LaPoizWindBundle:Spot', $id);
+
+        if (!$spot) {
+            return $this->container->get('templating')->renderResponse(
+                'LaPoizWindBundle:Default:errorBlock.html.twig',
+                array('errMessage' => "Spot not find !"));
+        }
+
+        list($tabDataNbHoureNav,$tabDataMeteo)=NbHoureNav::createTabNbHoureNav($spot, $em);
+
+        return $this->container->get('templating')->renderResponse('LaPoizWindBundle:BackOffice/Test:dataNbHoureNav.html.twig',
+            array(
+                'spot' => $spot,
+                'tabNbHoure' => $tabDataNbHoureNav,
+                'tabDataMeteo' => $tabDataMeteo,
+                'message' => "",
+                'saveSuccess' => true
+            ));
+    }
+
 }

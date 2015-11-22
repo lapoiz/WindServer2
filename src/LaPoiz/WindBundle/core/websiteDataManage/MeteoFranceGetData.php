@@ -127,9 +127,9 @@ class MeteoFranceGetData extends WebsiteGetData
 
 			foreach ($lineData as $key => $lineHoure) {
 				// 1 lineHoure = 1 hour
-                if ($lineHoure["houre"]!="2" || $key==0) {
+                if (($lineHoure["houre"]!="2" && $lineHoure["houre"]!="1") || $key==0) {
                     $cleanElemHoure = array();
-                    $cleanElemHoure['heure'] = $lineHoure["houre"];
+                    $cleanElemHoure['heure'] = MeteoFranceGetData::getHoureClean($lineHoure["houre"]);
                     $cleanElemHoure['date'] = $datePrev;
                     $cleanElemHoure['wind'] = MeteoFranceGetData::getWindClean($lineHoure['wind']);
                     $cleanElemHoure['maxWind'] = MeteoFranceGetData::getMaxWindClean($lineHoure['wind']);
@@ -209,6 +209,24 @@ class MeteoFranceGetData extends WebsiteGetData
         }
     }
 
+
+	// input: 8 (houre of the begin period)
+	// return: 9 (middle of the period)
+	// 2 kind of houre:
+	// -> 2, 5, 8, 11, 14, 17, 20, 23 -> every 3 hours
+	// -> 2, 7, 13, 19 -> every 6 hours
+	static private function getHoureClean($houreBegin) {
+		if ($houreBegin==7 || $houreBegin==13) {  //||  $houreBegin==19) { 19h -> 20h pour être utilisé
+			return $houreBegin+3;
+		} elseif ($houreBegin<23) {
+			return $houreBegin+1;
+		} else {
+			return $houreBegin; //$houreBegin==23
+		}
+
+	}
+
+
     // input: 15Â°C   ou 12°C | 13°C
     // return: 15
     static private function getTempClean($htmlValue) {
@@ -223,8 +241,10 @@ class MeteoFranceGetData extends WebsiteGetData
     // return: wnw
     static private function getOrientationClean($htmlValue) {
         if (preg_match('#^picVent V_(?<orientation>[NESO]+)#',$htmlValue,$value)>0) {
-            return $value['orientation'];
-        } else {
+            $result=strtolower($value['orientation']);
+			$result=str_replace('o', 'w', $result);
+			return $result;
+		} else {
             return "?";
         }
     }

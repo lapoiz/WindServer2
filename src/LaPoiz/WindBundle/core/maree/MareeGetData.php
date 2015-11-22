@@ -25,6 +25,28 @@ class MareeGetData {
         return $prevMaree;
     }
 
+
+    /**
+     * @param $mareeInfoURL: URL de info maréé, ex: http://maree.info/16
+     * @param $nbDays: number of prevision days since today
+     * @return an array of prevision
+     */
+    static function getMareeForXDays($mareeInfoURL, $nbDays) {
+
+        $prevMaree = array();
+        $day = new \DateTime("now");
+
+        for ($numJour = 0; $numJour < $nbDays; $numJour++) {
+            // $url=$mareeInfoURL?d=$idDateURLInfoMaree
+            //$idDateURLInfoMaree = 20150106
+            $url=$mareeInfoURL.'?d='.$day->format('Ymd');
+            $prevMaree[$numJour]=MareeGetData::getHauteurMareeFromURL($url);
+            $day->add(new \DateInterval('P10D')); // ajout d'un jour
+        }
+
+        return $prevMaree;
+    }
+
     static function saveMaree($spot, $prevMaree, $entityManager, $output) {
         $output->writeln('<info>****** function saveMaree ****</info>');
         $today = new \DateTime("now");
@@ -160,21 +182,24 @@ class MareeGetData {
         }
     }
 
-
-    static function getHauteurMaree($idURLInfoMaree, $idDateURLInfoMaree) {
-        // Récupere la page: http://maree.info/$idURLInfoMaree?d=$idDateURLInfoMaree
-        $url = "http://maree.info/".$idURLInfoMaree."?d=".$idDateURLInfoMaree;
+    static function getHauteurMareeFromURL($url) {
+        // Récupere la page: $url=http://maree.info/$idURLInfoMaree?d=$idDateURLInfoMaree
+        // $idDateURLInfoMaree = 20150106
 
         // Parse avec ce qui est déjà fait dans MareeGetData::getMaree
         // envoie la hauteur marée haute et marée basse
-
         $client = new Client();
         $crawler = $client->request('GET', $url);
-
-
         $trMaree = $crawler->filter('#MareeJours_0');// premier elem car on arrive direct sur le bon jour
 
         return MareeGetData::getElemMareeFromTr($trMaree);
+    }
+
+    static function getHauteurMaree($idURLInfoMaree, $idDateURLInfoMaree) {
+        // Récupere la page: http://maree.info/$idURLInfoMaree?d=$idDateURLInfoMaree
+        // dateMaree = 20150106
+        $url = "http://maree.info/".$idURLInfoMaree."?d=".$idDateURLInfoMaree;
+        return MareeGetData::getHauteurMareeFromURL($url);
     }
 
     static function getElemMareeFromTr($trMaree) {

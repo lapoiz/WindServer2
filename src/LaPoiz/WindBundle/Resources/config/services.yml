@@ -34,6 +34,14 @@ services:
         tags:
             - { name: form.type, alias: commentForm }
 
+
+# ********** Extension Twig **************
+
+    la_poiz_wind.twig.extension:
+        class: LaPoiz\WindBundle\Twig\LaPoizExtension
+        tags:
+            - { name: twig.extension }
+
 #    twig.extension.intl:
 #        class: Twig\Extensions\Extension\Intl
 #        tags:

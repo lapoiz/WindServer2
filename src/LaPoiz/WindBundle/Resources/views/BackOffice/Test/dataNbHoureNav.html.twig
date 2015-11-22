@@ -1,0 +1,92 @@
+{% extends 'LaPoizWindBundle:BackOffice:base.html.twig' %}
+
+{% block bodyPage %}
+
+    <div class="starter-template">
+        <h1>Intermediaire pour Calculer le nombre d'heure de naviguation</h1>
+
+        <h2>Tableau des nb d'heure de nav</h2>
+
+        <table class="table table-striped table-bordered">
+
+                        <tbody>
+                         {% for keyDate, tabDay in tabNbHoure %}
+                            <tr>
+                                <th>keyDate:{{ keyDate }}</th>
+                                {% for keyHoure, elem in tabDay %}
+                                    <td>keyHoure:{{ keyHoure }}
+                                    {% if elem is iterable %}
+                                        <table class="table table-striped table-bordered">
+                                            {% for key, subElem in elem %}
+                                                <tr>
+                                                    <td>key: {{ key }}</td>
+                                                    <td>
+                                                        {% if subElem is iterable %}
+                                                            <table class="table table-striped table-bordered">
+                                                            {% for subKey, subSubElem in subElem %}
+                                                                <tr><td>{{ subKey }}</td><td>{{ subSubElem }}</td></tr>
+                                                            {% endfor %}
+                                                            </table>
+                                                        {% else %}
+                                                            {{ subElem }}
+                                                        {% endif %}
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                        </table>
+                                    {% else %}
+                                        {{ elem }}
+                                    {% endif %}
+                                    </td>
+                                {% endfor %}
+                            </tr>
+                {% endfor %}
+
+                        </tbody>
+            </table>
+
+
+            <h2>Tableau de la météo</h2>
+
+            <table class="table table-striped table-bordered">
+
+                <tbody>
+                {% for keyDate, tabDay in tabDataMeteo %}
+                    <tr>
+                        <th>keyDate:{{ keyDate }}</th>
+                        {% for keyHoure, elem in tabDay %}
+                            <td>keyHoure:{{ keyHoure }}
+                                {% if elem is iterable %}
+                                    <table class="table table-striped table-bordered">
+                                        {% for key, subElem in elem %}
+                                            <tr>
+                                                <td>key: {{ key }}</td>
+                                                <td>
+                                                    {% if subElem is iterable %}
+                                                        <table class="table table-striped table-bordered">
+                                                            {% for subKey, subSubElem in subElem %}
+                                                                <tr><td>{{ subKey }}</td><td>{{ subSubElem }}</td></tr>
+                                                            {% endfor %}
+                                                        </table>
+                                                    {% else %}
+                                                        {{ subElem }}
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </table>
+                                {% else %}
+                                    {{ elem }}
+                                {% endif %}
+                            </td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+
+                </tbody>
+            </table>
+
+
+        </div>
+
+{% endblock %}

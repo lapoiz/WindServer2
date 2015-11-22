@@ -16,9 +16,9 @@
 
         </p>
 
+        <h1>Les spots</h1>
 
-        <h1>Les sites</h1>
-
+        Nombre d'heure de navigation sur 12h théorique (8h -> 20h).
         <table class="table table-hover table-note table-bordered">
             <thead>
                 <tr>
@@ -47,58 +47,63 @@
                     {% for notesDate in listNotesDate %}
                         <td>
                         <!-- Wind -->
-                        {% if notesDate.noteWind is defined and notesDate.noteWind is not null %}
-                            {% set classNote = classTop %}
-                            {% if notesDate.noteWind<0.4 %}
-                                {% set classNote = classNule %}
-                            {% elseif notesDate.noteWind<0.6 %}
-                                {% set classNote = classBof %}
-                            {% endif %}
-                            <span class="{{ classNote }}"><i class="icon-wind"></i></span>
-                        {% else %}
-                            <span><i class="icon-wind"></i></span>
-                        {% endif %}
+                            <table class="tableWithoutBorder">
+                                {% for nbHoureNavElem in notesDate.nbHoureNav %}
 
-                        <!-- Temperature -->
-                                {% if notesDate.noteTemp is defined and notesDate.noteTemp is not null %}
-                                    {% set classNote = classTop %}
-                                    {% if notesDate.noteTemp<0.4 %}
-                                        {% set classNote = classNule %}
-                                    {% elseif notesDate.noteTemp<0.6 %}
-                                        {% set classNote = classBof %}
-                                    {% endif %}
-                                    <span class="{{ classNote }}"><i class="icon-temperature"></i></span>
-                                {% else %}
-                                    <span><i class="icon-temperature"></i></span>
+                                        {% set classNbH = classTop %}
+                                        {% if nbHoureNavElem.nbHoure<3 %}
+                                            {% set classNbH = classNule %}
+                                        {% elseif nbHoureNavElem.nbHoure<8 %}
+                                            {% set classNbH = classBof %}
+                                        {% endif %}
+
+                                    <tr>
+
+                                        <td class="{{ classNbH }}"><img src="{{ asset('bundles/lapoizwind/images/logos/'~nbHoureNavElem.website.logo|e) }}"
+                                            alt="{{ nbHoureNavElem.website.nom }}" class="logoWebsite">
+                                            {{ (nbHoureNavElem.nbHoure)|number_format(0, ',', '.') }} h</td>
+                                    </tr>
+                                {% endfor %}
+
+                                {% if notesDate.nbHoureNav|length < 3 %}
+                                    <tr><td><div class="logoWebsite"></div></td></tr>
                                 {% endif %}
 
-                        <!-- Meteo -->
-                                {% if notesDate.noteMeteo is defined and notesDate.noteMeteo is not null %}
-                                    {% set classNote = classTop %}
-                                    {% if notesDate.noteMeteo<0.4 %}
-                                        {% set classNote = classNule %}
-                                    {% elseif notesDate.noteMeteo<0.8 %}
-                                        {% set classNote = classBof %}
-                                    {% endif %}
-                                    <span class="{{ classNote }}"><i class="icon-cloud-sun-inv"></i></span>
-                                {% else %}
-                                    <span><i class="icon-cloud-sun-inv"></i></span>
-                                {% endif %}
+                                {% if notesDate.tempMin<35 %}
 
-                        <!-- Maree -->
-                        {% if spot.mareeURL is defined and  spot.mareeURL is not null %}
-                                {% if notesDate.noteMaree is defined and notesDate.noteMaree is not null %}
-                                    {% set classNote = classTop %}
-                                    {% if notesDate.noteMaree<0.4 %}
-                                        {% set classNote = classNule %}
-                                    {% elseif notesDate.noteMaree<0.6 %}
-                                        {% set classNote = classBof %}
+                                <!--<tr><td style="border-top: 1px solid grey"></td></tr>-->
+
+                                    {% set classTemp = classTop %}
+                                    {% if notesDate.tempMin<8 %}
+                                        {% set classTemp = classNule %}
+                                    {% elseif notesDate.tempMin<15 %}
+                                        {% set classTemp = classBof %}
                                     {% endif %}
-                                    <span class="{{ classNote }}"><i class="icon-waves"></i></span>
-                                {% else %}
-                                    <span><i class="icon-waves"></i></span>
+
+                                <tr>
+                                    <td class="{{ classTemp }}">
+                                        <i class="icon-temperature" />
+                                        {{ notesDate.tempMin|number_format(0, ',', '.') }}°C -> {{ notesDate.tempMax|number_format(0, ',', '.') }}°C
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td><img src="{{ asset('bundles/lapoizwind/images/transparent.png') }}"
+                                        class="meteo-icon"
+                                        style="background:url({{ asset('bundles/lapoizwind/images/meteo-icons-small.png') }});
+                                                background-position: 0% {{ notesDate.meteoBest|meteoFrance_logo }}%;"
+                                        />
+                                        ->
+                                        <img src="{{ asset('bundles/lapoizwind/images/transparent.png') }}"
+                                             class="meteo-icon"
+                                             style="background:url({{ asset('bundles/lapoizwind/images/meteo-icons-small.png') }});
+                                                     background-position: 0% {{ notesDate.meteoWorst|meteoFrance_logo }}%;"
+                                        />
+                                    </td>
+                                </tr>
                                 {% endif %}
-                        {% endif %}
+                            </table>
+
 
                         </td>
                     {% endfor %}
@@ -107,46 +112,6 @@
         {% endfor %}
 
         </table>
-        <br>
-        <br>
-        <div class="row">
-            <div class="col-md-7">
-                <p class="bg-info">
-                <table class="table table-condensed">
-                    <caption>Légende</caption>
-                    <tr>
-                        <td>Puissance et orientation du vent</td>
-                        <td class="elemRed"><i class="icon-wind"></i>: <12 Nd</td>
-                        <td class="elemOrange"><i class="icon-wind"></i>: ~12 Nd</td>
-                        <td class="elemGreen"><i class="icon-wind"></i>: >12 Nd</td>
-                        <td><i class="icon-wind"></i>: ?</td>
-                    </tr>
-                    <tr>
-                        <td>Température</td>
-                        <td class="elemRed"><i class="icon-temperature"></i>: <10°C</td>
-                        <td class="elemOrange">10°C <<i class="icon-temperature"></i>< 15°C</td>
-                        <td class="elemGreen"><i class="icon-temperature"></i>: >15°C</td>
-                        <td><i class="icon-temperature"></i>: ?</td>
-                    </tr>
-                    <tr>
-                        <td>Météo</td>
-                        <td class="elemRed"><i class="icon-cloud-sun-inv"></i>: Orage</td>
-                        <td class="elemOrange"><i class="icon-cloud-sun-inv"></i>: Nuageux</td>
-                        <td class="elemGreen"><i class="icon-cloud-sun-inv"></i>: Soleil</td>
-                        <td><i class="icon-cloud-sun-inv"></i>: ?</td>
-                    </tr>
-                    <tr>
-                        <td>Marée</td>
-                        <td class="elemRed"><i class="icon-waves"></i>: Impraticable</td>
-                        <td class="elemOrange"><i class="icon-waves"></i>: Parfois OK</td>
-                        <td class="elemGreen"><i class="icon-waves"></i>: Naviguable</td>
-                        <td><i class="icon-waves"></i>: ?</td>
-                    </tr>
-                </table>
-                </p>
-            </div>
-        </div>
-
     </div>
 
 {% endblock %}

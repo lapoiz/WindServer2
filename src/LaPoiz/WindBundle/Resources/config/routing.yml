@@ -126,6 +126,17 @@ _bo_ajax_dataWindPrev_test_save:
   pattern: /admin/BO/ajax/spot/dataWindPrev/test/save/{id}
 
 
+_bo_ajax_maree_spot_calcule_nbHoure_nav:
+  defaults: { _controller: LaPoizWindBundle:BOAjaxSpot:calculNbHoureNav }
+  pattern: /admin/BO/ajax/spot/nbHoureNav/{id}
+
+_bo_ajax_maree_spot_tabData_nbHoure_nav:
+  defaults: { _controller: LaPoizWindBundle:BOAjaxSpot:tabDataHoureNav }
+  pattern: /admin/BO/ajax/spot/dataHoureNav/{id}
+
+_bo_ajax_maree_spot_save_nbHoure_nav:
+  defaults: { _controller: LaPoizWindBundle:BOAjaxSpot:saveNbHoureNav }
+  pattern: /admin/BO/ajax/spot/save/nbHoureNav/{id}
 
 
 _bo_test:

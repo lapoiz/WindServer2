@@ -27,7 +27,7 @@ class LoadingFixtures implements FixtureInterface
         //$webSiteWG->setNom("Windguru");
         $webSiteWG->setNom(WebsiteGetData::windguruName);
         $webSiteWG->setUrl("www.windguru.cz");
-        $webSiteWG->setLogo("logo");
+        $webSiteWG->setLogo("Windguru.png");
         $manager->persist($webSiteWG);
         $manager->flush();
 
@@ -35,21 +35,21 @@ class LoadingFixtures implements FixtureInterface
         $webSiteWGPro = new WebSite();
         $webSiteWGPro->setNom(WebsiteGetData::windguruProName);
         $webSiteWGPro->setUrl("www.windguru.cz");
-        $webSiteWGPro->setLogo("logo");
+        $webSiteWGPro->setLogo("WindguruPro.png");
         $manager->persist($webSiteWGPro);
         $manager->flush();
         
         $webSiteWF = new WebSite();
         $webSiteWF->setNom(WebsiteGetData::windFinderName);
         $webSiteWF->setUrl("www.windfinder.com");
-        $webSiteWF->setLogo("logo");
+        $webSiteWF->setLogo("Windfinder.png");
         $manager->persist($webSiteWF);
         $manager->flush();
 
         $webSiteMF = new WebSite();
         $webSiteMF->setNom(WebsiteGetData::meteoFranceName);
         $webSiteMF->setUrl("http://france.meteofrance.com/");
-        $webSiteMF->setLogo("logo");
+        $webSiteMF->setLogo("MeteoFrance.png");
         $manager->persist($webSiteMF);
         $manager->flush();
         

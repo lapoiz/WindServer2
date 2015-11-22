@@ -89,7 +89,8 @@ class NoteWind {
             // si dans la tranche horaire de $prevision->getTime()
             if (NoteWind::isInGoodTime($prevision->getTime())) {
                 $wind = $prevision->getWind();
-                $orientation=NoteWind::getRosaceName($prevision->getOrientation());
+                //$orientation=NoteWind::getRosaceName($prevision->getOrientation());
+                $orientation=$prevision->getOrientation();
                 $stateOrientation=$tabRosaceOrientation[$orientation];
 
                 if ($wind < 12 ) {

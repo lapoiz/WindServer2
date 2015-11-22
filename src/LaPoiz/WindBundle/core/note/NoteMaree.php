@@ -3,6 +3,7 @@
 namespace LaPoiz\WindBundle\core\note;
 
 use LaPoiz\WindBundle\Command\CreateNoteCommand;
+use LaPoiz\WindBundle\core\maree\MareeTools;
 
 class NoteMaree {
 
@@ -35,7 +36,7 @@ class NoteMaree {
                 // pour chaque $restriction de  $spot->getMareeRestriction()
                 foreach ($spot->getMareeRestriction() as $mareeRestriction) {
                     // calcul l'heure (minute) d'intersection pour calculer le temps dans l'etat
-                    list($timeInState, $timeTab)=NoteMaree::calculTimeInState($mareeRestriction, $listePrevisionMaree);
+                    list($timeInState, $timeTab)=MareeTools::calculTimeInState($mareeRestriction, $listePrevisionMaree);
                     $mareeState=$mareeRestriction->getState();
 
                     switch ($mareeState) {
@@ -76,6 +77,20 @@ class NoteMaree {
     }
 
 
+    /**
+     * @param $timeMareeOK
+     * @param $timeMareeWarn
+     * @param $timeMareeKO
+     * Calcul la note en fonction du temps de chaque état
+     */
+    static function getNote($timeMareeOK, $timeMareeWarn, $timeMareeKO) {
+        $totalTime = $timeMareeOK+$timeMareeWarn+$timeMareeKO;
+        if ($totalTime>0) {
+            return round(($timeMareeOK + 0.5 * $timeMareeWarn) / $totalTime,1);
+        } else {
+            return -1;
+        }
+    }
 
     //////// Functions annexes a enlever /////////////////////////////////////////
 
@@ -105,21 +120,6 @@ class NoteMaree {
             return (pi()-asin(round(($y-$tabDataSinu['b'])/$tabDataSinu['a'],16))-$tabDataSinu['phi'] + $k*2*pi())/$tabDataSinu['w'];
         }
 
-    }
-
-    /**
-     * @param $timeMareeOK
-     * @param $timeMareeWarn
-     * @param $timeMareeKO
-     * Calcul la note en fonction du temps de chaque état
-
-    static function getNote($timeMareeOK, $timeMareeWarn, $timeMareeKO) {
-        $totalTime = $timeMareeOK+$timeMareeWarn+$timeMareeKO;
-        if ($totalTime>0) {
-            return round(($timeMareeOK + 0.5 * $timeMareeWarn) / $totalTime,1);
-        } else {
-            return -1;
-        }
     }
 
     static function buildSinusoidal($listePrevisionMaree, $tBegin) {

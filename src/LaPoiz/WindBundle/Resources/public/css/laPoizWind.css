@@ -35,3 +35,19 @@ nav {
 #meteoGraph {
     height: 400px;
 }
+
+.tableWithoutBorder {
+    border: 0px;
+}
+
+/* ************* INDEX = HOME PAGE *********** */
+.meteo-icon {
+    height: 30px;
+    width: 35px;
+    /*border: 1px dotted red;*/
+}
+.logoWebsite {
+    height: 20px;
+    width: 20px;
+    margin: 0px;
+}

@@ -11,7 +11,10 @@ class WebsiteGetData
     const windguruProName="WindguruPro";
 	const windFinderName="WindFinder";
 	const meteoFranceName="MeteoFrance"; 
-	
+
+	const windPowerMin=12;
+	const windPowerMinFun=15;
+
 	static function getListWebsiteAvailable() {
 		return array(
 			WebsiteGetData::meteoFranceName,
@@ -209,7 +212,7 @@ class WebsiteGetData
 	}
 
 	/*
-	 * Determine comment afficher le resultat en fonction de l'étape des test
+	 * Determine comment afficher le resultat en fonction de l'ï¿½tape des test
 	 */
 	static function typeDisplay($step) {
 		$result="text";
