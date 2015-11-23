@@ -33,7 +33,7 @@ class GetDataCommand extends ContainerAwareCommand  {
     	foreach ($dataWindPrevList as $dataWindPrev) {
             try {
                 GetDataCommand::getDataFromDataWindPrev($dataWindPrev, $output, $em);
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 $output->writeln('<error>'.$e->getMessage().'</error>');
             }
     	}
