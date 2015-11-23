@@ -127,7 +127,7 @@ class MeteoFranceGetData extends WebsiteGetData
 
 			foreach ($lineData as $key => $lineHoure) {
 				// 1 lineHoure = 1 hour
-                if (($lineHoure["houre"]!="2" && $lineHoure["houre"]!="1") || $key==0) {
+                if (!empty($lineHoure['wind']) && ($lineHoure["houre"]!="2" && $lineHoure["houre"]!="1") || $key==0) {
                     $cleanElemHoure = array();
                     $cleanElemHoure['heure'] = MeteoFranceGetData::getHoureClean($lineHoure["houre"]);
                     $cleanElemHoure['date'] = $datePrev;
