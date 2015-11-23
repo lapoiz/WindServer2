@@ -5,7 +5,7 @@ const MargeLeft= 50;
 const MargeRight= 50;
 const MargeBottom= 30;
 const MargeTop= 10;
-const NbJourPrev=10; /* prévision à nbJourPrev jours max */
+const NbJourPrev=10; /* prï¿½vision ï¿½ nbJourPrev jours max */
 const NdsMax=40;
 const NdsForNavMin=12;
 const NdsForNavGood=15;
@@ -25,8 +25,8 @@ function WindGraph(idName) {
     /* Parametres generaux */
     this.xMax=SvgWidth-MargeLeft-MargeRight;
     this.yMax=SvgHeight-MargeBottom-MargeTop;
-    this.xPerDay=this.xMax/NbJourPrev; /* largeur en x pour une journée */
-    this.yPerNds=this.yMax/NdsMax; /* équivalant 1 Nd -> yPerNds pixel */
+    this.xPerDay=this.xMax/NbJourPrev; /* largeur en x pour une journï¿½e */
+    this.yPerNds=this.yMax/NdsMax; /* ï¿½quivalant 1 Nd -> yPerNds pixel */
 
     var viewBoxParam = "0 0 "+SvgWidth+" "+SvgHeight;
     this.svg.setAttributeNS(null,'viewBox',viewBoxParam);
@@ -51,7 +51,7 @@ function WindGraph(idName) {
 
 WindGraph.prototype = Object.create(Graph.prototype);
 
-/* Coordonnées normales */
+/* Coordonnï¿½es normales */
 WindGraph.prototype.getXvalue = function(x) {
     return x+MargeLeft;
 }
@@ -60,17 +60,17 @@ WindGraph.prototype.getYvalue = function(y) {
 }
 
 /**
- * Retourne le X projeté si l'axe était comme à l'école (inverse de getXvalue())
+ * Retourne le X projetï¿½ si l'axe ï¿½tait comme ï¿½ l'ï¿½cole (inverse de getXvalue())
  * @param x
- * @returns la veleur de x dans un system de coordonnée classique
+ * @returns la veleur de x dans un system de coordonnï¿½e classique
  */
 WindGraph.prototype.getValueX = function(x) {
     return x-MargeLeft;
 }
 /**
- * Retourne le Y projeté si l'axe était comme à l'école (inverse de getYvalue())
+ * Retourne le Y projetï¿½ si l'axe ï¿½tait comme ï¿½ l'ï¿½cole (inverse de getYvalue())
  * @param y
- * @returns la veleur de y dans un system de coordonnée classique
+ * @returns la veleur de y dans un system de coordonnï¿½e classique
  */
 WindGraph.prototype.getValueY = function(y) {
     return SvgHeight-MargeBottom-y;
@@ -97,12 +97,12 @@ WindGraph.prototype.drawAxes = function() {
 
 /* Dessine les dates sur l'axe X */
 WindGraph.prototype.drawDateOnX = function() {
-    /* Prévision sur les 10 prochains jours max */
+    /* Prï¿½vision sur les 10 prochains jours max */
     moment.locale('fr');
     var now = moment();
-    now.add(-1, 'days'); /* Pour commencer à aujourd'hui dans la boucle */
+    now.add(-1, 'days'); /* Pour commencer ï¿½ aujourd'hui dans la boucle */
 
-    /* créer la defs pour la nuit */
+    /* crï¿½er la defs pour la nuit */
     var linearGradient=this.newLinearGradientSVGElement("degradeNuit","0","0","100%","0%");
     this.addStopLinearGradientSVGElement(linearGradient,'stop1','0%');
     this.addStopLinearGradientSVGElement(linearGradient,'stop2','10%');
@@ -116,7 +116,7 @@ WindGraph.prototype.drawDateOnX = function() {
         now.add(1, 'days');
         jour=now.format("ddd D");
 
-        /* Créer les nuits entre les dates */
+        /* Crï¿½er les nuits entre les dates */
         var rectNight=this.newRectSVGElement(this.getXvalue(i*this.xPerDay),this.getYvalue(this.yMax),this.xPerDay,
             this.yMax,'nuitGraph',null);
         rectNight.setAttributeNS(null,"fill","url(#degradeNuit)");
@@ -125,12 +125,12 @@ WindGraph.prototype.drawDateOnX = function() {
         this.newTextSVGElement(this.getXvalue(xCurrent),this.getYvalue(-20),jour,"dateAxesGraph");
         xCurrent+=this.xPerDay;
 
-        /* Créer les lignes séparant les jours */
+        /* Crï¿½er les lignes sï¿½parant les jours */
         var path="M "+this.getXvalue((i+1)*this.xPerDay)+" "+this.getYvalue(-20)+" L "+this.getXvalue((i+1)*this.xPerDay)
             +" "+this.getYvalue(this.yMax);
         this.newPathSVGElement(path,"subAxesDateGraph");
 
-        /* Créer les lignes de midi +écrire les heures 8h, 12h et 20h */
+        /* Crï¿½er les lignes de midi +ï¿½crire les heures 8h, 12h et 20h */
 
         path="M "+this.getXvalue((i+xMidiRatio)*this.xPerDay)+" "+this.getYvalue(0)+" L "+this.getXvalue((i+xMidiRatio)*this.xPerDay)
             +" "+this.getYvalue(this.yMax);
@@ -175,9 +175,9 @@ WindGraph.prototype.getYOnGraph = function(nds) {
 }
 
 /**
- * Retourne le x du svg à partir de la date + heure
- * @param dateJS: date de l'élément à placer sur le graph - format: momentJS
- * @param heure: heure de l'élément à placer sur le graph - format: 8 (String ou nombre)
+ * Retourne le x du svg ï¿½ partir de la date + heure
+ * @param dateJS: date de l'ï¿½lï¿½ment ï¿½ placer sur le graph - format: momentJS
+ * @param heure: heure de l'ï¿½lï¿½ment ï¿½ placer sur le graph - format: 8 (String ou nombre)
  */
 WindGraph.prototype.getXOnGraph = function(dateJS, heure) {
     // Calcul le x hors marge
@@ -207,9 +207,9 @@ WindGraph.prototype.getXOnGraph = function(dateJS, heure) {
 }
 
 /**
- * Trouve la date à partir de x
+ * Trouve la date ï¿½ partir de x
  * @param x : x sur l'axe des abcisses
- * @return date correspondant à x - format: momentJS
+ * @return date correspondant ï¿½ x - format: momentJS
  */
 WindGraph.prototype.getDateFromX=function(x) {
     x=this.getValueX(x);
@@ -239,9 +239,9 @@ WindGraph.prototype.getDateFromX=function(x) {
 }
 
 /**
- * Trouve les Nds à partir de y
- * @param y : y sur l'axe des ordonnées
- * @return Nds correspondant à y - format: int
+ * Trouve les Nds ï¿½ partir de y
+ * @param y : y sur l'axe des ordonnï¿½es
+ * @return Nds correspondant ï¿½ y - format: int
  */
 WindGraph.prototype.getNdsFromY=function(y) {
     y=this.getValueY(y);
@@ -265,13 +265,13 @@ WindGraph.prototype.drawLimiNav = function() {
 }
 
 /**
- * Dessin un rectangle dans groupe Restriction Maree, pour la date de deb et date fin, à l'etat indiqué (OK, KO, Warn)
+ * Dessin un rectangle dans groupe Restriction Maree, pour la date de deb et date fin, ï¿½ l'etat indiquï¿½ (OK, KO, Warn)
  * @param dateBegin: sous la forme MomentJS
  * @param dateFin: sous la forme MomentJS
  * @param etatRestriction : "OK", "KO" ou "warn"
  */
 WindGraph.prototype.drawRestrictionMaree = function(dateJS,heureBegin,heureEnd,etatRestriction) {
-    //alert("Ajout restriction: "+dateJS+"  "+heureBegin+" -> "+heureEnd+"  dans l'état:"+etatRestriction);
+    //alert("Ajout restriction: "+dateJS+"  "+heureBegin+" -> "+heureEnd+"  dans l'ï¿½tat:"+etatRestriction);
     var xBegin=this.getXOnGraph(dateJS,heureBegin);
     var xEnd=this.getXOnGraph(dateJS,heureEnd);
     this.newRectSVGElement(xBegin,this.getYvalue(this.yMax),xEnd-xBegin,this.yMax,"restrictionMaree"+etatRestriction,null,this.mareeRestrictionGroup);
@@ -352,5 +352,19 @@ WindGraph.prototype.drawFlecheOrientation=function(deg,x) {
     var hautFleche=3;
     var yFleche=this.getYOnGraph(YNdsPositionFleche);
     deg=deg.toFixed(1); // For have 90.0
-    this.newUseSVGElement('flecheOrientDef',x-(hautFleche*ratioFleche/2),yFleche-hautFleche,hautFleche,hautFleche, 'rotate('+deg+' '+x+' '+yFleche+' )',"flecheOrientationGraph"+orientationVentSpot[deg]);
+    this.newUseSVGElement('flecheOrientDef',x-(hautFleche*ratioFleche/2),yFleche-hautFleche,hautFleche,null, 'rotate('+deg+' '+x+' '+yFleche+' )',"flecheOrientationGraph"+orientationVentSpot[deg]);
+}
+
+WindGraph.prototype.drawMeteoIcon=function(meteoStr,x) {
+    svgIcon=this.newSVGElement(x,20,35,15);
+    //this.newRectSVGElement(0,0,50,50,"nuitGraph",null,svgIcon);
+    var y=yIconFromName(meteoStr);
+    this.newImageSVGElement(0,-y,30,600,iconUrl,svgIcon);
+}
+
+/**
+ * Return the y value for display only the good icon from the file iconUrl=meteo-icons-small.png
+ */
+function yIconFromName(meteoStr) {
+    return getTabValIcon()[meteoStr]*13.3;
 }

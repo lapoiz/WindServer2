@@ -2,7 +2,7 @@
 
 namespace LaPoiz\WindBundle\core\nbHoure;
 
-
+// SI MODIFIE, LE FAIRE EGALEMENT pour LaPoiz\GraphBundle\Resources\public\js\meteoFranceIcon.js
 class MeteoFranceIcon
 {
     private static $_instance = null;

@@ -35,7 +35,8 @@ function putOnGraph(jSon) {
                  { "heure": "02",
                  "wind": 4 },
                  "orientation":{"deg":315,"nom":"nw"},
-                 ,"precipitation":"0" }
+                 "precipitation":"0",
+                 "meteo":"r-a" }
                  */
                 var prevision=previsionDate.previsions[numPrevision];
 
@@ -46,8 +47,13 @@ function putOnGraph(jSon) {
                 if (nbJour>=0) {
                     var x=svgGraph.getXOnGraph(moment(previsionDate.date,"DD-MM-YYYY").startOf('day'), prevision.heure);
                     spline.addPoint(x, svgGraph.getYOnGraph(prevision.wind));
+
                     if (!isEmpty(prevision.orientation) && !isEmpty(prevision.orientation.deg) && prevision.orientation.deg>=0) {
                         svgGraph.drawFlecheOrientation(prevision.orientation.deg, x);
+                    }
+
+                    if (!isEmpty(prevision.meteo)) {
+                        svgGraph.drawMeteoIcon(prevision.meteo, x);
                     }
                 }
             }
@@ -87,12 +93,12 @@ function displayBoutonMarree() {
 }
 
 /**
- * Charge les données des restrictions des maréees
+ * Charge les donnÃ©es des restrictions des marÃ©ees
  * @param listeDate
  */
 function loadMareeOnGraph(listeDate) {
     // array de date du type "2015-08-13"
-    var today=moment().startOf('day'); // Todo: verifier que la date est après aujourd'hui
+    var today=moment().startOf('day'); // Todo: verifier que la date est aprï¿½s aujourd'hui
 
     svgGraph.mareeRestrictionGroup.setAttributeNS(null, 'visibility', 'hidden');
 
@@ -122,7 +128,7 @@ function loadMareeOnGraph(listeDate) {
 function drawPlageRestrictionFromList(dateJS,listePlageRestriction,etatRestriction) {
     if (!isEmpty(listePlageRestriction)) {
         for (numRestriction = 0; numRestriction < listePlageRestriction.length; numRestriction++) {
-            // heure au format 08:55:37 à transformer en un nombre 5.9
+            // heure au format 08:55:37 ï¿½ transformer en un nombre 5.9
             svgGraph.drawRestrictionMaree(dateJS, convertiHeureStringEnNombre(listePlageRestriction[numRestriction].begin),
                 convertiHeureStringEnNombre(listePlageRestriction[numRestriction].end), etatRestriction);
         }

@@ -16,7 +16,7 @@ isEmpty = function(variable) {
     return variable === undefined || variable === null || variable === '' || variable.length === 0;
 }
 
-// X et Y selon les normes classiques du svg, cad O : en haut à gauche
+// X et Y selon les normes classiques du svg, cad O : en haut ï¿½ gauche
 
 Graph.prototype.newPolygonSVGElement = function(points,className,svgElem) {
     var newPolygon=document.createElementNS(SvgNS,'polygon');
@@ -221,7 +221,7 @@ Graph.prototype.newSymbolSVGElement = function(idName,viewBox,preserveAspectRati
     this.defsSvgGraph.appendChild(newSymbol);
     return newSymbol;
 }
-Graph.prototype.newUseSVGElement = function(symbolName,x,y,width,heigth,transform,className,svgElem) {
+Graph.prototype.newUseSVGElement = function(symbolName,x,y,width,height,transform,className,svgElem) {
     var newUse=document.createElementNS(SvgNS,'use');
     if (!isEmpty(symbolName)) {
         newUse.setAttributeNS(SvgXlinkns,'xlink:href','#'+symbolName);
@@ -235,8 +235,8 @@ Graph.prototype.newUseSVGElement = function(symbolName,x,y,width,heigth,transfor
     if (!isEmpty(width)) {
         newUse.setAttributeNS(null,'width',width);
     }
-    if (!isEmpty(heigth)) {
-        newUse.setAttributeNS(null,'heigth',heigth);
+    if (!isEmpty(height)) {
+        newUse.setAttributeNS(null,'height',height);
     }
     if (!isEmpty(transform)) {
         newUse.setAttributeNS(null,'transform',transform);
@@ -251,9 +251,59 @@ Graph.prototype.newUseSVGElement = function(symbolName,x,y,width,heigth,transfor
     } else {
         this.svg.appendChild(newUse)
     }
-
     return newUse;
 }
+Graph.prototype.newImageSVGElement = function(x,y,width,height,href,svgElem) {
+    var newImage=document.createElementNS(SvgNS,'image');
 
+    if (!isEmpty(x)) {
+        newImage.setAttributeNS(null,'x',x);
+    }
+    if (!isEmpty(y)) {
+        newImage.setAttributeNS(null,'y',y);
+    }
+    if (!isEmpty(width)) {
+        newImage.setAttributeNS(null,'width',width);
+    }
+    if (!isEmpty(height)) {
+        newImage.setAttributeNS(null,'height',height);
+    }
+    if (!isEmpty(href)) {
+        newImage.setAttributeNS(SvgXlinkns,'href',href);
+    }
+    if (!isEmpty(svgElem)) {
+        svgElem.appendChild(newImage);
+    } else {
+        this.svg.appendChild(newImage)
+    }
+
+    return newImage;
+}
+Graph.prototype.newSVGElement = function(x,y,width,height,viewBox,svgElem) {
+    var newSvg=document.createElementNS(SvgNS,'svg');
+
+    if (!isEmpty(x)) {
+        newSvg.setAttributeNS(null,'x',x);
+    }
+    if (!isEmpty(y)) {
+        newSvg.setAttributeNS(null,'y',y);
+    }
+    if (!isEmpty(width)) {
+        newSvg.setAttributeNS(null,'width',width);
+    }
+    if (!isEmpty(height)) {
+        newSvg.setAttributeNS(null,'height',height);
+    }
+    if (!isEmpty(viewBox)) {
+        newSvg.setAttributeNS(null,'viewBox',viewBox);
+    }
+    if (!isEmpty(svgElem)) {
+        svgElem.appendChild(newSvg);
+    } else {
+        this.svg.appendChild(newSvg)
+    }
+    //newSvg.style.display = "block";
+    return newSvg;
+}
 
 

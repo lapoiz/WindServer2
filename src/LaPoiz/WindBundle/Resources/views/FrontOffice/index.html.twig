@@ -48,6 +48,7 @@
                         <td>
                         <!-- Wind -->
                             <table class="tableWithoutBorder">
+                            {% if notesDate is not null %}
                                 {% for nbHoureNavElem in notesDate.nbHoureNav %}
 
                                         {% set classNbH = classTop %}
@@ -102,6 +103,7 @@
                                     </td>
                                 </tr>
                                 {% endif %}
+                            {% endif %}
                             </table>
 
 
