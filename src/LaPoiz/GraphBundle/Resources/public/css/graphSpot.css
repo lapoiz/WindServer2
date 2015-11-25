@@ -119,7 +119,7 @@
     fill: green;
 }
 /************************
-Courbe de pr�vision du vent
+Courbe de prévision du vent
 *************************/
 .pointWindguru {
     fill: rgba(255,0,0,0.5);
@@ -260,5 +260,14 @@ Courbe de pr�vision du vent
 .flecheOrientationGraphKO {
     fill: red;
     stroke: black;
+    stroke-width: 1;
+}
+
+/********************
+    Autres
+**********************/
+.precipitationRectGraph {
+    fill: blue;
+    stroke: navy;
     stroke-width: 1;
 }

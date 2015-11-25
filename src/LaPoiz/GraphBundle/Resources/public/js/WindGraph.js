@@ -51,7 +51,7 @@ function WindGraph(idName) {
 
 WindGraph.prototype = Object.create(Graph.prototype);
 
-/* Coordonn�es normales */
+/* Coordonnées normales */
 WindGraph.prototype.getXvalue = function(x) {
     return x+MargeLeft;
 }
@@ -367,4 +367,9 @@ WindGraph.prototype.drawMeteoIcon=function(meteoStr,x) {
  */
 function yIconFromName(meteoStr) {
     return getTabValIcon()[meteoStr]*13.3;
+}
+
+WindGraph.prototype.drawPrecipitation=function(precipitation,x) {
+    var higth=precipitation*4;
+    this.newRectSVGElement(x,this.getValueY(0)-higth,3,higth,"precipitationRectGraph");
 }

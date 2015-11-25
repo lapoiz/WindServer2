@@ -55,13 +55,16 @@ function putOnGraph(jSon) {
                     if (!isEmpty(prevision.meteo)) {
                         svgGraph.drawMeteoIcon(prevision.meteo, x);
                     }
+
+                    if (!isEmpty(prevision.precipitation)) {
+                        svgGraph.drawPrecipitation(prevision.precipitation, x);
+                    }
                 }
             }
         }
         spline.drawSpline();
     }
 }
-
 
 function displayRestrictionMaree() {
     if (svgGraph.mareeRestrictionGroup.getAttributeNS(null, 'visibility')=='hidden') {
