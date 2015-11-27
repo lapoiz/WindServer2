@@ -356,7 +356,7 @@ WindGraph.prototype.drawFlecheOrientation=function(deg,x) {
 }
 
 WindGraph.prototype.drawMeteoIcon=function(meteoStr,x) {
-    svgIcon=this.newSVGElement(x,20,35,15);
+    svgIcon=this.newSVGElement(x-15,20,35,15);
     //this.newRectSVGElement(0,0,50,50,"nuitGraph",null,svgIcon);
     var y=yIconFromName(meteoStr);
     this.newImageSVGElement(0,-y,30,600,iconUrl,svgIcon);
