@@ -373,3 +373,8 @@ WindGraph.prototype.drawPrecipitation=function(precipitation,x) {
     var higth=precipitation*4;
     this.newRectSVGElement(x,this.getValueY(0)-higth,3,higth,"precipitationRectGraph");
 }
+
+WindGraph.prototype.drawTemperature=function(temperature,x) {
+    this.newCircleSVGElement(x,this.getValueY(this.yMax)-2,7,"temperatureTextCircle");
+    this.newTextSVGElement(x,this.getValueY(this.yMax),temperature+"°C","temperatureText");
+}

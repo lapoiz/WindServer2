@@ -2,6 +2,7 @@
 namespace LaPoiz\WindBundle\core\graph;
 
 use LaPoiz\WindBundle\core\graph\spotJsonObject\WindOrientation;
+use LaPoiz\WindBundle\core\websiteDataManage\WebsiteGetData;
 
 /**
  * @author dapoi
@@ -46,6 +47,12 @@ class TransformeToLaPoizGraphDataTabForJson   {
                     if ($prevision->getPrecipitation()!=null && $prevision->getPrecipitation()!='?') {
 						$previ["precipitation"]= $prevision->getPrecipitation();
                     }
+					if ($prevision->getPrevisionDate()->getDataWindPrev()->getWebsite()->getNom()==WebsiteGetData::meteoFranceName) {
+						// Temperature que pour meteoFrance
+						if ($prevision->getTemp() != null && $prevision->getTemp() != '?') {
+							$previ["temperature"] = $prevision->getTemp();
+						}
+					}
 					$forecastDateArray['previsions'][]=$previ;
                 };
 				$forecastArray[]=$forecastDateArray;

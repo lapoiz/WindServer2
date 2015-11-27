@@ -271,3 +271,14 @@ Courbe de prévision du vent
     stroke: navy;
     stroke-width: 1;
 }
+
+.temperatureText {
+    text-anchor:middle;
+    font-size: 6px;
+    fill: blue;
+}
+.temperatureTextCircle {
+    fill: white;
+    stroke: grey;
+    stroke-width: 0.5;
+}

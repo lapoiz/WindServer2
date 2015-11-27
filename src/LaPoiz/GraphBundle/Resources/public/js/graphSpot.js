@@ -59,6 +59,10 @@ function putOnGraph(jSon) {
                     if (!isEmpty(prevision.precipitation)) {
                         svgGraph.drawPrecipitation(prevision.precipitation, x);
                     }
+
+                    if (!isEmpty(prevision.temperature)) {
+                        svgGraph.drawTemperature(prevision.temperature, x);
+                    }
                 }
             }
         }

@@ -55,6 +55,8 @@ class MareeGetData {
         $regExGetHoure = '#h#';
         $regExGetHauteur = '#m#';
 
+        MareeGetData::deleteOldMaree($spot,$entityManager,$output);
+
         $lastMareeDate = $entityManager->getRepository('LaPoizWindBundle:MareeDate')->findLast($spot);
         $beginDate = null;
         if ($lastMareeDate != null && !$lastMareeDate->getListPrevision()->isEmpty( )) {
@@ -97,6 +99,9 @@ class MareeGetData {
         $entityManager->flush();
     }
 
+    /**
+     * Attention - Efface toutes les marées de la BD
+     */
     static function deleteMaree($spot, $entityManager, $output) {
         $output->writeln('<info>****** function deleteMaree ****</info>');
 
@@ -111,6 +116,27 @@ class MareeGetData {
         }
     }
 
+    /**
+     * Efface les marées anciennes (antérieur à aujourd'hui)
+     */
+    static function deleteOldMaree($spot, $entityManager, $output) {
+        $output->writeln('<info>****** function deleteOldMaree ****</info>');
+        $today=new \DateTime('now');
+        $today->setTime(0, 0, 0);
+
+        foreach ($spot->getListMareeDate() as $mareeDate) {
+            if ($mareeDate->getDatePrev() < $today) {
+                // avant today -> on efface
+                try {
+                    $entityManager->remove($mareeDate);
+                    $output->writeln('<info>delete $mareeDate->getDatePrev : '.$mareeDate->getDatePrev()->format('Y-m-d H:i:s').'</info>');
+                    $entityManager->flush();
+                } catch (\Exception $ex) {
+                    $output->writeln("Exception Found - " . $ex->getMessage());;
+                }
+            }
+        }
+    }
 
     /*
      * scan la page des marées sur 2 mois.
