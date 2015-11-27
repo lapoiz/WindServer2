@@ -31,7 +31,7 @@ class MareeGetData {
      * @param $nbDays: number of prevision days since today
      * @return an array of prevision
      */
-    static function getMareeForXDays($mareeInfoURL, $nbDays) {
+    static function getMareeForXDays($mareeInfoURL, $nbDays, $output) {
 
         $prevMaree = array();
         $day = new \DateTime("now");
@@ -40,8 +40,9 @@ class MareeGetData {
             // $url=$mareeInfoURL?d=$idDateURLInfoMaree
             //$idDateURLInfoMaree = 20150106
             $url=$mareeInfoURL.'?d='.$day->format('Ymd');
+            $output->writeln('<info>url : '.$url.'</info>');
             $prevMaree[$numJour]=MareeGetData::getHauteurMareeFromURL($url);
-            $day->add(new \DateInterval('P10D')); // ajout d'un jour
+            $day->add(new \DateInterval('P01D')); // ajout d'un jour
         }
 
         return $prevMaree;
@@ -94,6 +95,20 @@ class MareeGetData {
             $currentDay= date_add($currentDay, new \DateInterval('P1D'));
         };
         $entityManager->flush();
+    }
+
+    static function deleteMaree($spot, $entityManager, $output) {
+        $output->writeln('<info>****** function deleteMaree ****</info>');
+
+        foreach ($spot->getListMareeDate() as $mareeDate) {
+                $output->writeln('<info>delete $mareeDate->getDatePrev : '.$mareeDate->getDatePrev()->format('Y-m-d H:i:s').'</info>');
+                try {
+                    $entityManager->remove($mareeDate);
+                    $entityManager->flush();
+                } catch (\Exception $ex) {
+                    $output->writeln("Exception Found - " . $ex->getMessage());;
+                }
+        }
     }
 
 

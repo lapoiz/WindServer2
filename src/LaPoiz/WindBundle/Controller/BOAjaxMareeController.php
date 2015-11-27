@@ -42,7 +42,7 @@ class BOAjaxMareeController extends Controller
                     array('errMessage' => "No spot find !"));
             }
             //$prevMaree=MareeGetData::getMaree($spot->getMareeURL());
-            $prevMaree=MareeGetData::getMareeForXDays($spot->getMareeURL(),10);
+            $prevMaree=MareeGetData::getMareeForXDays($spot->getMareeURL(),10,new NullOutput());
 
             return $this->render('LaPoizWindBundle:BackOffice/Spot/Ajax/Maree:prevMaree.html.twig', array(
                     'prevMaree' => $prevMaree,
@@ -197,6 +197,40 @@ class BOAjaxMareeController extends Controller
                 'saveSuccess' => true
             ));
     }
+
+    /**
+     * @Template()
+     * Efface les prévisions de marée
+     * http://localhost/Wind/web/app_dev.php/admin/BO/ajax/spot/maree/delete/1
+     */
+    public function mareeDeleteAction($id)
+    {
+        $em = $this->container->get('doctrine.orm.entity_manager');
+        $spot = $em->find('LaPoizWindBundle:Spot', $id);
+
+        if (!$spot)
+        {
+            return $this->container->get('templating')->renderResponse(
+                'LaPoizWindBundle:Default:errorBlock.html.twig',
+                array('errMessage' => "Spot not find !"));
+        }
+
+        $mareeURL = $spot->getMareeURL();
+        if (!empty($mareeURL)) {
+            MareeGetData::deleteMaree($spot,$em,new NullOutput());
+        }
+
+        $mareeDateDB = $em->getRepository('LaPoizWindBundle:MareeDate')->findLastPrev(10, $spot);
+
+        return $this->container->get('templating')->renderResponse('LaPoizWindBundle:BackOffice/Spot/Ajax/Maree:mareeSaveResult.html.twig',
+            array(
+                'mareeDateDB' => $mareeDateDB,
+                'spot' => $spot,
+                'message' => "",
+                'saveSuccess' => true
+            ));
+    }
+
 
 
     /**

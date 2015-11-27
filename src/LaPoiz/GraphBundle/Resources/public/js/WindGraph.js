@@ -175,9 +175,9 @@ WindGraph.prototype.getYOnGraph = function(nds) {
 }
 
 /**
- * Retourne le x du svg � partir de la date + heure
- * @param dateJS: date de l'�l�ment � placer sur le graph - format: momentJS
- * @param heure: heure de l'�l�ment � placer sur le graph - format: 8 (String ou nombre)
+ * Retourne le x du svg à partir de la date + heure
+ * @param dateJS: date de l'élèment à placer sur le graph - format: momentJS
+ * @param heure: heure de l'élèment à placer sur le graph - format: 8 (String ou nombre)
  */
 WindGraph.prototype.getXOnGraph = function(dateJS, heure) {
     // Calcul le x hors marge
@@ -207,9 +207,9 @@ WindGraph.prototype.getXOnGraph = function(dateJS, heure) {
 }
 
 /**
- * Trouve la date � partir de x
+ * Trouve la date à partir de x
  * @param x : x sur l'axe des abcisses
- * @return date correspondant � x - format: momentJS
+ * @return date correspondant à x - format: momentJS
  */
 WindGraph.prototype.getDateFromX=function(x) {
     x=this.getValueX(x);
@@ -239,7 +239,7 @@ WindGraph.prototype.getDateFromX=function(x) {
 }
 
 /**
- * Trouve les Nds � partir de y
+ * Trouve les Nds à partir de y
  * @param y : y sur l'axe des ordonn�es
  * @return Nds correspondant � y - format: int
  */

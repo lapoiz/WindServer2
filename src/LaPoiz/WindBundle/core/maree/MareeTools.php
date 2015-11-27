@@ -92,10 +92,13 @@ class MareeTools {
         // Récupére les 2 premiers points
         $previsionMaree1 = $listePrevisionMaree->first();
         $previsionMaree2 = $listePrevisionMaree->next();
+        $previsionMaree3 = $listePrevisionMaree->next();
+
         $t1=MareeTools::getXTime($previsionMaree1);
         $y1=$previsionMaree1->getHauteur();
         $t2=MareeTools::getXTime($previsionMaree2);
         $y2=$previsionMaree2->getHauteur();
+        $t3=MareeTools::getXTime($previsionMaree3);
 
         if ($y1>$y2) {
             $yMax=$y1;
@@ -110,16 +113,15 @@ class MareeTools {
         }
         // y = a  sin(wt + Phi) + b
 
+        $periode = $t3-$t1; // $t2 - $t1 : demi periode -> disparition du 2 ou $t3 - $t1 = periode
         // w=2 pi / T
-        $w= pi() / ($t2-$t1); // $t2 - $t1 : demi periode -> disparition du 2
+        $w= 2*pi() / $periode;
         $w=$w>=0?$w:-$w; // $w >0
 
         $a=($yMax-$yMin)/2;
         $b=($yMax+$yMin)/2;
 
         $phi = asin(round(($y1-$b)/$a,10))-$w*$t1; // calcul directement le bon phi = k * phi' (en tous cas proche de t1)
-
-        $periode = 2*pi()/$w;
 
         $tHMax = MareeTools::getTAfterBegin($tHMax, $periode, $tBegin);
         $tHMin = MareeTools::getTAfterBegin($tHMin, $periode, $tBegin);
@@ -189,6 +191,10 @@ class MareeTools {
         $tyMin=$tabDataSinu['tyMin'];
         $tyMax=$tabDataSinu['tyMax'];
 
+        $tyMax=$tyMax>$tBegin?$tyMax:($tyMax+$periode); // $tyMax : premiere time au max de la courbe en periode naviguable
+        $tyMin=$tyMin>$tBegin?$tyMin:($tyMin+$periode); // $tyMin : premiere time au max de la courbe en periode naviguable
+
+
         if ($hMaxRestriction>=$yMax) {
             // Courbe au dessous de la restriction: $hMaxRestriction
             // -> tous ce qui est au dessus de $hmin est à comptabiliser
@@ -256,6 +262,7 @@ class MareeTools {
         } else {
             // la restriction haute croise la courbe
             if ($hMaxRestriction>$yMin) {
+                // Cas classique hMaxRestriction est au dessus de la + petite valeur de la courbe
                 if ($hMinRestriction<=$yMin) {
                     // tous ce qui est au dessous de $hMaxRestriction est a compter
                     $c=$hMaxRestriction; // intersection avec la droite $y=$c
@@ -264,7 +271,7 @@ class MareeTools {
 
 
                     if (MareeTools::isMontant($tabDataSinu, $tInter, $c)) {
-                        // courbe ascendante
+                        // courbe montante
                         // on prend de tBegin à tInter
                         $timeRestriction += $tInter-$tBegin;
                         $timeTab[]=array("begin"=>date("H:i:s", $tBegin), "end"=>date("H:i:s", $tInter));
@@ -307,13 +314,14 @@ class MareeTools {
                     }
                 } else {
                     // pire des cas intersection pour partie haute et partie basse de la restriction....
+                    // on va devoir regarder les 2 intersections (typique de la retriction Warn)
                     // On se cale sur tInterMin en pente montante
 
                     // Find intersection after $tBegin
                     list($kMax, $tInterMax) = MareeTools::findTInterBegin($tabDataSinu, 0, 0, $tBegin, $hMaxRestriction);
                     list($kMin, $tInterMin) = MareeTools::findTInterBegin($tabDataSinu, 0, 0, $tBegin, $hMinRestriction);
-
-                    // $tInterMin IS NOT GOD - Après $tInterMax en monté -> pas normal
+                    // $tInterMax : date intersection avec la restriction haute
+                    // $tInterMin : date intersection avec la restriction basse
 
                     $timeToAdd=0; // temps entre $tInterMin et $tInterMax en phase montante
                     $timeInter2tInterMax = 0; // temps entre les 2 tInterMax (pente montante et pente descendante)
@@ -348,6 +356,7 @@ class MareeTools {
                         }
                     } else {
                         // $tInterMin<$tInterMax
+                        // 1er intersection est la restriction basse
                         // 1er intersection: $tInterMin -> montante ou tBegin entre les deux
                         if (MareeTools::isMontant($tabDataSinu, $tInterMin, $hMinRestriction)) {
                             // On est calé sur tInterMin en pente montante
@@ -355,7 +364,9 @@ class MareeTools {
                             $timeToAdd = $tInterMax-$tInterMin;
                             // On est en pente montante, tInterMax est l'interception avec restriction haute et la courbe
                             // -> prochaine interception courbe descendante symétrique avec le sommet qui est en tyMax
-                            $timeInter2tInterMax=2*($tyMax-$tInterMax); //prend un crayon pour t'en assurer...
+
+                            $timeInter2tInterMax=2*($tyMax-$tInterMax); //prend un crayon pour t'en assurer... Faux
+                            // ***** Faux lorsque montant puis resdescendant ****
                             //$timeInter2tInterMax=2*($timeToAdd+$tyMax-$tInterMin); //prend un crayon pour t'en assurer...Mais c'est faux...
 
                         } else {

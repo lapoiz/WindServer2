@@ -80,6 +80,10 @@ _fo_json_lapoizGraph_maree_data:
   defaults: { _controller: LaPoizWindBundle:FOJsonMaree:getPlageNavigation }
   pattern: /fo/json/lapoizgraph/plage/maree/spot/{id}
 
+_fo_json_maree_data:
+  defaults: { _controller: LaPoizWindBundle:FOJsonMaree:getMaree }
+  pattern: /fo/json/maree/spot/{id}
+
 
 
 
@@ -159,6 +163,10 @@ _bo_ajax_maree_getPrev:
 _bo_ajax_maree_save:
   defaults: { _controller: LaPoizWindBundle:BOAjaxMaree:mareeSave }
   pattern: /admin/BO/ajax/spot/maree/save/{id}
+
+_bo_ajax_maree_delete:
+  defaults: { _controller: LaPoizWindBundle:BOAjaxMaree:mareeDelete }
+  pattern: /admin/BO/ajax/spot/maree/delete/{id}
 
 _bo_ajax_maree_launch_note:
   defaults: { _controller: LaPoizWindBundle:BOAjaxMaree:mareeLaunchNote }

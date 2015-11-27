@@ -67,4 +67,51 @@ class FOJsonMareeController extends Controller {
         }
         return $mareeStateArray;
     }
+
+
+    /**
+     * Affiche les marée du spot sous forme de JSon
+     * http://localhost/Wind/web/app_dev.php/fo/json/maree/spot/1
+     */
+    public function getMareeAction($id=null) {
+        $em = $this->container->get('doctrine.orm.entity_manager');
+        if (isset($id) && $id!=-1) {
+            $spot = $em->find('LaPoizWindBundle:Spot', $id);
+            if (!$spot) {
+                return new JsonResponse(array(
+                    'success' => false,
+                    'description' => "No spot find with id:".$id
+                ));
+            }
+
+            // Recupere les dernieres marées depuis aujourd'hui
+            $listMaree=$em->getRepository('LaPoizWindBundle:MareeDate')->getFuturMaree($spot);
+            $tabMaree=array();
+            foreach ($listMaree as $mareeDate) {
+                $keyDate=$mareeDate->getDatePrev()->format('Y-m-d');
+                $listePrevisionMaree=$mareeDate->getListPrevision();
+                $tabMareeDate = array();
+                foreach ($listePrevisionMaree as $previsionMaree) {
+                    $tabMareeDate[] = array("heure" =>$previsionMaree->getTime()->format('H:i:s'),"hauteur" =>$previsionMaree->getHauteur());
+                }
+                $mareeDateElem=array("date"=>$keyDate,"maree"=>$tabMareeDate);
+                $tabPlageRestriction[]=$mareeDateElem;
+            }
+
+
+            return new JsonResponse(array(
+                'success' => true,
+                'description' => "Data find:",
+                'data' => $tabPlageRestriction
+            ));
+
+        } else {
+            return new JsonResponse(array(
+                'success' => false,
+                'description' => "No spot find with id:".$id
+            ));
+        }
+    }
+
+
 } 

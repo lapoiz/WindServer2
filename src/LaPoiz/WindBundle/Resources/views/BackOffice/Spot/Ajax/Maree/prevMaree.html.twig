@@ -15,7 +15,7 @@
 </div>
 
 <a  onclick="saveMareeData()" class="btn btn-primary btn-large">Save</a>
-
+<a  onclick="deleteMareeData()" class="btn btn-danger btn-large">Delete</a>
 
     <script>
         function saveMareeData(){
@@ -24,6 +24,21 @@
             $.ajax({
                 type: "POST",
                 url: "{{ path('_bo_ajax_maree_save', {'id':spot.id})}}",
+                id: id,
+                cache: false,
+                success: function(data){
+                    $('#result').html(data);
+                }
+            });
+            return false;
+        };
+
+        function deleteMareeData(){
+            $('#result').html('<img src="{{ asset('bundles/lapoizwind/images/loading.gif') }}" alt="Loading Ajax data" />');
+            var id = {{ spot.id }};
+            $.ajax({
+                type: "POST",
+                url: "{{ path('_bo_ajax_maree_delete', {'id':spot.id})}}",
                 id: id,
                 cache: false,
                 success: function(data){
