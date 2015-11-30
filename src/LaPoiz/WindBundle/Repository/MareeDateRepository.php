@@ -14,6 +14,7 @@ use LaPoiz\WindBundle\Entity\Spot;
  */
 class MareeDateRepository extends EntityRepository
 {
+    // JAMAIS UTILISE ????????????????
     public function findLast($spot)
     {
         $queryBuilder = $this->createQueryBuilder('mareeDate');
@@ -31,6 +32,7 @@ class MareeDateRepository extends EntityRepository
         }
     }
 
+    // JAMAIS UTILISE ????????????????
     public function findLastPrev($number, $spot)
     {
         $queryBuilder = $this->createQueryBuilder('mareeDate');
@@ -48,8 +50,7 @@ class MareeDateRepository extends EntityRepository
         }
     }
 
-
-    // Return future marrée from today
+    // Return future marée from today
     // previsionMareeDateList
     public function getFuturMaree($spot)
     {

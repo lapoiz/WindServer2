@@ -25,6 +25,25 @@
         </div>
     </div>
 
+    <div class="row">
+        <div class="col-sm-12">
+            <h3>T°C de l'eau</h3>
+            <ul class="nav nav-pills nav-stacked">
+                {% if spot.tempWaterURL is defined %}
+                    {% if spot.tempWaterURL is  null %}
+                        <li class="" id="menuTempWaterCreate"> <a  onclick="addTempWater(this)"><i class="icon-white icon-plus"></i> Ajouter</a></li>
+                    {% else %}
+                        <li class="" id="menuTempWaterEditer"><a onclick="tempWaterEditer(this)"><i class="icon-pencil icon-white"></i> Editer</a></li>
+                        <li class="" id="menuTempWaterGetData"><a onclick="getTempWaterData(this)">Get Data</a></li>
+                    {% endif %}
+                {% else %}
+                    <li class="" id="menuTempWaterCreate"> <a  onclick="addTempWater(this)"><i class="icon-white icon-plus"></i> Ajouter</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+
+
 
     <div class="row">
         <div class="col-sm-12">
@@ -163,9 +182,7 @@
             });
             return false;
         };
-
         {%  endif %}
-
 
         function addMaree(elemLink){
             deselectAllMenu();
@@ -199,10 +216,90 @@
             return false;
         };
 
+
+        {% if spot.tempWaterURL is defined and spot.tempWaterURL is not null %}
+        function tempWaterEditer(elemLink){
+            deselectAllMenu();
+            elemLink.parentNode.className = elemLink.parentNode.className+" active";
+            $('#result').html('<img src="{{ asset('bundles/lapoizwind/images/loading.gif') }}" alt="Loading Ajax data" />');
+            var id = {{ spot.id }};
+            $.ajax({
+                type: "POST",
+                url: "{{ path('_bo_ajax_spot_tempWater_edit', {'id':spot.id})}}",
+                id: id,
+                cache: false,
+                success: function(data){
+                    $('#result').html(data);
+                }
+            });
+            return false;
+        };
+        function tempWaterEffacer(elemLink){
+            deselectAllMenu();
+            elemLink.parentNode.className = elemLink.parentNode.className+" active";
+            $('#result').html('<img src="{{ asset('bundles/lapoizwind/images/loading.gif') }}" alt="Loading Ajax data" />');
+            var id = {{ spot.id }};
+            $.ajax({
+                type: "POST",
+                url: "{{ path('_bo_ajax_spot_tempWater_delete', {'id':spot.id})}}",
+                id: id,
+                cache: false,
+                success: function(data){
+                    $('#result').html(data);
+                }
+            });
+            return false;
+        };
+        function getTempWaterData(elemLink){
+            deselectAllMenu();
+            elemLink.parentNode.className = elemLink.parentNode.className+" active";
+            $('#result').html('<img src="{{ asset('bundles/lapoizwind/images/loading.gif') }}" alt="Loading Ajax data" />');
+            var id = {{ spot.id }};
+            $.ajax({
+                type: "POST",
+                url: "{{ path('_bo_ajax_tempWater_getPrev', {'id':spot.id})}}",
+                id: id,
+                cache: false,
+                success: function(data){
+                    $('#result').html(data);
+                }
+            });
+            return false;
+        };
+        {%  endif %}
+
+        function addTempWater(elemLink){
+            deselectAllMenu();
+            elemLink.parentNode.className = elemLink.parentNode.className+" active";
+            $('#result').html('<img src="{{ asset('bundles/lapoizwind/images/loading.gif') }}" alt="Loading Ajax data" />');
+
+            $.ajax({
+                type: "POST",
+                url: "{{ path('_bo_ajax_tempWater_create', {'id':spot.id})}}",
+                cache: false,
+                success: function(data){
+                    $('#result').html(data);
+                }
+            });
+            return false;
+        };
+
+
         function deselectAllMenu() {
             // liste des menu fixe et connu
             idMenuArray = new Array ("menuEditer", "menuAddSite", "menuMeteoNote");
             // ajouter les menu des webSites
+
+            {% if spot.tempWaterURL is defined %}
+            {% if spot.tempWaterURL is null %}
+                idMenuArray.push("menuTempWaterCreate");
+            {% else %}
+                idMenuArray.push("menuTempWaterEditer");
+                idMenuArray.push("menuTempWaterGetData");
+            {% endif %}
+            {% else %}
+                idMenuArray.push("menuTempWaterCreate");
+            {% endif %}
 
             {% if spot.mareeURL is defined %}
                 {% if spot.mareeURL is null %}

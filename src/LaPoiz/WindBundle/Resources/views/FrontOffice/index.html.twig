@@ -3,18 +3,6 @@
 {% block bodyPage %}
 
     <div class="starter-template">
-        <h1>Le site LaPoiz.com</h1>
-        <p class="lead">
-            Ce site est fait pour les Kitteurs.<br>
-            Le but est de regrouper tous les paramètres pour planifier sa session: force du vent, orientation, marée ...<br>
-            <br>
-            S'il peut être utile pour d'autre activité utilisant le vent: nickel !
-            <br><br>
-            Vous trouverez dans la rubrique <a href="{{ path('_fo_concept') }}">Le concept du site</a> une explication sur le coeur du site.
-            <br>
-            Et dans "Les spots" la liste des spots actuellement enregistrés.
-
-        </p>
 
         <h1>Les spots</h1>
 
@@ -43,37 +31,49 @@
                     {% set classTop = 'elemGreen' %}
                     {% set classBof = 'elemOrange' %}
                     {% set classNule = 'elemRed' %}
+                    {% set classBorderTop = 'borderGreen' %}
+                    {% set classBorderBof = 'borderOrange' %}
+                    {% set classBorderNule = 'borderRed' %}
 
                     {% for notesDate in listNotesDate %}
                         <td>
                         <!-- Wind -->
                             <table class="tableWithoutBorder">
                             {% if notesDate is not null %}
-                                {% for nbHoureNavElem in notesDate.nbHoureNav %}
+                                <tr>
+                                    <td>
+                                        <table class="tableWithoutBorder">
+                                            <tr>
+                                {% if notesDate.nbHoureNav is not null %}
+                                    {% for nbHoureNavElem in notesDate.nbHoureNav %}
+                                        {% if nbHoureNavElem is not null %}
+                                            {% set classNbH = classTop %}
+                                            {% set classBorderColor = classBorderTop %}
+                                            {% if nbHoureNavElem.nbHoure<3 %}
+                                                {% set classNbH = classNule %}
+                                                {% set classBorderColor = classBorderNule %}
+                                            {% elseif nbHoureNavElem.nbHoure<8 %}
+                                                {% set classNbH = classBof %}
+                                                {% set classBorderColor = classBorderBof %}
+                                            {% endif %}
 
-                                        {% set classNbH = classTop %}
-                                        {% if nbHoureNavElem.nbHoure<3 %}
-                                            {% set classNbH = classNule %}
-                                        {% elseif nbHoureNavElem.nbHoure<8 %}
-                                            {% set classNbH = classBof %}
+                                            <td class="{{ classNbH }}">
+                                                <img src="{{ asset('bundles/lapoizwind/images/logos/'~nbHoureNavElem.website.logo|e) }}"
+                                                     alt="{{ nbHoureNavElem.website.nom }}" class="logoWebsite">
+                                                <span class="nbHourNavCircle {{ classBorderColor }}">
+                                                {{ (nbHoureNavElem.nbHoure)|number_format(0, ',', '.') }}h
+                                                </span>
+                                            </td>
                                         {% endif %}
-
-                                    <tr>
-
-                                        <td class="{{ classNbH }}"><img src="{{ asset('bundles/lapoizwind/images/logos/'~nbHoureNavElem.website.logo|e) }}"
-                                            alt="{{ nbHoureNavElem.website.nom }}" class="logoWebsite">
-                                            {{ (nbHoureNavElem.nbHoure)|number_format(0, ',', '.') }} h</td>
-                                    </tr>
-                                {% endfor %}
-
-                                {% if notesDate.nbHoureNav|length < 3 %}
-                                    <tr><td><div class="logoWebsite"></div></td></tr>
+                                    {% endfor %}
                                 {% endif %}
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
 
                                 {% if notesDate.tempMin<35 %}
-
                                 <!--<tr><td style="border-top: 1px solid grey"></td></tr>-->
-
                                     {% set classTemp = classTop %}
                                     {% if notesDate.tempMin<8 %}
                                         {% set classTemp = classNule %}
@@ -83,10 +83,20 @@
 
                                 <tr>
                                     <td class="{{ classTemp }}">
-                                        <i class="icon-temperature" />
+                                        <i class="icon-temperature"></i>
                                         {{ notesDate.tempMin|number_format(0, ',', '.') }}°C -> {{ notesDate.tempMax|number_format(0, ',', '.') }}°C
                                     </td>
                                 </tr>
+                                {% endif %}
+
+                                {% if notesDate.tempWater is not null %}
+                                <tr>
+                                    <td class="{{ classTemp }}">
+                                        <i class="icon-air" ></i>
+                                        {{ notesDate.tempWater|number_format(0, ',', '.') }}°C
+                                    </td>
+                                </tr>
+                                {% endif %}
 
                                 <tr>
                                     <td><img src="{{ asset('bundles/lapoizwind/images/transparent.png') }}"
@@ -102,11 +112,9 @@
                                         />
                                     </td>
                                 </tr>
-                                {% endif %}
+
                             {% endif %}
                             </table>
-
-
                         </td>
                     {% endfor %}
                 {% endif %}
@@ -114,6 +122,21 @@
         {% endfor %}
 
         </table>
+
+    <h1>Le site LaPoiz.com</h1>
+    <p>
+        Ce site est fait pour les Kitteurs.<br>
+        Le but est de regrouper tous les paramètres pour planifier sa session: force du vent, orientation, marée ...<br>
+        <br>
+        S'il peut être utile pour d'autre activité utilisant le vent: nickel !
+        <br><br>
+        Vous trouverez dans la rubrique <a href="{{ path('_fo_concept') }}">Le concept du site</a> une explication sur le coeur du site.
+        <br>
+        Et dans "Les spots" la liste des spots actuellement enregistrés.
+
+    </p>
+
+
     </div>
 
 {% endblock %}

@@ -20,12 +20,14 @@
                     {% for spot in listSpot %}
                         <li class="{% if app.request.attributes.get('_route') starts with '_fo_spot_graph' and
                             spot.id in   app.request.uri|split('/') %} active{% endif %}">
-                            <a href="{{ path('_fo_spot_graph',{'id':spot.id}) }}"><span class="glyphicon glyphicon-stats"></span>{{ spot.nom }}</a>
+                            <a href="{{ path('_fo_spot_graph',{'id':spot.id}) }}">
+                                <i class="icon-chart-bar" ></i>{{ spot.nom }}</a>
                         </li>
                     {% endfor %}
 
                         <li class="divider"></li>
-                        <li><a href="{{ path('_fo_spot_ask_create') }}"><span class="glyphicon glyphicon-plus"></span> Demande pour ajouter un spot</a></li>
+                        <li><a href="{{ path('_fo_spot_ask_create') }}">
+                                <i class="icon-plus"></i> Demande pour ajouter un spot</a></li>
                     </ul>
                 </li>
                 <li class="disabled"> <a href="#">Où naviguer ce we ?</a> </li>

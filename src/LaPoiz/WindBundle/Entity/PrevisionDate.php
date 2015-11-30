@@ -33,7 +33,7 @@ class PrevisionDate
      * @Assert\NotBlank()
      */    
     private $dataWindPrev;
-    
+
     /**
      * @ORM\OneToMany(targetEntity="Prevision", mappedBy="previsionDate", cascade={"persist", "remove"}, orphanRemoval=true)
      */

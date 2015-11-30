@@ -1,0 +1,52 @@
+
+{% if  prevTempWater is defined and prevTempWater!= null %}
+<h3>Prévision de <a href="{{ tempWaterURL }}" target="_blank">{{ tempWaterURL }}</a> </h3>
+<div class="row">
+    <table class="table table-striped table-hover table-bordered">
+        {% for key, temp in prevTempWater %}
+            <tr>
+                <td>{{ "now"|date("d/m/Y") }} + {{ key }} jours</td>
+
+                    <td>{{ temp }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+</div>
+
+<a  onclick="saveTempWaterData()" class="btn btn-primary btn-large">Save</a>
+<a  onclick="deleteTempWaterData()" class="btn btn-danger btn-large">Delete</a>
+
+    <script>
+        function saveTempWaterData(){
+            $('#result').html('<img src="{{ asset('bundles/lapoizwind/images/loading.gif') }}" alt="Loading Ajax data" />');
+            var id = {{ spot.id }};
+            $.ajax({
+                type: "POST",
+                url: "{{ path('_bo_ajax_spot_tempWater_save', {'id':spot.id})}}",
+                id: id,
+                cache: false,
+                success: function(data){
+                    $('#result').html(data);
+                }
+            });
+            return false;
+        };
+
+        function deleteTempWaterData(){
+            $('#result').html('<img src="{{ asset('bundles/lapoizwind/images/loading.gif') }}" alt="Loading Ajax data" />');
+            var id = {{ spot.id }};
+            $.ajax({
+                type: "POST",
+                url: "{{ path('_bo_ajax_spot_tempWater_delete', {'id':spot.id})}}",
+                id: id,
+                cache: false,
+                success: function(data){
+                    $('#result').html(data);
+                }
+            });
+            return false;
+        };
+    </script>
+
+
+{% endif %}

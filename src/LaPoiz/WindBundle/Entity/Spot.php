@@ -70,6 +70,11 @@ class Spot
     private $windOrientation;
 
     /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $tempWaterURL;
+
+    /**
      * @ORM\OneToMany(targetEntity="NotesDate", mappedBy="spot", cascade={"remove", "persist"} , orphanRemoval=true)
      */
     private $notesDate;
@@ -732,4 +737,29 @@ class Spot
     {
         return $this->isValide;
     }
+
+    /**
+     * Set tempWaterURL
+     *
+     * @param string $tempWaterURL
+     *
+     * @return Spot
+     */
+    public function setTempWaterURL($tempWaterURL)
+    {
+        $this->tempWaterURL = $tempWaterURL;
+
+        return $this;
+    }
+
+    /**
+     * Get tempWaterURL
+     *
+     * @return string
+     */
+    public function getTempWaterURL()
+    {
+        return $this->tempWaterURL;
+    }
+
 }

@@ -4,7 +4,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="LaPoiz\WindBundle\Repository\NotesDateRepository")
  * @ORM\Table(name="windServer_NotesDate")
  */
 class NotesDate
@@ -27,7 +27,6 @@ class NotesDate
      */
     private $nbHoureNav;
 
-
     /**
      * @ORM\Column(type="decimal", scale=2, nullable=true)
      */
@@ -37,6 +36,11 @@ class NotesDate
      * @ORM\Column(type="decimal", scale=2, nullable=true)
      */
     private $tempMin;
+
+    /**
+     * @ORM\Column(type="decimal", scale=2, nullable=true)
+     */
+    private $tempWater;
 
     /**
      * @ORM\Column(type="string",length=10, nullable=true)
@@ -275,5 +279,29 @@ class NotesDate
     public function getMeteoWorst()
     {
         return $this->meteoWorst;
+    }
+
+    /**
+     * Set tempWater
+     *
+     * @param string $tempWater
+     *
+     * @return NotesDate
+     */
+    public function setTempWater($tempWater)
+    {
+        $this->tempWater = $tempWater;
+
+        return $this;
+    }
+
+    /**
+     * Get tempWater
+     *
+     * @return string
+     */
+    public function getTempWater()
+    {
+        return $this->tempWater;
     }
 }

@@ -8,6 +8,7 @@ use LaPoiz\WindBundle\core\note\NbHoureWind;
 use LaPoiz\WindBundle\core\note\ManageNote;
 
 
+use LaPoiz\WindBundle\core\tempWater\TempWaterGetData;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -71,12 +72,21 @@ class CreateNbHoureCommand extends ContainerAwareCommand  {
                 $em->persist($noteDates);
             }
 
-            $em->flush();
 
             //********** Température de l'eau **********
-            // rien n'existe actuellement
-            // récupére la temperature de l'eau dans la journée (elle ne varie quasi pas
-            // calcul de la note en fonction de la T°C
+            $tabTempWater=TempWaterGetData::getTempWaterFromSpot($spot, $output);
+
+            if ($tabTempWater != null) {
+                $currentDay = new \DateTime("now");
+                foreach ($tabTempWater as $numJourFromToday => $tempWater) {
+                    $noteDates = ManageNote::getNotesDate($spot, clone $currentDay, $em);
+                    $noteDates->setTempWater($tempWater);
+                    $em->persist($noteDates);
+                    $currentDay = date_add($currentDay, new \DateInterval('P1D')); // Jour suivant
+                }
+            }
+
+            $em->flush();
 
     		$output->writeln('<info>******************************</info>');
     	}

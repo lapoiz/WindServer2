@@ -200,6 +200,25 @@ _bo_ajax_spot_edit:
   defaults: { _controller: LaPoizWindBundle:BOAjaxSpot:spotEdit }
   pattern: /admin/BO/ajax/spot/edit/{id}
 
+_bo_ajax_spot_tempWater_edit:
+  defaults: { _controller: LaPoizWindBundle:BOAjaxTempWater:spotTempWaterEdit }
+  pattern: /admin/BO/ajax/spot/{id}/tempwater/edit
+
+_bo_ajax_spot_tempWater_delete:
+  defaults: { _controller: LaPoizWindBundle:BOAjaxTempWater:spotTempWaterDelete }
+  pattern: /admin/BO/ajax/spot/{id}/tempwater/delete
+
+_bo_ajax_tempWater_getPrev:
+  defaults: { _controller: LaPoizWindBundle:BOAjaxTempWater:getTempWaterPrev }
+  pattern: /admin/BO/ajax/spot/tempwater/get/{id}
+
+_bo_ajax_tempWater_create:
+  defaults: { _controller: LaPoizWindBundle:BOAjaxTempWater:tempWaterCreate }
+  pattern: /admin/BO/ajax/spot/{id}/tempWater/create
+
+_bo_ajax_spot_tempWater_save:
+  defaults: { _controller: LaPoizWindBundle:BOAjaxTempWater:tempWaterSave }
+  pattern: /admin/BO/ajax/spot/tempWater/save/{id}
 
 
 _bo_ajax_spot_add_site:

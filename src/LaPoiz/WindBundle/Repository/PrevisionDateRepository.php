@@ -12,6 +12,7 @@ use Doctrine\ORM\EntityRepository;
  */
 class PrevisionDateRepository extends EntityRepository
 {
+	// JAMAIS UTILISE
 	// date on Y-m-d format
 	// return previsionDate from id of DataWindPrev and a date
 	public  function getFromOneWebSiteForOneDay($dataWindPrevId,$date) {	
@@ -33,7 +34,8 @@ class PrevisionDateRepository extends EntityRepository
 		}
 		return $query->getResult();
 	}
-	
+
+	// JAMAIS UTILISE
 	// date on Y-m-d format
 	public  function getFromOneWebSiteFromAnalyseDateOneDay($dataWindPrevId,$date) {
 		$queryBuilder = $this->createQueryBuilder('previsionDate');
@@ -55,7 +57,8 @@ class PrevisionDateRepository extends EntityRepository
 		}
 		return $queryBuilder->getResult();
 	}
-	
+
+	// JAMAIS UTILISE
 	// date on Y-m-d format
 	public function getFromOneWebSiteForOneMonth($dataWindPrevId,$date) {
 		$queryBuilder = $this->createQueryBuilder('previsionDate');

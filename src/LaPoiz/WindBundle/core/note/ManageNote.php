@@ -39,6 +39,11 @@ class ManageNote {
      * @return renvoie la notesDate de spot à $datePrev, ou une nouvelle instance si elle n'existe pas
      */
     static function getNotesDate($spot, $datePrev, $em) {
+
+        // On pourrait utiliser:
+        // $entityManager->getRepository('LaPoizWindBundle:NotesDate')->getNotesDateForDatePrev($spot,$currentDay);
+        // Dans le cas où l'on n'efface pas les anciennes notesDate ...
+
         $datePrev->setTime(0, 0, 0);
 
         $noteDatesFind = null;
