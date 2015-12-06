@@ -56,9 +56,7 @@ class NotesDate
      * @ORM\ManyToOne(targetEntity="Spot", inversedBy="notesDate", cascade={"persist"})
      * @ORM\JoinColumn(name="spot_id", referencedColumnName="id")
      */
-    private $spot;   
-
-
+    private $spot;
 
 
     /**
@@ -304,4 +302,5 @@ class NotesDate
     {
         return $this->tempWater;
     }
+
 }

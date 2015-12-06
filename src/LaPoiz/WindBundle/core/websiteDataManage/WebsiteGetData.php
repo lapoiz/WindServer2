@@ -1,8 +1,10 @@
 <?php
 namespace LaPoiz\WindBundle\core\websiteDataManage;
 
+use Goutte\Client;
 use LaPoiz\WindBundle\Entity\PrevisionDate;
 use LaPoiz\WindBundle\Entity\Prevision;
+use Symfony\Component\DomCrawler\Crawler;
 
 
 class WebsiteGetData
@@ -42,8 +44,13 @@ class WebsiteGetData
 		}
 		return $result;
 	}
-	
-	 function getDataURL($url) { return " mistake, is not good object";} 
+
+    function getDataURL($url)	{
+        $client = new Client();
+        $crawler = $client->request('GET', $url);
+        return $crawler;
+    }
+
 	 function analyseData($tabData,$url) {return " mistake, is not good object";} 
 	 function transformData($tableauData) {return " mistake, is not good object";}
 	
@@ -227,6 +234,15 @@ class WebsiteGetData
 		return $result;
 	}
 
+
+    function getNodeValue(Crawler $crawler, $filter) {
+        if (!empty($crawler->filter($filter)->getNode(0))) {
+            return trim($crawler->filter($filter)->getNode(0)->nodeValue);
+        } else {
+            return null;
+        }
+    }
+
 	/**
 	 * @param $resulGetData: resultat de la fonction getDataURL
 	 * @return ce qu'on affiche
@@ -234,6 +250,19 @@ class WebsiteGetData
 	static function displayGetData($resultGetDataURL) {
 		return $resultGetDataURL; // par defaut retourn un element lisible
 	}
+
+
+	/**
+     * $windCalculate -> max | min | cumul | nbPrev
+     */
+    static function calculateWind($windCalculate, $prevision) {
+        $wind=$prevision->getWind();
+        $windCalculate["max"]=($wind>$windCalculate["max"]?$wind:$windCalculate["max"]);
+        $windCalculate["min"]=($wind<$windCalculate["min"]?$wind:$windCalculate["min"]);
+        $windCalculate["cumul"]+=$wind;
+        $windCalculate["nbPrev"]++;
+    }
+
 
 	static function transformeOrientation($orientation) {
 		$result='';

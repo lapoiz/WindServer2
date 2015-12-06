@@ -1,4 +1,4 @@
-{% macro view(listSpot) %}
+{% macro view(listSpot, listRegion) %}
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -23,6 +23,19 @@
                         {% endif %}
                         <li class="divider"></li>
                         <li><a href="{{ path('_bo_spot_create') }}"><span class="glyphicon glyphicon-plus"></span> Créer un spot</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown {% if app.request.attributes.get('_route') starts with '_bo_region' %} active{% endif %}">
+                    <a data-toggle="dropdown" href="#">Gestion des regions<b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        {% if listRegion is not null %}
+                            {% for region in listRegion %}
+                                <li class="{% if app.request.attributes.get('_route') starts with '_bo_region' and
+                                region.id in app.request.uri|split('/') %} active{% endif %}"><a href="{{ path('_bo_region',{'id':region.id}) }}">{{ region.nom }}</a></li>
+                            {% endfor %}
+                        {% endif %}
+                        <li class="divider"></li>
+                        <li><a href="{{ path('_bo_region_create') }}"><span class="glyphicon glyphicon-plus"></span> Créer une region</a></li>
                     </ul>
                 </li>
                 <li class="dropdown {% if app.request.attributes.get('_route') starts with '_bo_test' %} active{% endif %}">

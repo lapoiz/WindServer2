@@ -1,0 +1,149 @@
+{% extends 'LaPoizWindBundle:BackOffice:base.html.twig' %}
+
+{% block scripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('bundles/lapoizwind/js/tinymce/tinymce.min.js') }}"></script>
+    {{ form_javascript(form) }}
+{% endblock %}
+
+{% block bodyPage %}
+
+    <div class="starter-template">
+        <div class="row">
+            <div class="col-sm-6">
+                {{ form_start(form, {
+                    'style': 'horizontal',
+                    'label_col': 2,
+                    'widget_col': 8,
+                })}}
+
+                {{ form_errors(form, { 'global_errors': true }) }}
+
+                {{ form_end(form) }}
+
+                <a class="btn btn-danger" href="{{ path('_bo_region_delete',{'id':region.id}) }}">Effacer</a>
+            </div>
+
+            <div class="col-sm-6">
+                    <h2>Spots dans la région</h2>
+
+                    {% if region.spots is not null %}
+                        <ul id="spotsInRegion" class="listeSansPuce">
+                            {% for spot in region.spots %}
+                                <li id="spot_{{ spot.id }}"><button class="btn btn-danger" onclick="removeSpot({{ spot.id }})"><span class="glyphicon glyphicon-moins"></span>{{ spot.nom }}</button></li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+            </div>
+
+        </div>
+
+
+        <div class="row">
+
+
+            <div class="col-sm-4">
+                <h2>liste des régions</h2>
+
+                {% if listRegion is not null %}
+                    <ul class="listeSansPuce">
+                        {% for region in listRegion %}
+                            <li>{{ region.numDisplay }} - {{ region.nom }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+
+            <div class="col-sm-6">
+                <h2>Spots à ajouter à la région</h2>
+
+            {% if listSpotWitoutRegion is not null %}
+                <ul id="spotsWithoutRegion" class="listeSansPuce">
+                {% for spot in listSpotWitoutRegion %}
+                    <li id="spot_{{ spot.id }}"><button class="btn btn-primary" onclick="addSpot({{ spot.id }})"><span class="glyphicon glyphicon-plus"></span>{{ spot.nom }}</button></li>
+                {% endfor %}
+                </ul>
+
+            {% endif %}
+            </div>
+
+
+        </div>
+
+    </div>
+
+    <script>
+
+        spotsName = {
+        {% if region.spots is not null %}
+            {% for spot in region.spots %}
+                {{ spot.id }} : "{{ spot.nom }}",
+            {% endfor %}
+        {% endif %}
+        {% if listSpotWitoutRegion is not null %}
+            {% for spot in listSpotWitoutRegion %}
+                {{ spot.id }} : "{{ spot.nom }}",
+            {% endfor %}
+        {% endif %}
+        };
+
+        function addSpot(idSpot) {
+            var urlAjax = "{{ path('_bo_ajax_region_add_spot',{'id':region.id, 'idSpot':'__idSpot__'}) }}";
+            urlAjax=urlAjax.replace('__idSpot__',idSpot);
+
+            $.ajax({
+                url: urlAjax,
+                type: "POST",
+                success: function(html) {
+                    addSpotInRegion(idSpot);
+                },
+                error : function(resultat, statut, erreur){
+                    alert("Operation échouée: "+erreur);
+                }
+            });
+        };
+
+        function removeSpot(idSpot) {
+            var urlAjax = "{{ path('_bo_ajax_region_remove_spot',{'id':region.id, 'idSpot':'__idSpot__'}) }}";
+            urlAjax=urlAjax.replace('__idSpot__',idSpot);
+
+            $.ajax({
+                url: urlAjax,
+                type: "POST",
+                success: function(html) {
+                    addSpotWithoutRegion(idSpot);
+                },
+                error : function(resultat, statut, erreur){
+                    alert("Operation échouée: "+erreur);
+                }
+            });
+        };
+        function addSpotInRegion(idSpot) {
+            $('#spot_'+idSpot).remove();
+
+            var spotNom=spotsName[idSpot];
+
+            var htmlAdd='<li id="spot_'+idSpot+'"><button class="btn btn-danger" onclick="removeSpot('+idSpot+
+                ')"><span class="glyphicon glyphicon-moins"></span>'+spotNom+
+                '</button></li>';
+            $('#spotsInRegion').append(htmlAdd);
+            return false;
+        }
+
+
+        function addSpotWithoutRegion(idSpot) {
+
+            $('#spot_'+idSpot).remove();
+            var spotNom=spotsName[idSpot];
+            var htmlAdd='<li id="spot_'+idSpot+'"><button class="btn btn-primary" onclick="addSpot('+idSpot+
+                    ')"><span class="glyphicon glyphicon-plus"></span>'+spotNom+
+                    '</button></li>';
+            $('#spotsWithoutRegion').append(htmlAdd);
+            return false;
+        }
+
+    </script>
+
+
+
+{% endblock %}

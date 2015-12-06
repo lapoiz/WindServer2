@@ -30,7 +30,9 @@
                                 <i class="icon-plus"></i> Demande pour ajouter un spot</a></li>
                     </ul>
                 </li>
+
                 <li class="disabled"> <a href="#">Où naviguer ce we ?</a> </li>
+
                 <li class=" {% if app.request.attributes.get('_route') starts with '_fo_concept' %}active{% endif %}"> <a href="{{ path('_fo_concept') }}">Le concept du site</a> </li>
                 <li class="disabled"> <a href="#">Les paramètres</a> </li>
             </ul>

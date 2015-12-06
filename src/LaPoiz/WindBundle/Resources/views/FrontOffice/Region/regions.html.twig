@@ -1,0 +1,94 @@
+{% macro view(listRegion,listSpotsWithoutRegion) %}
+
+    <div class="starter-template">
+
+
+        <div class="row">
+            <div class="panel-group col-lg-12">
+                <h3>Les spots par région</h3>
+
+                {% if listRegion is defined %}
+                    {% for region in listRegion %}
+                        <div class="panel panel-default">
+                            <div class="panel-heading"  id="regionId_{{ region.id }}">
+                                <h3 class="panel-title">
+                                    {{ region.nom }}
+                                </h3>
+                            </div>
+                            <div class="panel-body hide" id="spots_regionid_{{ region.id }}">
+                                <img src="{{ asset('bundles/lapoizwind/images/loading.gif') }}" alt="Loading Ajax data" />
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                {% if (listSpotsWithoutRegion is defined) and (listSpotsWithoutRegion | length > 0) %}
+                    <div class="panel panel-default">
+                        <div class="panel-heading"  id="regionId_0">
+                            <h3 class="panel-title">
+                                Autres
+                            </h3>
+                        </div>
+                        <div class="panel-body hide" id="spots_regionid_0">
+                            <img src="{{ asset('bundles/lapoizwind/images/loading.gif') }}" alt="Loading Ajax data" />
+                        </div>
+                    </div>
+                {% endif %}
+
+            </div>
+        </div>
+
+    </div>
+
+
+    <script type="text/javascript">
+        var regionLoadTab = new Array();//regions qui ont étées déjà chargées
+
+        $('.panel-heading').click(function(event){
+            var id=$(this).attr('id');
+            if(id!==null && id.startsWith('regionId_')) {
+                var idRegion=id.split('regionId_')[1];
+                $('#spots_regionid_'+idRegion).toggleClass("hide");
+
+                if (typeof regionLoadTab[idRegion] === "undefined") {
+                    loadRegion(idRegion,$(this).next());
+                }
+            }
+        });
+
+        /**
+         * @param idRegion id de la region utilisé pour récuperer les spots et autres infos, en ajax
+         * @param div dans lequel on va afficher le tableau
+         */
+        function loadRegion(idRegion,divPanelBody) {
+            var urlAjax="{{ path('_fo_ajax_region_liste_spots_infoNav', {'id':'__idRegion__'})}}";
+            urlAjax=urlAjax.replace('__idRegion__',idRegion);
+            $.ajax({
+                type: "GET",
+                url: urlAjax,
+                success: function(html){
+                    divPanelBody.html(html);
+                    regionLoadTab[idRegion]=true;
+                },
+                error : function(data) {
+                    div.append('Erreur dans la récupération des données...');
+                    div.append('<button class="btn btn-primary" onclick="loadAgainRegion('+idRegion+')">Try again</button>');
+                }
+
+            });
+        }
+
+
+        /**
+         * Lorsque l'ajax a été defectueux et que l'utilisateur clique sur le bouton "try again"
+         * @param idRegion
+         */
+        function loadAgainRegion(idRegion) {
+            loadRegion(idRegion,$('#spots_regionid_'+idRegion).next());
+        }
+
+
+    </script>
+
+
+{% endmacro %}

@@ -49,4 +49,21 @@ class SpotRepository extends EntityRepository
             return null;
         }
     }
+
+
+    public function findAllWithoutRegion() {
+        $query = $this->getEntityManager()
+            ->createQuery(
+                'SELECT spot FROM LaPoizWindBundle:Spot spot
+            WHERE spot.region IS NULL '
+            );
+
+        try {
+            return $query->getResult();
+        } catch (\Doctrine\ORM\NoResultException $e) {
+            return null;
+        }
+    }
+
+
 }

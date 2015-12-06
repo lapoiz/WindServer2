@@ -11,12 +11,6 @@ class MeteoFranceGetData extends WebsiteGetData
 	const nbJoursPrev=7; // Au dela de 4 jours, pas de prévision de vent...
 	const idNameDivDay="detail-day-0";
 
-	function getDataURL($url)	{
-		$client = new Client();
-		$crawler = $client->request('GET', $url);
-		return $crawler;
-	}
-
 	/**
 	 * @param $pageHTML: crawler de Goutte
 	 * @param $url: URL de la page

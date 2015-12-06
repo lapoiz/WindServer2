@@ -3,95 +3,130 @@ namespace LaPoiz\WindBundle\core\websiteDataManage;
 
 use LaPoiz\WindBundle\Entity\PrevisionDate;
 use LaPoiz\WindBundle\Entity\Prevision;
+use Symfony\Component\DomCrawler\Crawler;
 
 class WindFinderGetData extends WebsiteGetData
 {
-	const idHTML = 'tabs';
-	const divClass= 'tab-content';
-	const nbLine = 4;
-	const dataClassName = 'weathertable';
-	const dataClassName2 = 'weathertable last-weathertable';
+	const idLastUpdate = '#last-update';            // <span id="last-update">17:38</span>
+    const goodSectionClass = '.tabcontent';         // <section class="tabcontent">
+    const dataDayDivClass = '.forecast-day';        // <div class="weathertable forecast-day forecast forecast-day-8">
+    const dataDateDivClass = '.weathertable__header';// <div class="weathertable__header">Sunday, Dec 06</div>
+    const dataHoureDivClass = '.weathertable__row'; // <div class="weathertable__row row-stripe">
+    const dataHoureClass = '.data-time';            // <div class="data-time weathertable__cell">
+    const dataWindOrientationClass = '.units-wd-dir';// <span class="data-direction-unit units-wd units-wd-dir data--minor weathertable__cell" style="display: none;">
+    const dataWindClass = '.units-ws';              // <span class="units-ws">14</span>
+    const dataPrecipitationClass = '.data-rain';    //<div class="data-rain data--minor weathertable__cell">
+    const dataTempClass = '.units-at';              // <span class="units-at">11</span>
+    const dataWaveClass = '.units-wh';              // <span class="units-wh">1.2</span>
 
+	/**
+	 * @param $pageHTML: crawler de Goutte
+	 * @param $url: URL de la page
+	 * @return array|null
+	 */
+	function analyseData($pageHTML,$url)	{
 
-	static private function getWichColumTab($htmlTabData) {
-		
-		$result1 = array(
-			"nbLineTabPerLineWeb"=>22,
-			"time"=>1,
-			"wind"=>5,
-			"maxWind"=>7,
-			"temp"=>21,
-			"orientation"=>3,
-            "precipitation"=>17
-		);
-		$result2 = array(
-			"nbLineTabPerLineWeb"=>16,
-			"time"=>1,
-			"wind"=>5,
-			"maxWind"=>7,
-			"temp"=>15,
-			"orientation"=>3,
-            "precipitation"=>11
-		);
-		$nbCol=count($htmlTabData);
-		if ((($nbCol)/$result1["nbLineTabPerLineWeb"])>=4)
-			return $result1;
-		else
-			return $result2; 
-	}
-
-	function getDataURL($url)
-	{
-		$tableauData = array();
-		$file = fopen($url,"r");
-		
-		while (!feof($file)) 
-		{
-		// line per line
-			$line = fgets($file); // read a line
-			$result[]=$line;
-		}
-		fclose($file);
-		return $result;
-	}
-	
-	function analyseData($pageHTML,$url) {
-		
-		$dom = new \DOMDocument();
-		@$dom->loadHTMLFile($url);
-		//$dom->save('windfinderPageExemple.html');
-		
-		$tableauData = array();	
-		if (empty($dom)) {
+		$previsionTab = array();
+		if (empty($pageHTML)) {
 			return null;
-		} else	{
-			//$div = $dom->getElementById(WindFinderGetData::idHTML);
-			$div=WindFinderGetData::getGoodDiv($dom);	
-			if (empty($div)){
-				echo '<br />div not find is id :'.WindFinderGetData::idHTML.' correct ?<br /><';
-			} else {
-				$tables = $div->getElementsByTagName('table'); // get all tables of the div
-				foreach ($tables as $table){
-					// for each table of the div
-					if (($table->getAttribute('class')==WindFinderGetData::dataClassName || $table->getAttribute('class')==WindFinderGetData::dataClassName2)
-                        && $table->getAttribute('summary')<>"advertising") {
-						$rows = $table->getElementsByTagName('tr');
-						foreach ($rows as $row){
-							// for each col of the table
-							$line = WindFinderGetData::getElemeLine('th',$row);//get each cell in array
-							if (!empty($line))
-								$tableauData[] = $line;
-							$line = WindFinderGetData::getElemeLine('td',$row);//get each cell in array
-							if (!empty($line))
-								$tableauData[] = $line;
-						}
-					}
-				}
-			}
+		} else {
+            $section=$pageHTML->filter(WindFinderGetData::goodSectionClass);
+            if (empty($section)){
+                echo '<br />Element not find is section id="'.WindFinderGetData::goodSectionId.'" ... Windfinder change the page ?<br />';
+            } else {
+                // Dans la section -> on récupére tous les div de data
+                foreach ($section->filter(WindFinderGetData::dataDayDivClass) as $divDayDomElem)  {
+                    $divDayData = new Crawler($divDayDomElem);
+                    $date=$divDayData->filter(WindFinderGetData::dataDateDivClass)->getNode(0)->nodeValue;
+                    $previsionDateTab = array();
+                    foreach ($divDayData->filter(WindFinderGetData::dataHoureDivClass) as $divHoureDomElem)  {
+                        $divHoureData=new Crawler($divHoureDomElem);
+                        $previsionHoureTab = array();
+                        $previsionHoureTab['houre']=$this->getNodeValue($divHoureData,WindFinderGetData::dataHoureClass);
+                        $previsionHoureTab['orientation']=$this->getNodeValue($divHoureData,WindFinderGetData::dataWindOrientationClass);
+                        $previsionHoureTab['wind']=$this->getNodeValue($divHoureData,WindFinderGetData::dataWindClass);
+                        $previsionHoureTab['windMax']=$this->getNodeValue($divHoureData,WindFinderGetData::dataWindClass);
+                        $previsionHoureTab['precipitation']=$this->getNodeValue($divHoureData,WindFinderGetData::dataPrecipitationClass);
+                        $previsionHoureTab['temp']=$this->getNodeValue($divHoureData,WindFinderGetData::dataTempClass);
+                        $previsionHoureTab['wave']=$this->getNodeValue($divHoureData,WindFinderGetData::dataWaveClass);
+                        $previsionDateTab[]=$previsionHoureTab;
+                    }
+                    $previsionTab[$date]=$previsionDateTab;
+                }
+            }
+            return $previsionTab;
 		}
-		return $tableauData;
 	}
-	
+
+
+    function transformData($tableauData) {
+        $cleanTabData = array();
+
+        $day = new \DateTime('NOW');
+        foreach ($tableauData as $date => $lineDayData) {
+            // 1 line = 1 date
+
+            $cleanElemDay = array();
+
+            foreach ($lineDayData as $key => $lineHoure) {
+                // 1 lineHoure = 1 hour
+
+                $cleanElemHoure = array();
+
+                $cleanElemHoure['heure'] = WindFinderGetData::getHoureClean($lineHoure["houre"]);
+                $cleanElemHoure['wind'] = $lineHoure['wind'];
+                $cleanElemHoure['maxWind'] = $lineHoure['windMax'];
+                $cleanElemHoure['temp'] = $lineHoure['temp'];
+                $cleanElemHoure['orientation'] = WindFinderGetData::getOrientationClean($lineHoure['orientation']);
+
+                $cleanElemDay[] = $cleanElemHoure;
+            }
+            $datePrev = WindFinderGetData::getDateClean($date);
+            $cleanTabData[$datePrev]=$cleanElemDay;
+
+        }
+
+        return $cleanTabData;
+    }
+
+    // $htmlData: Sunday, Dec 06
+    // return: 2015-12-06
+    static private function getDateClean($htmlData) {
+        //$this->get('logger')->err('htmlDate:'+$htmlData);
+        $htmlData = trim($htmlData);
+        preg_match('#([0-9]{2})$#',$htmlData,$data);
+
+        if ($data[1]>=date('d'))
+            return date("Y-m-").$data[1];
+        elseif (date('m')<=11)
+            return date("Y-").(date('m')+1).'-'.$data[1];
+        else
+            return (date("Y")+1).'-01-'.$data[1];
+    }
+    // 08h
+    static private function getHoureClean($htmlData) {
+        preg_match('#([0-9]{2})h#',$htmlData,$data);
+        return $data[1];
+    }
+    // $htmlData: SSW
+    // return: ssw
+    static private function getOrientationClean($htmlData) {
+        return strtolower($htmlData);
+    }
+
+    static function typeDisplay($step) {
+        $result="text";
+        switch ($step) {
+            case 10: $result="text";break; // display error texte
+            case 0: $result="text";break;
+            case 1: $result="code";break;
+            case 2: $result="arrayOfArrayOfArray";break;
+            case 3: $result="arrayOfArrayOfArray";break;
+            case 4: $result="prevDate";break;
+        }
+        return $result;
+    }
+/*
 	function transformData($htmlTabData) {
 		$cleanTabData = array();
 		$whichColumn = WindFinderGetData::getWichColumTab($htmlTabData);
@@ -125,32 +160,7 @@ class WindFinderGetData extends WebsiteGetData
 		return $cleanTabData;
 	}
 	
-	// New
-	
-	// find the div where table of data is
-	static private function getGoodDiv($dom) {
-		$divs = $dom->getElementsByTagName('div');
-		$divFind=null;
-		foreach ($divs as $div) {
-			if ($div -> getAttribute('class')==WindFinderGetData::divClass) {
-				$divFind=$div;
-			}
-		}
-		return $divFind;
-	}
-	
-	static private function getElemeLine($tag,$row)
-	{
-		$rowTab = array();
-		$cols = $row->getElementsByTagName($tag);
-		foreach ($cols as $cell) {
-			$value = $cell->nodeValue;
-			$value=preg_replace('/\s\s+/', '', $value);
-			$rowTab[] = $cell->nodeValue;
-	
-		}
-		return $rowTab;
-	}
+
 	
 	static private function getWindFinderHtmlData($htmlTabData,$whichColumn,$numLine,$numCol,$today,$datePrev,$timePrev) {
 		$nbLineTabPerLineWeb=$whichColumn["nbLineTabPerLineWeb"];
@@ -171,19 +181,7 @@ class WindFinderGetData extends WebsiteGetData
 	static private function getTodayFromHTML($htmlData) {
 		return date("Y-m-d");
 	}
-	// Tuesday,� Aug� 17	
-	static private function getDatePrevFromHTML($htmlData) {
-		//$this->get('logger')->err('htmlDate:'+$htmlData);
-        $htmlData = trim($htmlData);
-		preg_match('#([0-9]{2})$#',$htmlData,$data);
 
-		if ($data[1]>=date('d'))
-			return date("Y-m-").$data[1];
-		elseif (date('m')<=11)
-			return date("Y-").(date('m')+1).'-'.$data[1];
-		else
-			return (date("Y")+1).'-01-'.$data[1];
-	}
 
 	
 	// 08h
@@ -267,7 +265,7 @@ class WindFinderGetData extends WebsiteGetData
 	/**
 	 * transforme date like '15' in saved date : '05/12/2011'
 	 * @param string $date
-	 */
+	 *
 	static private function getCompleteDate($date) {
 		$today= new \DateTime("now");
 		if ($today->format('d') > $date) {
@@ -277,24 +275,14 @@ class WindFinderGetData extends WebsiteGetData
 		$result=$today->format('Y-m-').$date;
 		return $result;
 	}
-	
-	/**
-	 * $windCalculate -> max | min | cumul | nbPrev
-	 */
-	static function calculateWind($windCalculate, $prevision) {
-		$wind=$prevision->getWind();
-		$windCalculate["max"]=($wind>$windCalculate["max"]?$wind:$windCalculate["max"]);
-		$windCalculate["min"]=($wind<$windCalculate["min"]?$wind:$windCalculate["min"]);
-		$windCalculate["cumul"]+=$wind;
-		$windCalculate["nbPrev"]++;
-	}
+
 	
 	/*
 	 * 3627|3|1281931200|169|'France - Saint-Aubin-sur-Mer'|'16.08. 2010 06'|1|0|2|23|46|49.8768|0.8025
-	 */
+	 *
 	private function getDateFromHTML($htmlLine) {
 		preg_match('#([0-9]{2}).([0-9]{2}).\s([0-9]{4})\s#',$htmlLine[5],$data);
 		return $data[3].'-'.$data[2].'-'.$data[1];
 	}
-	
+*/
 }

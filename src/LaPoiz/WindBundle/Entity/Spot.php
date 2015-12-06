@@ -130,6 +130,14 @@ class Spot
      */
     private $hauteurMHPetiteMaree;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Region", inversedBy="spots")
+     * @ORM\JoinColumn(name="region_id", referencedColumnName="id", nullable=true)
+     */
+    private $region;
+
+
+
 
     /**
      * Constructor
@@ -762,4 +770,28 @@ class Spot
         return $this->tempWaterURL;
     }
 
+
+    /**
+     * Set region
+     *
+     * @param \LaPoiz\WindBundle\Entity\Region $region
+     *
+     * @return Spot
+     */
+    public function setRegion(\LaPoiz\WindBundle\Entity\Region $region = null)
+    {
+        $this->region = $region;
+
+        return $this;
+    }
+
+    /**
+     * Get region
+     *
+     * @return \LaPoiz\WindBundle\Entity\Region
+     */
+    public function getRegion()
+    {
+        return $this->region;
+    }
 }

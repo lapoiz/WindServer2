@@ -68,6 +68,10 @@ _fo_ajax_spot_list_website:
   defaults: { _controller: LaPoizWindBundle:FOJson:listWebsite }
   pattern: /json/listeWebsite/spot/{id}
 
+_fo_ajax_region_liste_spots_infoNav:
+  defaults: { _controller: LaPoizWindBundle:FOAjaxRegion:listSpotsInfoNav }
+  pattern: /fo/ajax/region/spots/infoNav/{id}
+
 _fo_json_spot_data:
   defaults: { _controller: LaPoizWindBundle:FOJson:get }
   pattern: /fo/json/spot/data/{id}
@@ -99,6 +103,17 @@ _bo_spot_create:
   defaults: { _controller: LaPoizWindBundle:BO:createSpot }
   pattern: /admin/spot/create
 
+_bo_region:
+  defaults: { _controller: LaPoizWindBundle:BO:editRegion }
+  pattern: /admin/region/edit/{id}
+
+_bo_region_create:
+  defaults: { _controller: LaPoizWindBundle:BO:createRegion }
+  pattern: /admin/region/create
+
+_bo_region_delete:
+  defaults: { _controller: LaPoizWindBundle:BO:deleteRegion }
+  pattern: /admin/region/delete/{id}
 
 
 _bo_dataWindPrev:
@@ -141,6 +156,18 @@ _bo_ajax_maree_spot_tabData_nbHoure_nav:
 _bo_ajax_maree_spot_save_nbHoure_nav:
   defaults: { _controller: LaPoizWindBundle:BOAjaxSpot:saveNbHoureNav }
   pattern: /admin/BO/ajax/spot/save/nbHoureNav/{id}
+
+
+
+_bo_ajax_region_add_spot:
+  defaults: { _controller: LaPoizWindBundle:BOAjaxRegion:addSpot }
+  pattern: /admin/BO/ajax/region/add/spot/{id}/{idSpot}
+
+_bo_ajax_region_remove_spot:
+  defaults: { _controller: LaPoizWindBundle:BOAjaxRegion:removeSpot }
+  pattern: /admin/BO/ajax/region/remove/spot/{id}/{idSpot}
+
+
 
 
 _bo_test:
