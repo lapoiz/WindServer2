@@ -6,11 +6,19 @@ module.exports = function(grunt) {
     grunt.initConfig({
 
         copy: {
-            main: {
+            inBundle: {
                 expand: true,
                 cwd: 'src/LaPoiz/WindBundle/Resources/public/css/',
                 src: '*.css',
                 dest: 'web/bundles/lapoizwind/css/',
+                flatten: true,
+                filter: 'isFile'
+            },
+            inSrc: {
+                expand: true,
+                cwd: 'app/Resources/public/lapoizSass/sass/',
+                src: '*.css',
+                dest: 'src/LaPoiz/WindBundle/Resources/public/css/',
                 flatten: true,
                 filter: 'isFile'
             }
@@ -18,7 +26,7 @@ module.exports = function(grunt) {
         sass: {
             dist: {
                 files: {
-                    'app/Resources/public/lapoizSass/sass/lapoizwind.css': 'app/Resources/public/lapoizSass/sass/test.scss'
+                    'app/Resources/public/lapoizSass/sass/lapoizwind-bootstrap.css': 'app/Resources/public/lapoizSass/sass/lapoizwind-bootstrap.scss'
                 }
             }
         },
@@ -30,20 +38,20 @@ module.exports = function(grunt) {
             },
             target: {
                 files: {
-                    'web/bundles/lapoizwind/css/lapoizwind.min.css': ['app/Resources/public/lapoizSass/sass/lapoizwind.css']
+                    'web/bundles/lapoizwind/css/lapoizwind-bootstrap.min.css': ['app/Resources/public/lapoizSass/sass/lapoizwind-bootstrap.css']
                 }
             }
         },
 
         watch : {
             scss: {
-                files: ['app/Resources/public/lapoizSass/sass/test.scss'],
-                tasks: ['sass', 'cssmin'],
+                files: ['app/Resources/public/lapoizSass/sass/lapoizwind-bootstrap.scss'],
+                tasks: ['sass', 'cssmin', 'copy:inSrc'],
                 options: { spawn: false }
             },
             css: {
                 files: ['src/LaPoiz/WindBundle/Resources/public/css/*.css'],
-                tasks: ['copy'],
+                tasks: ['copy:inBundle'],
                 options: { spawn: false }
             }
         }
