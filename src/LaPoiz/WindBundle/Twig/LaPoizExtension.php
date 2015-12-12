@@ -20,6 +20,7 @@ class LaPoizExtension extends \Twig_Extension
         // images de 35 px -> 1260 px pour 43 icons -> 29.3px / icon
         $value=MeteoFranceIcon::getInstance()->getTabMeteo()[$meteoFranceSigle];
 
+        //return $value*100/44;
         return $value*100/44;
     }
 

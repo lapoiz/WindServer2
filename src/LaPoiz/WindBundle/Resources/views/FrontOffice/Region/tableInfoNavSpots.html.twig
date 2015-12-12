@@ -1,5 +1,5 @@
 
-    <table class="table table-hover table-note table-bordered">
+    <table class="table table-hover table-note table-bordered table-condensed">
         <thead>
         <tr>
             <th class="text-center">Spot</th>
@@ -11,6 +11,7 @@
         </tr>
         </thead>
 
+        <tbody>
         {% for spot in listSpots %}
             <tr>
                 <th scope="row" class="titleLineTableNote">
@@ -30,14 +31,15 @@
                     {% set classBorderNule = 'borderRed' %}
 
                     {% for notesDate in listNotesDate %}
-                        <td>
+                <td>
+
                         <!-- Wind -->
-                            <table class="tableWithoutBorder">
+
                             {% if notesDate is not null %}
-                                <tr>
-                                    <td>
-                                        <table class="tableWithoutBorder">
-                                            <tr>
+                                <div class="row">
+
+                                    <div class="col-sm-5"> <!-- partie note du vent -->
+                                        <div class="row">
                                 {% if notesDate.nbHoureNav is not null %}
                                     {% for nbHoureNavElem in notesDate.nbHoureNav %}
                                         {% if nbHoureNavElem is not null %}
@@ -51,21 +53,18 @@
                                                 {% set classBorderColor = classBorderBof %}
                                             {% endif %}
 
-                                            <td class="{{ classNbH }}">
+                                            <div class="col-sm-4 {{ classNbH }} noPadding">
                                                 <img src="{{ asset('bundles/lapoizwind/images/logos/'~nbHoureNavElem.website.logo|e) }}"
                                                      alt="{{ nbHoureNavElem.website.nom }}" class="logoWebsite">
                                                 <span class="nbHourNavCircle {{ classBorderColor }}">
                                                 {{ (nbHoureNavElem.nbHoure)|number_format(0, ',', '.') }}h
                                                 </span>
-                                            </td>
+                                            </div>
                                         {% endif %}
                                     {% endfor %}
                                 {% endif %}
-                                            </tr>
-                                        </table>
-                                    </td>
-                                </tr>
-
+                                        </div>
+                                    </div>
 
                                 {% set classTemp = classTop %}
                                 {% if notesDate.tempMin<8 %}
@@ -74,46 +73,48 @@
                                     {% set classTemp = classBof %}
                                 {% endif %}
 
+                                    <div class="col-md-7 noPadding"> <!-- partie meteo -->
+
                                 {% if notesDate.tempMin<35 %}
-                                <!--<tr><td style="border-top: 1px solid grey"></td></tr>-->
-                                <tr>
-                                    <td class="{{ classTemp }}">
-                                        <i class="icon-temperature"></i>
-                                        {{ notesDate.tempMin|number_format(0, ',', '.') }}°C -> {{ notesDate.tempMax|number_format(0, ',', '.') }}°C
-                                    </td>
-                                </tr>
+                                        <div class="row">
+                                            <div class="col-xs-12 {{ classTemp }}">
+                                                <i class="icon-temperature"></i>
+                                        {{ notesDate.tempMin|number_format(0, ',', '.') }}°C<i class="icon-right"></i>{{ notesDate.tempMax|number_format(0, ',', '.') }}°C
+                                            </div>
+                                        </div>
                                 {% endif %}
 
                                 {% if notesDate.tempWater is not null %}
-                                <tr>
-                                    <td class="{{ classTemp }}">
-                                        <i class="icon-air" ></i>
-                                        {{ notesDate.tempWater|number_format(0, ',', '.') }}°C
-                                    </td>
-                                </tr>
+                                        <div class="row">
+                                            <div class="col-xs-12 {{ classTemp }}">
+                                                <i class="icon-air" ></i>
+                                                {{ notesDate.tempWater|number_format(0, ',', '.') }}°C
+                                            </div>
+                                        </div>
                                 {% endif %}
 
-                                <tr>
-                                    <td><img src="{{ asset('bundles/lapoizwind/images/transparent.png') }}"
-                                        class="meteo-icon"
-                                        style="background:url({{ asset('bundles/lapoizwind/images/meteo-icons-small.png') }});
-                                                background-position: 0% {{ notesDate.meteoBest|meteoFrance_logo }}%;"
-                                        />
-                                        ->
-                                        <img src="{{ asset('bundles/lapoizwind/images/transparent.png') }}"
-                                             class="meteo-icon"
-                                             style="background:url({{ asset('bundles/lapoizwind/images/meteo-icons-small.png') }});
+                                        <div class="row">
+                                            <div class="col-xs-12 visible-lg meteo-display-icon">
+                                                <img src="{{ asset('bundles/lapoizwind/images/transparent.png') }}"
+                                                     class="meteo-icon"
+                                                     style="background:url({{ asset('bundles/lapoizwind/images/meteo-icons-x-small.png') }});
+                                                             background-position: 0% {{ notesDate.meteoBest|meteoFrance_logo }}%;"
+                                                /><i class="icon-right"></i>
+                                                <img src="{{ asset('bundles/lapoizwind/images/transparent.png') }}"
+                                                    class="meteo-icon"
+                                                    style="background:url({{ asset('bundles/lapoizwind/images/meteo-icons-x-small.png') }});
                                                      background-position: 0% {{ notesDate.meteoWorst|meteoFrance_logo }}%;"
-                                        />
-                                    </td>
-                                </tr>
-
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             {% endif %}
-                            </table>
-                        </td>
+
+                </td>
                     {% endfor %}
                 {% endif %}
             </tr>
         {% endfor %}
-
+        </tbody>
         </table>

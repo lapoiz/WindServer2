@@ -7,7 +7,8 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="{{ path('_index') }}">
+            <a class="navbar-brand {% if app.request.attributes.get('_route') starts with '_index' %} active{% endif %}"
+               href="{{ path('_index') }}">
                 LaPoiz Wind
             </a>
         </div>
@@ -33,7 +34,8 @@
 
                 <li class="disabled"> <a href="#">Où naviguer ce we ?</a> </li>
 
-                <li class=" {% if app.request.attributes.get('_route') starts with '_fo_concept' %}active{% endif %}"> <a href="{{ path('_fo_concept') }}">Le concept du site</a> </li>
+                <li class=" {% if app.request.attributes.get('_route') starts with '_fo_concept' %}active{% endif %}">
+                    <a href="{{ path('_fo_concept') }}">Le concept du site</a> </li>
                 <li class="disabled"> <a href="#">Les paramètres</a> </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">

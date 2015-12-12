@@ -4,13 +4,15 @@
 
     <div class="starter-template">
 
-        <h1>Les spots par régions</h1>
+        <h2>Les spots par régions
+            <span class="helpHP"><i class="icon-help-circled"  data-toggle="modal" data-target="#myModal"></i></span>
+        </h2>
 
         {% from "LaPoizWindBundle:FrontOffice/Region:regions.html.twig" import view %}
         {{ view(listRegion,listSpotsWithoutRegion) }}
 
 
-        <h1>Le site LaPoiz.com</h1>
+        <h2>Le site LaPoiz.com</h2>
         <p>
             Ce site est fait pour les Kitteurs.<br>
             Le but est de regrouper tous les paramètres pour planifier sa session: force du vent, orientation, marée ...<br>
@@ -24,6 +26,22 @@
 
         </p>
 
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">Un peu d'aide</h4>
+                    </div>
+                    <div class="modal-body">
+                        <img src="{{ asset('bundles/lapoizwind/images/LaPoizHelp.png') }}" />
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
     </div>
 

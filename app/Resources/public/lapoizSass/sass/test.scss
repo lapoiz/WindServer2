@@ -1,0 +1,30 @@
+/* Barre de navigation */
+$navbar-height:                    35px !default;
+
+/* Texte */
+$font-size-base:          12px !default;
+
+$font-size-h1:            floor(($font-size-base * 1.75)) !default;
+$font-size-h2:            floor(($font-size-base * 1.5)) !default;
+$font-size-h3:            ceil(($font-size-base * 1.25)) !default;
+$font-size-h4:            ceil(($font-size-base * 1.1)) !default;
+$font-size-h5:            $font-size-base !default;
+$font-size-h6:            ceil(($font-size-base * 0.85)) !default;
+
+
+
+@import "../../bootstrap-sass/assets/stylesheets/bootstrap-sprockets";
+@import "../../bootstrap-sass/assets/stylesheets/bootstrap" ;
+@import "../../bootstrap-sass/assets/stylesheets/bootstrap-compass";
+
+
+/** Hors scss  **/
+body {
+  padding-top: 25px;
+}
+nav {
+  text-align: center;
+}
+.container {
+  width: 90%;
+}
