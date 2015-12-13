@@ -154,56 +154,66 @@ class WebsiteGetData
 		$now=new \DateTime("now");
 		$result= array();
 		foreach ($tableauData as $date=>$lineWindData) {
-			$prevDate = new PrevisionDate();
-			$prevDate->setCreated($now);
-			
-			$prevDate->setDatePrev(new \DateTime($date));
-			 
-			$windCalculate= array("max"=>0,"min"=>0,"cumul"=>0,"nbPrev"=>0);
-		 
-			foreach ($lineWindData as $dataPrev) {
-				$prev = new Prevision();
-				$prev->setOrientation($dataPrev["orientation"]);
-				$prev->setWind($dataPrev["wind"]);
-				$hour=new \DateTime();
-				if (isset($dataPrev["heure"]) && !empty($dataPrev["heure"]) && strlen($dataPrev["heure"])>0) {
-					$hour->setTime($dataPrev["heure"], "00");
-				} else {
-					$hour->setTime("01", "00");
-				}
-				$prev->setTime($hour);
+			if ($date != 'update') {
+				$prevDate = new PrevisionDate();
+				$prevDate->setCreated($now);
 
-                if (isset($dataPrev["meteo"])) {
-                    $prev->setMeteo($dataPrev["meteo"]);
-                }
-                if (isset($dataPrev["precipitation"])) {
-                    $prev->setPrecipitation($dataPrev["precipitation"]);
-                }
-                if (isset($dataPrev["temp"])) {
-                    $prev->setTemp($dataPrev["temp"]);
-                }
-				
-				WindFinderGetData::calculateWind($windCalculate,$prev);
-				
-				$prev->setPrevisionDate($prevDate);
-				$prevDate->addListPrevision($prev);
-				$entityManager->persist($prev);
+				$prevDate->setDatePrev(new \DateTime($date));
+
+				$windCalculate = array("max" => 0, "min" => 0, "cumul" => 0, "nbPrev" => 0);
+
+				foreach ($lineWindData as $dataPrev) {
+					$prev = new Prevision();
+					$prev->setOrientation($dataPrev["orientation"]);
+					$prev->setWind($dataPrev["wind"]);
+					$hour = new \DateTime();
+					if (isset($dataPrev["heure"]) && !empty($dataPrev["heure"]) && strlen($dataPrev["heure"]) > 0) {
+						$hour->setTime($dataPrev["heure"], "00");
+					} else {
+						$hour->setTime("01", "00");
+					}
+					$prev->setTime($hour);
+
+					if (isset($dataPrev["meteo"])) {
+						$prev->setMeteo($dataPrev["meteo"]);
+					}
+					if (isset($dataPrev["precipitation"])) {
+						$prev->setPrecipitation($dataPrev["precipitation"]);
+					}
+					if (isset($dataPrev["temp"])) {
+						$prev->setTemp($dataPrev["temp"]);
+					}
+
+					WindFinderGetData::calculateWind($windCalculate, $prev);
+
+					$prev->setPrevisionDate($prevDate);
+					$prevDate->addListPrevision($prev);
+					$entityManager->persist($prev);
+				}
+
+				//TODO: calculate average etc...
+				$prevDate->setWindAverage(0);
+				if ($windCalculate["nbPrev"] > 0)
+					$prevDate->setWindAverage($windCalculate["max"] / $windCalculate["nbPrev"]);
+				$prevDate->setWindMax($windCalculate["max"]);
+				$prevDate->setWindMin($windCalculate["min"]);
+				$prevDate->setWindGauss(0);
+				$prevDate->setWindMiddle(0);
+
+				$prevDate->setDataWindPrev($dataWindPrev);
+				$dataWindPrev->addListPrevisionDate($prevDate);
+
+				$entityManager->persist($prevDate);
+				$result[] = $prevDate;
+			} else { // last update
+				if (isset($lineWindData[0]) && isset($lineWindData[0][0])) {
+					try {
+						$dataWindPrev->setLastUpdate(new \DateTime($lineWindData[0][0]));
+					} catch (\Exception $e) {
+						// DO nothing
+					}
+				}
 			}
-		 
-			//TODO: calculate average etc...
-			$prevDate->setWindAverage(0);
-			if ($windCalculate["nbPrev"]>0)
-			$prevDate->setWindAverage($windCalculate["max"]/$windCalculate["nbPrev"]);
-			$prevDate->setWindMax($windCalculate["max"]);
-			$prevDate->setWindMin($windCalculate["min"]);
-			$prevDate->setWindGauss(0);
-			$prevDate->setWindMiddle(0);
-			 
-			$prevDate->setDataWindPrev($dataWindPrev);
-			$dataWindPrev->addListPrevisionDate($prevDate);
-			 
-			$entityManager->persist($prevDate);
-			$result[]=$prevDate;
 		}
 		$entityManager->persist($dataWindPrev);
 		$entityManager->flush();

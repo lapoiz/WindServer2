@@ -14,6 +14,7 @@ class WindguruProGetData extends WebsiteGetData
     Const javascriptVar = 'wg_fcst_tab_data_3';
     Const exprWindPart = 'WINDSPD';
     Const exprOrientationPart = "WINDDIR";
+	Const exprUpdateTime= 'update_last';
 	
 	function getDataURL($url) 
 	{
@@ -73,6 +74,9 @@ class WindguruProGetData extends WebsiteGetData
 
 			$orientationPart = WindguruProGetData::getPart(WindguruProGetData::exprOrientationPart, $data); // get wind part in line
 			$tableauData['orientation'] = WindguruProGetData::getElemeInPart($orientationPart);// transforme to tab
+
+			$updateTime = WindguruProGetData::getSpecialPart(WindguruProGetData::exprUpdateTime, $data);
+			$tableauData['update'] = array($updateTime);
 		}
 
 		return $tableauData;
@@ -142,6 +146,8 @@ class WindguruProGetData extends WebsiteGetData
 			//$indexCol++;
 		}
 		$tableauWindData[WindguruProGetData::getCompleteDate($currentDate)]=$currenteLine;
+		$tableauWindData['update']=array(array(WindguruProGetData::transformeUpdate($tableauData['update'][0])));
+
 		return $tableauWindData;
 	}
 		
@@ -158,9 +164,27 @@ class WindguruProGetData extends WebsiteGetData
       // $patternPart = '#\"'.$expres.'\":\[([\d\.,\"]*)#'; -> fonctionne hors "null"
       $patternPart = '#\"'.$expres.'\":\[([\d|null\.,\"]*)#';
 	  preg_match_all($patternPart,$line,$parts);
-      return $parts[1][0];
+		if (count($parts[1])>0) {
+			return $parts[1][0];
+		} else {
+			return null;
+		}
 	}
 
+	/**
+	 * Recupere élément seul et non un tableau de données, ex: ,"update_last":"Sun, 13 Dec 2015 17:21:16 +0000",
+	 */
+	static private function getSpecialPart($expres,$line) {
+		// \"update_last\":\"([\w,\s:+]+)\"
+		$patternPart = '#\"'.$expres.'\":\"([\w,\s:+]+)\"#';
+		preg_match_all($patternPart,$line,$parts);
+		if (count($parts[1])>0) {
+			return $parts[1][0];
+		} else {
+			return null;
+		}
+
+	}
 	//need special with hr_d can't be send in param of a function...
     static private function getDatePart($line) 
 	{
@@ -217,6 +241,19 @@ class WindguruProGetData extends WebsiteGetData
 	private function getDateFromHTML($htmlLine) {
 		preg_match('#([0-9]{2}).([0-9]{2}).\s([0-9]{4})\s#',$htmlLine[5],$data);
 		return $data[3].'-'.$data[2].'-'.$data[1];
+	}
+
+	/*
+	 * $htmlUpdate: "Sun, 13 Dec 2015 17:21:16 +0000"
+	 * return : 2015-12-13 18:21:16
+	 */
+	private function transformeUpdate($htmlUpdate) {
+		//preg_match('#(\w+), (\d+) (\w+) (\d+) (\d+):(\d+):(\d+)#/i',$htmlUpdate,$data);
+		//preg_match('#(\w|,|\s|\d|:)+#',$htmlUpdate,$data);
+		// on a séparé chque groupe d'element, il faut juste transformer le mois
+		$date=strtotime($htmlUpdate);
+		$result=date('Y-m-d H:i:s',$date);
+		return $result;
 	}
 	
 }

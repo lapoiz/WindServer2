@@ -21,6 +21,14 @@ module.exports = function(grunt) {
                 dest: 'src/LaPoiz/WindBundle/Resources/public/css/',
                 flatten: true,
                 filter: 'isFile'
+            },
+            jsGraphInBundle: {
+                expand: true,
+                cwd: 'src/LaPoiz/GraphBundle/Resources/public/js/',
+                src: '*.js',
+                dest: 'src/LaPoiz/WindBundle/Resources/public/js/',
+                flatten: true,
+                filter: 'isFile'
             }
         },
         sass: {
@@ -52,6 +60,11 @@ module.exports = function(grunt) {
             css: {
                 files: ['src/LaPoiz/WindBundle/Resources/public/css/*.css'],
                 tasks: ['copy:inBundle'],
+                options: { spawn: false }
+            },
+            jsGraph: {
+                files: ['src/LaPoiz/GraphBundle/Resources/public/js/*.js'],
+                tasks: ['copy:jsGraphInBundle'],
                 options: { spawn: false }
             }
         }

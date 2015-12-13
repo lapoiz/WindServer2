@@ -43,8 +43,13 @@ class DataWindPrev
      * @ORM\ManyToOne(targetEntity="Spot", inversedBy="dataWindPrev")
      * @ORM\JoinColumn(name="spot_id", referencedColumnName="id")
      */
-    private $spot;   
+    private $spot;
 
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $lastUpdate;
     
 
     public function __construct()
@@ -183,5 +188,29 @@ class DataWindPrev
     public function removeListPrevisionDate(\LaPoiz\WindBundle\Entity\PrevisionDate $listPrevisionDate)
     {
         $this->listPrevisionDate->removeElement($listPrevisionDate);
+    }
+
+    /**
+     * Set lastUpdate
+     *
+     * @param \DateTime $lastUpdate
+     *
+     * @return DataWindPrev
+     */
+    public function setLastUpdate($lastUpdate)
+    {
+        $this->lastUpdate = $lastUpdate;
+
+        return $this;
+    }
+
+    /**
+     * Get lastUpdate
+     *
+     * @return \DateTime
+     */
+    public function getLastUpdate()
+    {
+        return $this->lastUpdate;
     }
 }

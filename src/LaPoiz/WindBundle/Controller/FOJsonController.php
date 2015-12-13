@@ -87,6 +87,7 @@ class FOJsonController extends Controller
                 // Récupére toutes les prévisions réalisées la même date que de création de la derniere prévision
                 $forecast=array();
                 $forecast["nom"]=$dataWindPrev->getWebsite()->getNom();
+                $forecast["lastUpdate"]=$dataWindPrev->getLastUpdate()->format('d-m-Y H:i');
                 //$forecast["date"]=$dataWindPrev->getCreated()->format('d-m-Y');
 
                 $previsionDateList = $this->getDoctrine()->getRepository('LaPoizWindBundle:PrevisionDate')->getLastCreated($dataWindPrev);

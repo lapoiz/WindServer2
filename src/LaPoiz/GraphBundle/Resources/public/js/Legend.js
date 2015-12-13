@@ -15,7 +15,8 @@ Legend.prototype.addWebSite = function(listeSites) {
 
     for (numSite = 0; numSite < listeSites.length; numSite++) {
         var site=listeSites[numSite];
-        divList.append('<div class="legend_label_'+site.nom+'"><span>'+site.nom+'</span> <span class="siteUpdateLegend">(derniere maj:'+site.date+')</span></div>');
+        divList.append('<div class="legend_label_'+site.nom+'"><span>'+site.nom+'</span> ' +
+            '<span class="siteUpdateLegend">(derniere maj:'+site.lastUpdate+')</span></div>');
     }
 }
 
