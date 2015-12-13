@@ -40,10 +40,15 @@ class FOController extends Controller
       $em = $this->container->get('doctrine.orm.entity_manager');
       // récupere tous les spots
       $listSpot = $em->getRepository('LaPoizWindBundle:Spot')->findAllValid();
+      // récupere toutes les régions
+      $listRegion = $em->getRepository('LaPoizWindBundle:Region')->findAllOrderByNumDisplay();
+      $listSpotsWithoutRegion = $em->getRepository('LaPoizWindBundle:Spot')->findAllWithoutRegion();
 
       return $this->container->get('templating')->renderResponse('LaPoizWindBundle:FrontOffice:concept.html.twig',
         array(
-            'listSpot' => $listSpot));
+            'listSpot' => $listSpot,
+            'listRegion' => $listRegion,
+            'listSpotsWithoutRegion' => $listSpotsWithoutRegion));
   }
 
   /**
@@ -53,6 +58,9 @@ class FOController extends Controller
   {
     $em = $this->container->get('doctrine.orm.entity_manager');
     $listSpot = $em->getRepository('LaPoizWindBundle:Spot')->findAllValid();
+      // récupere toutes les régions
+      $listRegion = $em->getRepository('LaPoizWindBundle:Region')->findAllOrderByNumDisplay();
+      $listSpotsWithoutRegion = $em->getRepository('LaPoizWindBundle:Spot')->findAllWithoutRegion();
 
     if (isset($id) && $id!=-1)
     {
@@ -66,7 +74,9 @@ class FOController extends Controller
         // Here modif
         return $this->render('LaPoizWindBundle:FrontOffice:spot.html.twig', array(
                 'spot' => $spot,
-                'listSpot' => $listSpot
+                'listSpot' => $listSpot,
+            'listRegion' => $listRegion,
+            'listSpotsWithoutRegion' => $listSpotsWithoutRegion
         ));
     }
   }
@@ -80,9 +90,14 @@ class FOController extends Controller
     {
         $em = $this->container->get('doctrine.orm.entity_manager');
         $listSpot = $em->getRepository('LaPoizWindBundle:Spot')->findAllValid();
+        // récupere toutes les régions
+        $listRegion = $em->getRepository('LaPoizWindBundle:Region')->findAllOrderByNumDisplay();
+        $listSpotsWithoutRegion = $em->getRepository('LaPoizWindBundle:Spot')->findAllWithoutRegion();
 
         return $this->render('LaPoizWindBundle:FrontOffice:askNewSpot.html.twig', array(
-                    'listSpot' => $listSpot
+                    'listSpot' => $listSpot,
+            'listRegion' => $listRegion,
+            'listSpotsWithoutRegion' => $listSpotsWithoutRegion
                 ));
     }
 
