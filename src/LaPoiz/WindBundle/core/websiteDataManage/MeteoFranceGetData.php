@@ -10,6 +10,7 @@ class MeteoFranceGetData extends WebsiteGetData
 	const goodSectionId= 'seven-days';
 	const nbJoursPrev=7; // Au dela de 4 jours, pas de prévision de vent...
 	const idNameDivDay="detail-day-0";
+	const lastUpdateFilter='p[class="heure-du-prevision"]'; //<p class="heure-du-prevision">Prévisions actualisées à 23h57</p>
 
 	/**
 	 * @param $pageHTML: crawler de Goutte
@@ -106,6 +107,7 @@ class MeteoFranceGetData extends WebsiteGetData
 				}
 			}// else
 		}// else
+		$previsionTab["lastUpdate"]=array(array(MeteoFranceGetData::getLastUpdate($pageHTML)));
 		return $previsionTab;
 	}
 
@@ -113,29 +115,33 @@ class MeteoFranceGetData extends WebsiteGetData
 		$cleanTabData = array();
 
 		$day = new \DateTime('NOW');
-		foreach ($tableauData as $lineData) {
+		foreach ($tableauData as $keyDate=>$lineData) {
 			// 1 line = 1 date depuis aujourd'hui
+			if ($keyDate!="lastUpdate") {
+				$cleanElemDay = array();
+				$datePrev = $day->format("Y-m-d");
 
-			$cleanElemDay = array();
-            $datePrev=$day->format("Y-m-d");
-
-			foreach ($lineData as $key => $lineHoure) {
-				// 1 lineHoure = 1 hour
-                if (!empty($lineHoure['wind']) && ($lineHoure["houre"]!="2" && $lineHoure["houre"]!="1") || $key==0) {
-                    $cleanElemHoure = array();
-                    $cleanElemHoure['heure'] = MeteoFranceGetData::getHoureClean($lineHoure["houre"]);
-                    $cleanElemHoure['date'] = $datePrev;
-                    $cleanElemHoure['wind'] = MeteoFranceGetData::getWindClean($lineHoure['wind']);
-                    $cleanElemHoure['maxWind'] = MeteoFranceGetData::getMaxWindClean($lineHoure['wind']);
-                    $cleanElemHoure['temp'] = MeteoFranceGetData::getTempClean($lineHoure['temp']);
-                    $cleanElemHoure['orientation'] = MeteoFranceGetData::getOrientationClean($lineHoure['orientation']);
-                    $cleanElemHoure['meteo'] = MeteoFranceGetData::getMeteoClean($lineHoure['meteo']);
-                    $cleanElemHoure['probaPrecipitation'] = MeteoFranceGetData::getProbaPrecipitationClean($lineHoure['probaPluie']);
-                    $cleanElemDay[] = $cleanElemHoure;
-                }
+				foreach ($lineData as $key => $lineHoure) {
+					// 1 lineHoure = 1 hour
+					if (!empty($lineHoure['wind']) && ($lineHoure["houre"] != "2" && $lineHoure["houre"] != "1") || $key == 0) {
+						$cleanElemHoure = array();
+						$cleanElemHoure['heure'] = MeteoFranceGetData::getHoureClean($lineHoure["houre"]);
+						$cleanElemHoure['date'] = $datePrev;
+						$cleanElemHoure['wind'] = MeteoFranceGetData::getWindClean($lineHoure['wind']);
+						$cleanElemHoure['maxWind'] = MeteoFranceGetData::getMaxWindClean($lineHoure['wind']);
+						$cleanElemHoure['temp'] = MeteoFranceGetData::getTempClean($lineHoure['temp']);
+						$cleanElemHoure['orientation'] = MeteoFranceGetData::getOrientationClean($lineHoure['orientation']);
+						$cleanElemHoure['meteo'] = MeteoFranceGetData::getMeteoClean($lineHoure['meteo']);
+						$cleanElemHoure['probaPrecipitation'] = MeteoFranceGetData::getProbaPrecipitationClean($lineHoure['probaPluie']);
+						$cleanElemDay[] = $cleanElemHoure;
+					}
+				}
+				$cleanTabData[$datePrev] = $cleanElemDay;
+				$day->modify('+1 day'); // jour suivant
+			} else { // lastUpdate
+				//  Prévisions actualisées à 00h26
+				$cleanTabData["update"] = array(array(MeteoFranceGetData::cleanLastUpdate($lineData[0][0])));
 			}
-            $cleanTabData[$datePrev]=$cleanElemDay;
-            $day->modify( '+1 day' ); // jour suivant
 		}
 
 		return $cleanTabData;
@@ -307,4 +313,31 @@ class MeteoFranceGetData extends WebsiteGetData
             return "?";
         }
     }
+
+	/**
+	 * @param $pageHML avec dedans: <p class="heure-du-prevision">Prévisions actualisées à 23h57</p>
+	 * @return 23h57
+	 */
+	private function getLastUpdate($pageHML) {
+		return $pageHML->filter(MeteoFranceGetData::lastUpdateFilter)->getNode(0)->nodeValue;
+	}
+
+	/**
+	 * @param $lastUpdateHTML du type: "Prévisions actualisées à 00h26"
+	 * @return: "2015-12-14 00:26"
+	 */
+	private function cleanLastUpdate($lastUpdateHTML)	{
+		// si $lastUpdateHTML plus tot que NOW -> 1 jour de moins
+		$now = new \DateTime('NOW');
+		$lastUpdateDT = new \DateTime('NOW');
+
+		preg_match('#([0-9]+)h([0-9]+)#',$lastUpdateHTML,$data);
+		$lastUpdateDT->setTime($data[1],$data[2]);
+
+		if ($lastUpdateDT > $now) {
+			// enlever 1 jour
+			$lastUpdateDT->modify('-1 day');
+		}
+		return $lastUpdateDT->format('Y-m-d H:i:s');
+	}
 }

@@ -183,7 +183,6 @@ class WindguruProGetData extends WebsiteGetData
 		} else {
 			return null;
 		}
-
 	}
 	//need special with hr_d can't be send in param of a function...
     static private function getDatePart($line) 

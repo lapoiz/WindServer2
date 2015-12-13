@@ -41,7 +41,10 @@ class WindguruGetData extends WebsiteGetData
   				$tableauData['heure']=WindguruGetData::getElemeInPart($hourePart);// transforme to tab
   				
   				$datePart=WindguruGetData::getDatePart($line);				
-  				$tableauData['date']=WindguruGetData::getElemeInPart($datePart);// transforme to tab	
+  				$tableauData['date']=WindguruGetData::getElemeInPart($datePart);// transforme to tab
+
+				$updateTime = WindguruGetData::getSpecialPart(WindguruProGetData::exprUpdateTime, $line);
+				$tableauData['update'] = array($updateTime);
   			}
 		}
 		return $tableauData;
@@ -84,6 +87,7 @@ class WindguruGetData extends WebsiteGetData
 			//$indexCol++;
 		}
 		$tableauWindData[WindguruGetData::getCompleteDate($currentDate)]=$currenteLine;
+		$tableauWindData['update']=array(array(WindguruGetData::transformeUpdate($tableauData['update'][0])));
 		return $tableauWindData;
 	}
 		
@@ -168,5 +172,32 @@ class WindguruGetData extends WebsiteGetData
 		preg_match('#([0-9]{2}).([0-9]{2}).\s([0-9]{4})\s#',$htmlLine[5],$data);
 		return $data[3].'-'.$data[2].'-'.$data[1];
 	}
-	
+
+	/**
+	 * Recupere élément seul et non un tableau de données, ex: ,"update_last":"Sun, 13 Dec 2015 17:21:16 +0000",
+	 */
+	static private function getSpecialPart($expres,$line) {
+		// \"update_last\":\"([\w,\s:+]+)\"
+		$patternPart = '#\"'.$expres.'\":\"([\w,\s:+]+)\"#';
+		preg_match_all($patternPart,$line,$parts);
+		if (count($parts[1])>0) {
+			return $parts[1][0];
+		} else {
+			return null;
+		}
+	}
+
+	/*
+	 * $htmlUpdate: "Sun, 13 Dec 2015 17:21:16 +0000"
+	 * return : 2015-12-13 18:21:16
+	 */
+	private function transformeUpdate($htmlUpdate) {
+		//preg_match('#(\w+), (\d+) (\w+) (\d+) (\d+):(\d+):(\d+)#/i',$htmlUpdate,$data);
+		//preg_match('#(\w|,|\s|\d|:)+#',$htmlUpdate,$data);
+		// on a séparé chque groupe d'element, il faut juste transformer le mois
+		$date=strtotime($htmlUpdate);
+		$result=date('Y-m-d H:i:s',$date);
+		return $result;
+	}
+
 }

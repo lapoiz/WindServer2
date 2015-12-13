@@ -18,6 +18,7 @@ class WindFinderGetData extends WebsiteGetData
     const dataPrecipitationClass = '.data-rain';    //<div class="data-rain data--minor weathertable__cell">
     const dataTempClass = '.units-at';              // <span class="units-at">11</span>
     const dataWaveClass = '.units-wh';              // <span class="units-wh">1.2</span>
+    const dataLastUpdateId= '#last-update';      // <span id="last-update">17:42</span>
 
 	/**
 	 * @param $pageHTML: crawler de Goutte
@@ -53,6 +54,7 @@ class WindFinderGetData extends WebsiteGetData
                     }
                     $previsionTab[$date]=$previsionDateTab;
                 }
+                $previsionTab['lastUpdate']=array(array($this->getNodeValue($section,WindFinderGetData::dataLastUpdateId)));
             }
             return $previsionTab;
 		}
@@ -65,25 +67,26 @@ class WindFinderGetData extends WebsiteGetData
         $day = new \DateTime('NOW');
         foreach ($tableauData as $date => $lineDayData) {
             // 1 line = 1 date
+            if ($date!='lastUpdate') {
+                $cleanElemDay = array();
 
-            $cleanElemDay = array();
+                foreach ($lineDayData as $key => $lineHoure) {
+                    // 1 lineHoure = 1 hour
+                    $cleanElemHoure = array();
 
-            foreach ($lineDayData as $key => $lineHoure) {
-                // 1 lineHoure = 1 hour
+                    $cleanElemHoure['heure'] = WindFinderGetData::getHoureClean($lineHoure["houre"]);
+                    $cleanElemHoure['wind'] = $lineHoure['wind'];
+                    $cleanElemHoure['maxWind'] = $lineHoure['windMax'];
+                    $cleanElemHoure['temp'] = $lineHoure['temp'];
+                    $cleanElemHoure['orientation'] = WindFinderGetData::getOrientationClean($lineHoure['orientation']);
 
-                $cleanElemHoure = array();
-
-                $cleanElemHoure['heure'] = WindFinderGetData::getHoureClean($lineHoure["houre"]);
-                $cleanElemHoure['wind'] = $lineHoure['wind'];
-                $cleanElemHoure['maxWind'] = $lineHoure['windMax'];
-                $cleanElemHoure['temp'] = $lineHoure['temp'];
-                $cleanElemHoure['orientation'] = WindFinderGetData::getOrientationClean($lineHoure['orientation']);
-
-                $cleanElemDay[] = $cleanElemHoure;
+                    $cleanElemDay[] = $cleanElemHoure;
+                }
+                $datePrev = WindFinderGetData::getDateClean($date);
+                $cleanTabData[$datePrev] = $cleanElemDay;
+            } else { // lastUpdate
+                $cleanTabData['update'] = array(array(WindFinderGetData::getLastUpdateClean($lineDayData[0][0])));
             }
-            $datePrev = WindFinderGetData::getDateClean($date);
-            $cleanTabData[$datePrev]=$cleanElemDay;
-
         }
 
         return $cleanTabData;
@@ -126,6 +129,26 @@ class WindFinderGetData extends WebsiteGetData
         }
         return $result;
     }
+
+    /**
+     * @param $lastUpdateHTML du type "17:42"
+     * @return 2015-12-13 17:42:00
+     */
+    private function getLastUpdateClean($lastUpdateHTML) {
+        // si $lastUpdateHTML plus tot que NOW -> 1 jour de moins
+        $now = new \DateTime('NOW');
+        $lastUpdateDT = new \DateTime('NOW');
+
+        preg_match('#([0-9]+):([0-9]+)#',$lastUpdateHTML,$data);
+        $lastUpdateDT->setTime($data[1],$data[2]);
+
+        if ($lastUpdateDT > $now) {
+            // enlever 1 jour
+            $lastUpdateDT->modify('-1 day');
+        }
+        return $lastUpdateDT->format('Y-m-d H:i:s');
+    }
+
 /*
 	function transformData($htmlTabData) {
 		$cleanTabData = array();
