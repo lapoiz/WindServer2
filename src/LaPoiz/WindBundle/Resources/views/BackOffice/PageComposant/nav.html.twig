@@ -1,4 +1,4 @@
-{% macro view(listSpot, listRegion) %}
+{% macro view(listRegion, listSpotsWithoutRegion) %}
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -12,19 +12,53 @@
         </div>
         <div class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
+
+
                 <li class="dropdown {% if app.request.attributes.get('_route') starts with '_bo_spot' %} active{% endif %}">
                     <a data-toggle="dropdown" href="#">Gestion des spots<b class="caret"></b></a>
                     <ul class="dropdown-menu">
-                        {% if listSpot is not null %}
-                        {% for spot in listSpot %}
-                            <li class="{% if app.request.attributes.get('_route') starts with '_bo_spot' and
-                            spot.id in app.request.uri|split('/') %} active{% endif %}"><a href="{{ path('_bo_spot',{'id':spot.id}) }}">{{ spot.nom }}</a></li>
+
+                        {% for region in listRegion %}
+                            <li class="dropdown dropdown-submenu">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ region.nom }}</a>
+                                <ul class="dropdown-menu">
+                                    {% if region.spots is not null %}
+                                        {% for spot in region.spots %}
+                                            <li class="{% if app.request.attributes.get('_route') starts with '_bo_spot' and
+                                            spot.id in   app.request.uri|split('/') %} active{% endif %}">
+                                                <a href="{{ path('_bo_spot',{'id':spot.id}) }}">
+                                                    <i class="icon-chart-bar" ></i>{{ spot.nom }}</a>
+                                            </li>
+                                        {% endfor %}
+                                    {% endif %}
+                                </ul>
+                            </li>
                         {% endfor %}
+
+                        {% if listSpotsWithoutRegion is not null %}
+                            {% if listSpotsWithoutRegion|length > 0 %}
+                                <li class="dropdown dropdown-submenu">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Autres spots</a>
+                                    <ul class="dropdown-menu">
+
+                                        {% for spot in listSpotsWithoutRegion %}
+                                            <li class="{% if app.request.attributes.get('_route') starts with '_fo_spot_graph' and
+                                            spot.id in   app.request.uri|split('/') %} active{% endif %}">
+                                                <a href="{{ path('_fo_spot_graph',{'id':spot.id}) }}">
+                                                    <i class="icon-chart-bar" ></i>{{ spot.nom }}</a>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                </li>
+                            {% endif %}
                         {% endif %}
+
                         <li class="divider"></li>
                         <li><a href="{{ path('_bo_spot_create') }}"><span class="glyphicon glyphicon-plus"></span> Créer un spot</a></li>
                     </ul>
                 </li>
+
+
                 <li class="dropdown {% if app.request.attributes.get('_route') starts with '_bo_region' %} active{% endif %}">
                     <a data-toggle="dropdown" href="#">Gestion des regions<b class="caret"></b></a>
                     <ul class="dropdown-menu">

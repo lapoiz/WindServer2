@@ -7,6 +7,7 @@
 {% endblock %}
 
 {% block bodyPage %}
+    <h1>{{ region.nom }}</h1>
 
     <div class="starter-template">
         <div class="row">
@@ -57,9 +58,9 @@
             <div class="col-sm-6">
                 <h2>Spots à ajouter à la région</h2>
 
-            {% if listSpotWitoutRegion is not null %}
+            {% if listSpotsWithoutRegion is not null %}
                 <ul id="spotsWithoutRegion" class="listeSansPuce">
-                {% for spot in listSpotWitoutRegion %}
+                {% for spot in listSpotsWithoutRegion %}
                     <li id="spot_{{ spot.id }}"><button class="btn btn-primary" onclick="addSpot({{ spot.id }})"><span class="glyphicon glyphicon-plus"></span>{{ spot.nom }}</button></li>
                 {% endfor %}
                 </ul>
@@ -80,8 +81,8 @@
                 {{ spot.id }} : "{{ spot.nom }}",
             {% endfor %}
         {% endif %}
-        {% if listSpotWitoutRegion is not null %}
-            {% for spot in listSpotWitoutRegion %}
+        {% if listSpotsWithoutRegion is not null %}
+            {% for spot in listSpotsWithoutRegion %}
                 {{ spot.id }} : "{{ spot.nom }}",
             {% endfor %}
         {% endif %}

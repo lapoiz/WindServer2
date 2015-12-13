@@ -24,13 +24,15 @@ class BOController extends Controller
     $listSpot = $em->getRepository('LaPoizWindBundle:Spot')->findAllValid();
     $listRegion = $em->getRepository('LaPoizWindBundle:Region')->findAllOrderByNumDisplay();
     $listSpotNotValid = $em->getRepository('LaPoizWindBundle:Spot')->findAllNotValid();
+      $listSpotsWithoutRegion = $em->getRepository('LaPoizWindBundle:Spot')->findAllWithoutRegion();
 
 
     return $this->container->get('templating')->renderResponse('LaPoizWindBundle:BackOffice:index.html.twig',
         array(
             'listSpot' => $listSpot,
             'listRegion' => $listRegion,
-            'listSpotNotValid' => $listSpotNotValid
+            'listSpotNotValid' => $listSpotNotValid,
+            'listSpotsWithoutRegion' => $listSpotsWithoutRegion
         ));
   }
 
@@ -48,6 +50,7 @@ class BOController extends Controller
         // récupere tous les spots
         $listSpot = $em->getRepository('LaPoizWindBundle:Spot')->findAllValid();
         $listRegion = $em->getRepository('LaPoizWindBundle:Region')->findAllOrderByNumDisplay();
+        $listSpotsWithoutRegion = $em->getRepository('LaPoizWindBundle:Spot')->findAllWithoutRegion();
 
         if (isset($id) && $id!=-1)
         {
@@ -61,7 +64,8 @@ class BOController extends Controller
             return $this->render('LaPoizWindBundle:BackOffice:spot.html.twig', array(
                     'spot' => $spot,
                     'listSpot' => $listSpot,
-                    'listRegion' => $listRegion
+                    'listRegion' => $listRegion,
+                'listSpotsWithoutRegion' => $listSpotsWithoutRegion
                 ));
         } else {
             return $this->container->get('templating')->renderResponse(
@@ -81,6 +85,7 @@ class BOController extends Controller
         // récupere tous les spots
         $listSpot = $em->getRepository('LaPoizWindBundle:Spot')->findAllValid();
         $listRegion = $em->getRepository('LaPoizWindBundle:Region')->findAllOrderByNumDisplay();
+        $listSpotsWithoutRegion = $em->getRepository('LaPoizWindBundle:Spot')->findAllWithoutRegion();
 
         $spot = new Spot();
         $form = $this->createForm('spot',$spot);
@@ -101,20 +106,23 @@ class BOController extends Controller
                 return $this->render('LaPoizWindBundle:BackOffice:spot.html.twig', array(
                         'spot' => $spot,
                         'listSpot' => $listSpot,
-                        'listRegion' => $listRegion
+                        'listRegion' => $listRegion,
+                    'listSpotsWithoutRegion' => $listSpotsWithoutRegion
                     ));
             } else {
                 return $this->render('LaPoizWindBundle:BackOffice/Spot:createSpot.html.twig', array(
                         'form' => $form->createView(),
                         'listSpot' => $listSpot,
-                        'listRegion' => $listRegion
+                        'listRegion' => $listRegion,
+                    'listSpotsWithoutRegion' => $listSpotsWithoutRegion
                     ));
             }
         }
         return $this->render('LaPoizWindBundle:BackOffice/Spot:createSpot.html.twig', array(
                 'form' => $form->createView(),
                 'listSpot' => $listSpot,
-                'listRegion' => $listRegion
+                'listRegion' => $listRegion,
+            'listSpotsWithoutRegion' => $listSpotsWithoutRegion
             ));
     }
 
@@ -162,7 +170,7 @@ class BOController extends Controller
         // récupere tous les spots, pour l'affichage de la page (barre de nav)
         $listSpot = $em->getRepository('LaPoizWindBundle:Spot')->findAllValid();
         $listRegion = $em->getRepository('LaPoizWindBundle:Region')->findAllOrderByNumDisplay();
-        $listSpotWitoutRegion = $em->getRepository('LaPoizWindBundle:Spot')->findAllWithoutRegion();
+        $listSpotsWithoutRegion = $em->getRepository('LaPoizWindBundle:Spot')->findAllWithoutRegion();
 
         if (isset($id) && $id!=-1) {
             $region = $em->find('LaPoizWindBundle:Region', $id);
@@ -199,7 +207,7 @@ class BOController extends Controller
             'region' => $region,
             'listSpot' => $listSpot,
             'listRegion' => $listRegion,
-            'listSpotWitoutRegion' => $listSpotWitoutRegion
+            'listSpotsWithoutRegion' => $listSpotsWithoutRegion
         ));
     }
 
@@ -215,7 +223,7 @@ class BOController extends Controller
         // récupere tous les spots, pour l'affichage de la page (barre de nav)
         $listSpot = $em->getRepository('LaPoizWindBundle:Spot')->findAllValid();
         $listRegion = $em->getRepository('LaPoizWindBundle:Region')->findAllOrderByNumDisplay();
-        $listSpotWitoutRegion = $em->getRepository('LaPoizWindBundle:Spot')->findAllWithoutRegion();
+        $listSpotsWithoutRegion = $em->getRepository('LaPoizWindBundle:Spot')->findAllWithoutRegion();
 
         $region = new Region();
         $form = $this->createForm('region',$region);
@@ -239,14 +247,14 @@ class BOController extends Controller
                     'region' => $region,
                     'listSpot' => $listSpot,
                     'listRegion' => $listRegion,
-                    'listSpotWitoutRegion' => $listSpotWitoutRegion
+                    'listSpotsWithoutRegion' => $listSpotsWithoutRegion
                 ));
             } else {
                 return $this->render('LaPoizWindBundle:BackOffice/Region:createRegion.html.twig', array(
                     'form' => $form->createView(),
                     'listSpot' => $listSpot,
                     'listRegion' => $listRegion,
-                    'listSpotWitoutRegion' => $listSpotWitoutRegion
+                    'listSpotsWithoutRegion' => $listSpotsWithoutRegion
                 ));
             }
         }
@@ -254,7 +262,7 @@ class BOController extends Controller
             'form' => $form->createView(),
             'listSpot' => $listSpot,
             'listRegion' => $listRegion,
-            'listSpotWitoutRegion' => $listSpotWitoutRegion
+            'listSpotsWithoutRegion' => $listSpotsWithoutRegion
         ));
     }
 
@@ -302,6 +310,7 @@ class BOController extends Controller
         // récupere tous les spots
         $listSpot = $em->getRepository('LaPoizWindBundle:Spot')->findAllValid();
         $listRegion = $em->getRepository('LaPoizWindBundle:Region')->findAllOrderByNumDisplay();
+        $listSpotsWithoutRegion = $em->getRepository('LaPoizWindBundle:Spot')->findAllWithoutRegion();
 
         if (isset($id) && $id!=-1)
         {
@@ -317,6 +326,7 @@ class BOController extends Controller
                     'dataWindPrev' => $dataWindPrev,
                     'spot' => $spot,
                     'listSpot' => $listSpot,
+                    'listSpotsWithoutRegion' => $listSpotsWithoutRegion,
                     'listRegion' => $listRegion)
             );
         } else {

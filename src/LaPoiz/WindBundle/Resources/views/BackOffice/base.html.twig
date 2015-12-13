@@ -7,13 +7,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <meta name="author" content="Damien Poizat">
-    <link rel="shortcut icon" href="{{ asset('bundles/lapoizwind/images/ico/favicon.png') }}">
+    <link rel="shortcut icon" href="{{ asset('bundles/lapoizwind/images/lapoizWindIcone.png') }}">
 
     <title>{% block titlePage %}Back Office de LaPoizWind Server{% endblock %}</title>
     <!-- Bootstrap core CSS -->
-    <link href="{{ asset('bundles/lapoizwind/css/bootstrap.css') }}" rel="stylesheet">
-    <!-- Icons en plus -->
-    <link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+    <link href="{{ asset('bundles/lapoizwind/css/lapoizwind-bootstrap.css') }}" rel="stylesheet" media="screen">
+    <link href="{{ asset('bundles/lapoizwind/font/css/fontello.css') }}" rel="stylesheet">
+
     <!-- Custom styles for this template -->
     <link href="{{ asset('bundles/lapoizwind/css/laPoizWind.css') }}" rel="stylesheet">
     <link href="{{ asset('bundles/lapoizwind/css/laPoizWind_BO.css') }}" rel="stylesheet">
@@ -43,7 +43,7 @@
     {% if listSpot is defined %}
 
     {% from "LaPoizWindBundle:BackOffice/PageComposant:nav.html.twig" import view %}
-    {{ view(listSpot, listRegion) }}
+    {{ view(listRegion, listSpotsWithoutRegion) }}
 
     {% endif %}
 
