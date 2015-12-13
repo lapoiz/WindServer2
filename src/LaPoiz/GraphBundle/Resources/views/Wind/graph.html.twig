@@ -31,7 +31,7 @@
             orientationVentSpot["{{ windOrientation.orientationDeg|e }}"]="{{ windOrientation.state|e }}";
             {% endfor %}
 
-
+            isMaree = {{ spot.mareeURL is not null ? "true":"false" }};
 
             $( document ).ready(function() {
                 initGraph();
@@ -46,15 +46,17 @@
                 });
             }
             function getMaree() {
-                $('#legend_btnActions').html('<img src="{{ asset('bundles/lapoizwind/images/loading.gif') }}" alt="Loading Ajax data" />');
-                $.getJSON( "{{ path('_fo_json_lapoizGraph_maree_data',{ 'id':spot.id }) }}", function( json ) {
-                    if (json.success) {
-                        loadMareeOnGraph(json.data);
-                        displayBoutonMarree();
-                    } else {
-                        $('#legend_btnActions').html('');
-                    }
-                });
+                if (isMaree) {
+                    $('#legend_btnActions').html('<img src="{{ asset('bundles/lapoizwind/images/loading.gif') }}" alt="Loading Ajax data" />');
+                    $.getJSON("{{ path('_fo_json_lapoizGraph_maree_data',{ 'id':spot.id }) }}", function (json) {
+                        if (json.success) {
+                            loadMareeOnGraph(json.data);
+                            displayBoutonMarree();
+                        } else {
+                            $('#legend_btnActions').html('');
+                        }
+                    });
+                }
             }
         </script>
 

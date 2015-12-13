@@ -5,7 +5,7 @@
             <th class="text-center">Spot</th>
 
             {% for i in 0..6 %}
-                <th class="text-center">{{ date('+' ~ i ~ 'days')|date('D j M') }}</th>
+                <th class="text-center">{{ date('+' ~ i ~ 'days')|localizeddate('full', 'none')|date('D j M') }}</th>
             {% endfor %}
 
         </tr>

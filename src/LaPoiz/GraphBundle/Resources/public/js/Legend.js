@@ -22,12 +22,14 @@ Legend.prototype.addWebSite = function(listeSites) {
 Legend.prototype.displayBtnMaree = function() {
     var divBtn=$("#legend_btnActions");
     divBtn.html('');
-    var btn = document.createElement('button');
-    //var txt = document.createTextNode("R&eacute;strisction d&ucirc; aux mar&eacute;es");
-    btn.innerHTML="R&eacute;strisction d&ucirc; aux mar&eacute;es";
+    if (isMaree) {
+        var btn = document.createElement('button');
+        //var txt = document.createTextNode("R&eacute;strisction d&ucirc; aux mar&eacute;es");
+        btn.innerHTML = "R&eacute;strisction d&ucirc; aux mar&eacute;es";
 
-    btn.setAttribute('type', 'button');
-    btn.setAttribute('class', 'btn btn-primary');
-    btn.setAttribute('onclick', "displayRestrictionMaree()");
-    divBtn.append(btn);
+        btn.setAttribute('type', 'button');
+        btn.setAttribute('class', 'btn btn-primary');
+        btn.setAttribute('onclick', "displayRestrictionMaree()");
+        divBtn.append(btn);
+    }
 }
