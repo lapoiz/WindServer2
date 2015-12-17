@@ -7,12 +7,13 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="logoHomePage" href="{{ path('_index') }}">
-                <img src="{{ asset('bundles/lapoizwind/images/lapoizWindIcone.png') }}" />
+            <a class="navbar-brand logoHomePage" href="{{ path('_index') }}">
+                <img src="{{ asset('bundles/lapoizwind/images/lapoizWindIcone.png') }}" alt="LaPoizWind">
             </a>
         </div>
         <div class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
+
                 <li class="dropdown {% if app.request.attributes.get('_route') starts with '_fo_spot_graph' %} active{% endif %}">
                     <a data-toggle="dropdown" href="#">Les spots<b class="caret"></b></a>
                     <ul class="dropdown-menu">

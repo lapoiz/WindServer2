@@ -91,9 +91,11 @@ class FOJsonController extends Controller
                 //$forecast["date"]=$dataWindPrev->getCreated()->format('d-m-Y');
 
                 $previsionDateList = $this->getDoctrine()->getRepository('LaPoizWindBundle:PrevisionDate')->getLastCreated($dataWindPrev);
-                $forecast["date"]=$previsionDateList[0]->getCreated()->format('d-m-Y H:i');
-                $forecast["previsions"]=TransformeToLaPoizGraphDataTabForJson::transformePrevisionDateList($previsionDateList);
-                $tabJson["forecast"][]=$forecast;
+                if ($previsionDateList!=null) {
+                    $forecast["date"] = $previsionDateList[0]->getCreated()->format('d-m-Y H:i');
+                    $forecast["previsions"] = TransformeToLaPoizGraphDataTabForJson::transformePrevisionDateList($previsionDateList);
+                    $tabJson["forecast"][] = $forecast;
+                }
             }
 
             // Récupére les previsions de la Marée prévue à partir d'aujourdhui

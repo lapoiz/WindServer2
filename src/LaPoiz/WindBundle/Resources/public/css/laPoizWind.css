@@ -48,14 +48,27 @@
     border: 0px;
 }
 
-/* ************* INDEX = HOME PAGE *********** */
+/* ************* Nav Bar ******************************/
+
+.navbar-brand {
+    padding: 1px; /*adjust the top/bottom padding if your logo looks too small */
+    margin-top: 0px; /* you can adjust this if your logo needs to be moved up or down but simply adjusting the padding is easier */
+    height: 35px; /* this should be equal to computed height of .navbar-nav>li>a */
+}
 .logoHomePage > img {
     display: block;
-    background: white;
+    background-color: white;
     border-radius: 50%;
-    height: 30px;
-    width: 30px;
+    height: 35px; /* resize UP to fit*/
+    width: 35px; /* resize based on height */
+    margin: 0 auto;
+
+    -o-object-fit: contain; /* Opera Support */
+    object-fit: contain; /* Resize down to fit container */
 }
+
+/* ************* INDEX = HOME PAGE *********** */
+
 
 .meteo-icon {
     height: 15px;
