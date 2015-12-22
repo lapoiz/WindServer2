@@ -1,0 +1,173 @@
+{% extends 'LaPoizWindBundle:FrontOffice:base.html.twig' %}
+
+{% block javascriptsHeader %}
+    <script src="{{ asset('bundles/lapoizgraph/js/moment.min.js') }}"></script>
+    <script src="https://maps.googleapis.com/maps/api/js"></script>
+    <script type="text/javascript" src="http://google-maps-utility-library-v3.googlecode.com/svn/trunk/markerwithlabel/src/markerwithlabel.js"></script>
+
+{% endblock %}
+
+{% block bodyPage %}
+
+    <div class="row">
+        <div class="col-md-12">
+            <h2>Cartes des sites</h2>
+
+            <SELECT id="selectDates" NAME="Date"></SELECT>
+
+            {% for webSite in listSites %}
+                <input type="checkbox" name="check_site" id="check_site_{{ webSite.id }}" value="{{ webSite.nom }}" checked />
+                <label for="check_site_{{ webSite.id }}">{{ webSite.nom }}</label>
+            {% endfor %}
+
+            <div id="sitesMap"></div>
+
+        </div>
+    </div>
+
+    <script>
+
+        var listeSpotsMarker;
+        var numDaySelected=0;
+
+        var spotsList = {"spots":[
+            {% for spot in listSpot %}
+                { "nom:":"{{ spot.nom }}", "id":{{ spot.id }}, "lat":{{ spot.gpsLat }}, "lng": {{ spot.gpsLong }} },
+            {% endfor %}
+        ]};
+        var isSpotsListLoading=false;
+
+        var select = $('#selectDates');
+        for (i=0;i<7;i++) {
+            var day = moment().add(i,'days').format('dddd');
+            var option = new Option(day,i);
+            select.append($(option));
+        }
+
+
+        select.change(function() {
+              var str = "";
+              $( "select option:selected" ).each(function() {
+                  numDaySelected=$( this ).val();
+                  loadDateData(spotsList);
+              });}
+        ).trigger( "change" );
+
+        var webSiteSelected=[{% for webSite in listSites %} "{{ webSite.nom }}", {% endfor %}];
+        // Manage la selection des sites Internet
+        $("[name='check_site']").change(function(){
+            webSiteSelected=[];
+            $("input[name='check_site']:checked").each(function(){
+                webSiteSelected.push($(this).val());
+            })
+            loadDateData(spotsList);
+        });
+
+        var map;
+
+        function initialize() {
+
+            var mapOptions = {
+                zoom: 6,
+                center: {lat: 47.090039, lng: 2.377031},
+                mapTypeId: google.maps.MapTypeId.TERRAIN
+            };
+            map = new google.maps.Map(document.getElementById('sitesMap'),
+                    mapOptions);
+            createMarker();
+        }
+
+
+        function createMarker() {
+
+            var spotMarker = {
+                path: 'M 5 -10 A 20 20, 0, 1, 0, -5 -10 L 0 0 Z',
+                fillColor: 'pink',
+                fillOpacity: 0.8,
+                scale: 1,
+                strokeColor: 'red',
+                strokeWeight: 1
+            };
+            listeSpotsMarker=[];
+
+            for	(index = 0; index < spotsList.spots.length; index++) {
+                var spot=spotsList.spots[index];
+
+                listeSpotsMarker[spot.id] = new MarkerWithLabel({
+                    position: spot,
+                    draggable: false,
+                    icon: spotMarker,
+                    map: map,
+                    labelAnchor: new google.maps.Point(10, 50),
+                    labelClass: "mapIconLabel", // the CSS class for the label
+                    labelContent: "?",
+                    labelStyle: {opacity: 0.75}
+                });
+            }
+        }
+
+        function loadJSON() {
+            $.ajax({
+                url: "{{ path('_fo_ajax_sites_info_prev') }}",
+                type: "GET",
+                success: function(jsonResult) {
+                    spotsList=jsonResult;
+                    isSpotsListLoading=true;
+                    loadDateData(spotsList);
+                }
+            });
+        };
+
+        function loadDateData(spotsList) {
+            if (!listeSpotsMarker) {
+                createMarker();
+            }
+            if (!isSpotsListLoading) {
+                loadJSON();
+            } else {
+                $.each(spotsList, function (idSpot, spotData) {
+                    // selon la selection du site webSiteSelected
+                    // alert(spotData.nom);
+                    listeSpotsMarker[spotData.id].labelContent = getNbHoure(spotData.nbHourNav, webSiteSelected, numDaySelected);
+                    listeSpotsMarker[spotData.id].label.setContent();
+                });
+            }
+        }
+
+        /**
+         * @param spotData: contenant pour tous les prochains jours, le nbHeure de nav prévu par chaque website
+         * @param webSiteSelected: tableau des websites dont on veut les infos
+         * @param numDaySelected: numero du jour séléctionné = index de la date de nbHourNav
+         */
+        function getNbHoure(nbHourNav,webSiteSelected,numDaySelected) {
+            // JSON: http://localhost/Wind/web/app_dev.php/fo/ajax/sites/prev
+            nbHoureAllWebSites=nbHourNav[numDaySelected];
+            //alert(JSON.stringify(nbHoureAllWebSites));
+            if (nbHoureAllWebSites!==null) {
+                nbWebsite=0;
+                nbH=0;
+
+                for (iWebSite = 0; iWebSite < webSiteSelected.length; iWebSite++) {
+                    if (nbHoureAllWebSites[webSiteSelected[iWebSite]]!== undefined) {
+                        nbH+=parseFloat(nbHoureAllWebSites[webSiteSelected[iWebSite]]);
+                        nbWebsite++;
+                    }
+                }
+                if (nbWebsite===0) {
+                    return '?';
+                } else {
+                    return (Math.round(nbH/nbWebsite))+"h";
+                }
+            } else {
+                return '?';
+            }
+        }
+
+        // Call the initialize function after the page has finished loading
+        google.maps.event.addDomListener(window, 'load', initialize);
+
+    </script>
+
+
+
+{% endblock %}

@@ -67,8 +67,21 @@
     object-fit: contain; /* Resize down to fit container */
 }
 
-/* ************* INDEX = HOME PAGE *********** */
 
+/* ************* Page Sites Map *********** */
+
+#sitesMap {
+    margin: 0;
+    padding: 0;
+    height: 600px;
+    width: 100%;
+}
+.mapIconLabel {
+    font-size: 10px;
+    color: black;
+}
+
+/* ************* INDEX = HOME PAGE *********** */
 
 .meteo-icon {
     height: 15px;

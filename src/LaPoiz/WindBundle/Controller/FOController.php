@@ -51,6 +51,26 @@ class FOController extends Controller
             'listSpotsWithoutRegion' => $listSpotsWithoutRegion));
   }
 
+    /**
+     * @Template()
+     */
+    public function sitesMapAction() {
+        $em = $this->container->get('doctrine.orm.entity_manager');
+        // récupere tous les spots
+        $listSpot = $em->getRepository('LaPoizWindBundle:Spot')->findAllValid();
+        // récupere toutes les régions
+        $listRegion = $em->getRepository('LaPoizWindBundle:Region')->findAllOrderByNumDisplay();
+        $listSpotsWithoutRegion = $em->getRepository('LaPoizWindBundle:Spot')->findAllWithoutRegion();
+        $listSites = $em->getRepository('LaPoizWindBundle:WebSite')->findAll();
+
+        return $this->container->get('templating')->renderResponse('LaPoizWindBundle:FrontOffice:sitesMap.html.twig',
+            array(
+                'listSpot' => $listSpot,
+                'listRegion' => $listRegion,
+                'listSpotsWithoutRegion' => $listSpotsWithoutRegion,
+                'listSites' => $listSites ));
+    }
+
   /**
     * @Template()
   */

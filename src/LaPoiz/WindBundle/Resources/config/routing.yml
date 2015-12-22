@@ -20,6 +20,15 @@ _index:
   defaults: { _controller: LaPoizWindBundle:FO:index }
   pattern: /index
 
+_fo_sites_map:
+  defaults: { _controller: LaPoizWindBundle:FO:sitesMap }
+  pattern: /map
+
+_fo_ajax_sites_info_prev:
+  defaults: { _controller: LaPoizWindBundle:FOJson:getInfoPrev }
+  pattern: /fo/ajax/sites/prev
+
+
 _fo_concept:
   defaults: { _controller: LaPoizWindBundle:FO:concept }
   pattern: /concept
