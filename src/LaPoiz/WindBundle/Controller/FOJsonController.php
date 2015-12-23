@@ -193,9 +193,15 @@ class FOJsonController extends Controller
                     if (array_key_exists($notesDate->getDatePrev()->format('Y-m-d'), $tabNotes)) {
                         $index=$tabNotes[$notesDate->getDatePrev()->format('Y-m-d')];
                         $nbHPrev=array();
+
+                        $websites=array();
                         foreach ($notesDate->getNbHoureNav() as $nbHoureNav) {
-                            $nbHPrev[$nbHoureNav->getWebsite()->getNom()]=$nbHoureNav->getNbHoure();
+                            $websites[$nbHoureNav->getWebsite()->getNom()]=$nbHoureNav->getNbHoure();
                         }
+                        $nbHPrev["websites"]=$websites;
+                        $nbHPrev["tempMax"]=round($notesDate->getTempMax());
+                        $nbHPrev["tempMin"]=round($notesDate->getTempMin());
+                        $nbHPrev["tempWater"]=round($notesDate->getTempWater());
                         $spotData["nbHourNav"][$index]=$nbHPrev;
                     }
                 }

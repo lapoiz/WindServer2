@@ -79,7 +79,10 @@
 .mapIconLabel {
     font-size: 10px;
     color: black;
+    text-align: center;
+    line-height: 11px;
 }
+
 
 /* ************* INDEX = HOME PAGE *********** */
 
