@@ -36,7 +36,7 @@ class GraphicalWeatherGovGetData extends WebsiteGetData
 	static function parseURL($url) {
 		$dom = new DOMDocument();
 		if (!$dom->load($url)) {
-		    die("Impossible de charger le fichier XML");
+		    //die("Impossible de charger le fichier XML");
 		    //TODO: gestion d'erreur
 		}
 		$tableauData = array();

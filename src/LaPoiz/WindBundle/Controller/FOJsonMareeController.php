@@ -54,7 +54,7 @@ class FOJsonMareeController extends Controller {
      * @param $mareeDate : prévision de marre que l'on va analyser
      * @return: Array: un tableau contenant la liste des plages horaires OK, KO et Warn
      */
-    static function getPlageRestriction($spot, $mareeDate) {
+    private static function getPlageRestriction($spot, $mareeDate) {
         $mareeStateArray=array();
         $listePrevisionMaree=$mareeDate->getListPrevision();
         if ($listePrevisionMaree!=null && count($listePrevisionMaree)>=2) {

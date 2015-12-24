@@ -333,7 +333,7 @@ class BOAjaxSiteController extends Controller
      * @param $dataWindPrev
      * @param $em
      */
-    public function saveDataWindPrev($spot, $dataWindPrev, $em)
+    private function saveDataWindPrev($spot, $dataWindPrev, $em)
     {
         $spot->addDataWindPrev($dataWindPrev);
         $site = $dataWindPrev->getWebsite();

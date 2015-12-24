@@ -97,8 +97,6 @@ class CreateNoteCommand extends ContainerAwareCommand  {
                 }
             }
 
-            $em->flush();
-
             //********** Température de l'eau **********
             // rien n'existe actuellement
             // récupére la temperature de l'eau dans la journée (elle ne varie quasi pas
@@ -106,7 +104,7 @@ class CreateNoteCommand extends ContainerAwareCommand  {
 
     		$output->writeln('<info>******************************</info>');
     	}
-
+        $em->flush();
     }
 
 }

@@ -85,10 +85,8 @@ class CreateNbHoureCommand extends ContainerAwareCommand  {
                     $currentDay = date_add($currentDay, new \DateInterval('P1D')); // Jour suivant
                 }
             }
-
-            $em->flush();
-
     		$output->writeln('<info>******************************</info>');
     	}
+        $em->flush();
     }
 }

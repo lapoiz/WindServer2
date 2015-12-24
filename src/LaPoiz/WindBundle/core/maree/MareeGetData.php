@@ -90,7 +90,7 @@ class MareeGetData {
                 }
                 $output->writeln('$mareeDate->getDatePrev 1: '.$mareeDate->getDatePrev()->format('Y-m-d H:i:s'));
                 $entityManager->persist($mareeDate);
-                $entityManager->flush();
+
                 $output->writeln('$mareeDate->getDatePrev 2: '.$mareeDate->getDatePrev()->format('Y-m-d H:i:s'));
             } // end of if $currentDay>$beginDate
 
@@ -109,11 +109,11 @@ class MareeGetData {
                 $output->writeln('<info>delete $mareeDate->getDatePrev : '.$mareeDate->getDatePrev()->format('Y-m-d H:i:s').'</info>');
                 try {
                     $entityManager->remove($mareeDate);
-                    $entityManager->flush();
                 } catch (\Exception $ex) {
                     $output->writeln("Exception Found - " . $ex->getMessage());;
                 }
         }
+        $entityManager->flush();
     }
 
     /**
@@ -130,12 +130,13 @@ class MareeGetData {
                 try {
                     $entityManager->remove($mareeDate);
                     $output->writeln('<info>delete $mareeDate->getDatePrev : '.$mareeDate->getDatePrev()->format('Y-m-d H:i:s').'</info>');
-                    $entityManager->flush();
+
                 } catch (\Exception $ex) {
                     $output->writeln("Exception Found - " . $ex->getMessage());;
                 }
             }
         }
+        $entityManager->flush();
     }
 
     /*
