@@ -25,7 +25,7 @@ class Spot
     private $nom;
     
     /**
-     * @ORM\Column(type="string",length=255)
+     * @ORM\Column(type="text")
      */    
     private $description;
     
@@ -37,7 +37,7 @@ class Spot
 
     
     /**
-     * @ORM\Column(type="string",length=255,nullable=true)
+     * @ORM\Column(type="text",nullable=true)
      */    
     private $localisationDescription;
     
