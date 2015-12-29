@@ -56,6 +56,7 @@ class DataWindPrev
     {
         $this->listPrevisionDate = new \Doctrine\Common\Collections\ArrayCollection();
         $this->created = new \Datetime();
+        $this->lastUpdate = new \Datetime();
     }
     
 
