@@ -188,6 +188,7 @@ class WebsiteGetData
 
 					$prev->setPrevisionDate($prevDate);
 					$prevDate->addListPrevision($prev);
+					$entityManager->persist($prevDate);
 					$entityManager->persist($prev);
 					$entityManager->flush(); // car sinon les éléments ne sont pas obligatoirement enregistrer dans l'ordre des heures
 				}

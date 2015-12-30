@@ -132,7 +132,8 @@ class NbHoureNav {
                 // Il y a des contraintes de marée
                 // Il faut les croiser avec les prev de vent
                 foreach ($jourTab as $houre => $hourTab) {
-                    $coefMarée=array_key_exists("marée",$hourTab)?$hourTab["marée"]:1; // A virer une fois l'erreur de datePrev des maree trouvé
+                    //$coefMarée=array_key_exists("marée",$hourTab)?$hourTab["marée"]:1; // A virer une fois l'erreur de datePrev des maree trouvé
+                    $coefMarée=$hourTab["marée"];
                     foreach ($tabSitePrev as $webSiteKey => $hourTab) {
                         if (!array_key_exists($webSiteKey,$tabNbHoureNav[$date])) {
                             $tabNbHoureNav[$date][$webSiteKey]=0;
