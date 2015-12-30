@@ -2,6 +2,8 @@
 
 namespace LaPoiz\WindBundle\Command;
 
+use Doctrine\ORM\EntityManager;
+use LaPoiz\WindBundle\Entity\DataWindPrev;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\Console\Input\InputArgument;
@@ -51,11 +53,14 @@ class GetDataCommand extends ContainerAwareCommand  {
         }
     }
 
-    public static function getDataFromDataWindPrev($dataWindPrev, $output, $em) {
+    public static function getDataFromDataWindPrev(DataWindPrev $dataWindPrev,OutputInterface $output,EntityManager $em) {
         $output->write('<info>Spot '.$dataWindPrev->getSpot()->getNom().' - </info>');
 
         // get each web site
         $output->writeln('<info>site '.$dataWindPrev->getWebSite()->getNom().' -> '.$dataWindPrev->getUrl().'</info>');
+
+        // Delete old value
+        GetDataCommand::deleteOldPrevisionDate($dataWindPrev, $output, $em);
 
         // save data
         $websiteGetData=WebsiteGetData::getWebSiteObject($dataWindPrev);// return WindguruGetData or MeteoFranceGetData... depend of $dataWindPrev
@@ -69,5 +74,28 @@ class GetDataCommand extends ContainerAwareCommand  {
         $saveData=$websiteGetData->saveFromTransformData($transformData[0],$dataWindPrev,$em); // array(array $prevDate,$chrono)
         $output->writeln('<info>    save data: '.$saveData[1].'</info>');
         $output->writeln('<info>******************************</info>');
+    }
+
+    /**
+     * Efface les anciennes PrevisionDate (antérieur à aujourd'hui)
+     */
+    private static function deleteOldPrevisionDate(DataWindPrev $dataWindPrev,OutputInterface $output,EntityManager $entityManager) {
+        $output->writeln('<info>****** function deleteOldPrevisionDate ****</info>');
+        $today=new \DateTime('now');
+        $today->setTime(0, 0, 0);
+
+        foreach ($dataWindPrev->getlistPrevisionDate() as $previsionDate) {
+            if ($previsionDate->getDatePrev() < $today) {
+                // avant today -> on efface
+                try {
+                    $entityManager->remove($previsionDate);
+                    $output->writeln('<info>delete $previsionDate->getDatePrev : '.$previsionDate->getDatePrev()->format('Y-m-d H:i:s').'</info>');
+                } catch (\Exception $ex) {
+                    $output->writeln("Exception Found - " . $ex->getMessage());;
+                }
+            }
+        }
+        $entityManager->flush();
+        $output->writeln('<info>******</info>');
     }
 }
