@@ -53,7 +53,7 @@ class NbHoureNav {
         }
 
         foreach ($tabDataNbHoureNav as $keyDate=>$toto) {
-            if ($tabAllPrevisionDate[$keyDate] != null && count($tabAllPrevisionDate[$keyDate]) > 0) {
+            if (array_key_exists($keyDate,$tabAllPrevisionDate)) {
                 //$noteDate = ManageNote::getNotesDate($spot,\DateTime::createFromFormat('Y-m-d',$keyDate), $em);
                 NbHoureWind::calculNbHoureNav($spot, $tabDataNbHoureNav[$keyDate], $tabAllPrevisionDate[$keyDate]);
             }
@@ -62,7 +62,7 @@ class NbHoureNav {
         //********** Meteo ***********
         // Récupere la météo (T°C, nuage ....) pour le spot qui sera utilisé pour noter l'agréabilité
         foreach ($tabDataNbHoureNav as $keyDate=>$toto) {
-            if ($tabAllPrevisionDate[$keyDate] != null && count($tabAllPrevisionDate[$keyDate]) > 0) {
+            if (array_key_exists($keyDate,$tabAllPrevisionDate)) {
                 foreach ($tabAllPrevisionDate[$keyDate] as $previsionDate) {
                     // pour chaque website = $previsionDate (même spot, même jour)
 
@@ -132,7 +132,7 @@ class NbHoureNav {
                 // Il y a des contraintes de marée
                 // Il faut les croiser avec les prev de vent
                 foreach ($jourTab as $houre => $hourTab) {
-                    $coefMarée=$hourTab["marée"];
+                    $coefMarée=array_key_exists("marée",$hourTab)?$hourTab["marée"]:1; // A virer une fois l'erreur de datePrev des maree trouvé
                     foreach ($tabSitePrev as $webSiteKey => $hourTab) {
                         if (!array_key_exists($webSiteKey,$tabNbHoureNav[$date])) {
                             $tabNbHoureNav[$date][$webSiteKey]=0;
