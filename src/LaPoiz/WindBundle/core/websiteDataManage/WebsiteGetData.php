@@ -154,7 +154,7 @@ class WebsiteGetData
 		$now=new \DateTime("now");
 		$result= array();
 		foreach ($tableauData as $date=>$lineWindData) {
-			if ($date != 'update') {
+			if ($date !== 'update') {
 				$prevDate = new PrevisionDate();
 				$prevDate->setCreated($now);
 
@@ -189,6 +189,7 @@ class WebsiteGetData
 					$prev->setPrevisionDate($prevDate);
 					$prevDate->addListPrevision($prev);
 					$entityManager->persist($prev);
+					$entityManager->flush(); // car sinon les éléments ne sont pas obligatoirement enregistrer dans l'ordre des heures
 				}
 
 				//TODO: calculate average etc...
@@ -204,6 +205,7 @@ class WebsiteGetData
 				$dataWindPrev->addListPrevisionDate($prevDate);
 
 				$entityManager->persist($prevDate);
+				$entityManager->flush();
 				$result[] = $prevDate;
 			} else { // last update
 				if (isset($lineWindData[0]) && isset($lineWindData[0][0])) {

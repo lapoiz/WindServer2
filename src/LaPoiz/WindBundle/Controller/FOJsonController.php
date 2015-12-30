@@ -79,7 +79,7 @@ class FOJsonController extends Controller
                 ));
             }
             // Normal way, we find spot
-            TransformeToHighchartsDataTabForJson::createResultJson($spot);
+            //TransformeToHighchartsDataTabForJson::createResultJson($spot);
             $tabJson=TransformeToLaPoizGraphDataTabForJson::createResultJson($spot);;
 
             foreach ($spot->getDataWindPrev() as $dataWindPrev) {
@@ -91,7 +91,7 @@ class FOJsonController extends Controller
                 //$forecast["date"]=$dataWindPrev->getCreated()->format('d-m-Y');
 
                 $previsionDateList = $this->getDoctrine()->getRepository('LaPoizWindBundle:PrevisionDate')->getLastCreated($dataWindPrev);
-                if ($previsionDateList!=null) {
+                if ($previsionDateList!==null) {
                     $forecast["date"] = $previsionDateList[0]->getCreated()->format('d-m-Y H:i');
                     $forecast["previsions"] = TransformeToLaPoizGraphDataTabForJson::transformePrevisionDateList($previsionDateList);
                     $tabJson["forecast"][] = $forecast;

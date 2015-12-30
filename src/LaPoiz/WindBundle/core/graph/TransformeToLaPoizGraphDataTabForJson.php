@@ -24,7 +24,7 @@ class TransformeToLaPoizGraphDataTabForJson   {
     // For same WebSite
 	static function transformePrevisionDateList($previsionDateList) {
 		$forecastArray=array();
-        if ($previsionDateList!=null) {
+        if ($previsionDateList!==null) {
             foreach ($previsionDateList as $previsionDate) {
 				$forecastDateArray=array();
 				$forecastDateArray['date']=$previsionDate->getDatePrev()->format('d-m-Y');

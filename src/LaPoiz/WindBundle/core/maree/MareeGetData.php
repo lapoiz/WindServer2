@@ -86,11 +86,13 @@ class MareeGetData {
                     $previsionMaree->setTime($hour);
                     $previsionMaree->setMareeDate($mareeDate);
                     $mareeDate->addListPrevision($previsionMaree);
+                    $entityManager->persist($mareeDate);
                     $entityManager->persist($previsionMaree);
+                    $entityManager->flush();
                 }
                 $output->writeln('$mareeDate->getDatePrev 1: '.$mareeDate->getDatePrev()->format('Y-m-d H:i:s'));
                 $entityManager->persist($mareeDate);
-
+                $entityManager->flush();
                 $output->writeln('$mareeDate->getDatePrev 2: '.$mareeDate->getDatePrev()->format('Y-m-d H:i:s'));
             } // end of if $currentDay>$beginDate
 
