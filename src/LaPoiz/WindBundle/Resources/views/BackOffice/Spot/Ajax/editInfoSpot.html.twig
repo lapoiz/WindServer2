@@ -1,0 +1,65 @@
+    <h2>Site Internet concernant le spot: {{ spot.nom }}</h2>
+
+
+    <div class="row">
+        <div class="col-sm-12">
+            {{ form_start(form, {
+                'style': 'horizontal',
+                'label_col': 2,
+                'widget_col': 8,
+                'attr': {
+                    'id': 'infoSpot_form'
+                }
+            })}}
+
+            {{ form_errors(form, { 'global_errors': true }) }}
+
+            {{ form_end(form) }}
+
+            {% if infoSpot is defined %}
+                <button class="btn btn-danger pull-right" id="buttonDelete">Delete</button>
+            {% endif %}
+
+
+        </div>
+    </div>
+
+    {{ form_javascript(form) }}
+
+    <script>
+
+        $("#infoSpot_form").on('submit', function(e){
+
+            $('#resul').html('<img src="{{ asset('bundles/lapoizwind/images/loading.gif') }}" alt="Loading Ajax data" />');
+
+            e.preventDefault();
+            var $this = $(this);
+
+            $.ajax({
+                url: $this.attr('action'),
+                type: $this.attr('method'),
+                data: $this.serialize(),
+                success: function(html) {
+                    loadMenuInfoSite();
+                    $('#result').html(html);
+                }
+            });
+        })
+
+        {% if infoSpot is defined %}
+
+        $("#buttonDelete").click( function(){
+
+            $('#resul').html('<img src="{{ asset('bundles/lapoizwind/images/loading.gif') }}" alt="Loading Ajax data" />');
+
+            $.ajax({
+                url: "{{ path('_bo_ajax_spot_remove_spot_info', {'id':infoSpot.id})}}",
+                type: "post",
+                success: function(html) {
+                    loadMenuInfoSite();
+                    $('#result').html(html);
+                }
+            });
+        })
+        {% endif %}
+    </script>

@@ -17,6 +17,11 @@ services:
         tags:
             - { name: form.type, alias: region }
 
+    la_poiz_wind.form.type.infoSpot:
+        class: LaPoiz\WindBundle\Form\InfoSpotType
+        tags:
+            - { name: form.type, alias: infoSpotForm }
+
     la_poiz_wind.form.type.dataWindPrev:
         class: LaPoiz\WindBundle\Form\DataWindPrevType
         tags:

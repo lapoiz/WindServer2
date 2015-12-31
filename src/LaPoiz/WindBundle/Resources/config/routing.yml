@@ -257,6 +257,23 @@ _bo_ajax_spot_tempWater_save:
   pattern: /admin/BO/ajax/spot/tempWater/save/{id}
 
 
+_bo_ajax_spot_load_menu_infoSite:
+  defaults: { _controller: LaPoizWindBundle:BOAjaxSpotLoadMenu:loadInfoSite }
+  pattern: /admin/BO/ajax/spot/{id}/load/infoSpot
+
+
+_bo_ajax_spot_add_spot_info:
+  defaults: { _controller: LaPoizWindBundle:BOAjaxSpot:addSpotInfo }
+  pattern: /admin/BO/ajax/spot/{id}/add/spotInfo
+
+_bo_ajax_spot_edit_spot_info:
+  defaults: { _controller: LaPoizWindBundle:BOAjaxSpot:editSpotInfo }
+  pattern: /admin/BO/ajax/spot/edit/spotInfo/{id}
+
+_bo_ajax_spot_remove_spot_info:
+  defaults: { _controller: LaPoizWindBundle:BOAjaxSpot:removeSpotInfo }
+  pattern: /admin/BO/ajax/spot/remove/spotInfo/{id}
+
 _bo_ajax_spot_add_site:
   defaults: { _controller: LaPoizWindBundle:BOAjaxSite:spotAddSite }
   pattern: /admin/BO/ajax/spot/{id}/addSite

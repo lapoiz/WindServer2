@@ -1,0 +1,9 @@
+
+            <li class="" id="menuAddInfoSite"> <a onclick="ajouterInfoSite(this)"><i class="icon-plus icon-white"></i> Ajouter</a></li>
+            {% if spot.infoSpot is not null %}
+                {% for siteInfoSpot in spot.infoSpot %}
+                    <li class="" id="menuInfoSpot{{ siteInfoSpot.id }}">
+                        <a onclick="infoSpot(this,'{{ siteInfoSpot.id }}')">{{ siteInfoSpot.titre }}</a>
+                    </li>
+                {% endfor %}
+            {% endif %}

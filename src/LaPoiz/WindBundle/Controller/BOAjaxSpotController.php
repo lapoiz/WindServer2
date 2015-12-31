@@ -8,14 +8,18 @@ use LaPoiz\WindBundle\core\nbHoure\NbHoureMeteo;
 use LaPoiz\WindBundle\core\nbHoure\NbHoureNav;
 use LaPoiz\WindBundle\core\nbHoure\NbHoureWind;
 use LaPoiz\WindBundle\core\note\ManageNote;
+use LaPoiz\WindBundle\core\infoSpot\ManageInfoSpot;
 use LaPoiz\WindBundle\Entity\DataWindPrev;
+use LaPoiz\WindBundle\Entity\InfoSpot;
 use LaPoiz\WindBundle\Entity\WebSite;
 use LaPoiz\WindBundle\Form\SpotType;
 use LaPoiz\WindBundle\Form\DataWindPrevType;
 use LaPoiz\WindBundle\core\maree\MareeGetData;
+use LaPoiz\WindBundle\Form\InfoSpotType;
+
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Security\Core\SecurityContext;
 use Symfony\Component\Console\Output\NullOutput;
+use Symfony\Component\Form\FormBuilder;
 use Symfony\Component\HttpFoundation\Request;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -151,15 +155,14 @@ class BOAjaxSpotController extends Controller
             $listSpot = $em->getRepository('LaPoizWindBundle:Spot')->findAllValid();
             $listSpotNotValid = $em->getRepository('LaPoizWindBundle:Spot')->findAllNotValid();
 
-            return $this->container->get('templating')->renderResponse('LaPoizWindBundle:BackOffice:index.html.twig',
+            return $this->render('LaPoizWindBundle:BackOffice:index.html.twig',
                 array(
                     'listSpot' => $listSpot,
                     'listSpotNotValid' => $listSpotNotValid,
                 )
             );
         } else {
-            return $this->container->get('templating')->renderResponse(
-                'LaPoizWindBundle:BackOffice:errorPage.html.twig',
+            return $this->render('LaPoizWindBundle:BackOffice:errorPage.html.twig',
                 array('errMessage' => "Miss id of dataWindPrev... !"));
         }
     }
@@ -176,8 +179,7 @@ class BOAjaxSpotController extends Controller
         $spot = $em->find('LaPoizWindBundle:Spot', $id);
 
         if (!$spot) {
-            return $this->container->get('templating')->renderResponse(
-                'LaPoizWindBundle:Default:errorBlock.html.twig',
+            return $this->render('LaPoizWindBundle:Default:errorBlock.html.twig',
                 array('errMessage' => "Spot not find !"));
         }
 
@@ -185,7 +187,7 @@ class BOAjaxSpotController extends Controller
         $tabNbHoureNav=NbHoureNav::calculateNbHourNav($tabDataNbHoureNav);
         $tabMeteo=NbHoureMeteo::calculateMeteoNav($tabDataMeteo);
 
-        return $this->container->get('templating')->renderResponse('LaPoizWindBundle:BackOffice/Test:nbHoureNav.html.twig',
+        return $this->render('LaPoizWindBundle:BackOffice/Test:nbHoureNav.html.twig',
             array(
                 'spot' => $spot,
                 'tabNbHoure' => $tabNbHoureNav,
@@ -206,8 +208,7 @@ class BOAjaxSpotController extends Controller
         $spot = $em->find('LaPoizWindBundle:Spot', $id);
 
         if (!$spot) {
-            return $this->container->get('templating')->renderResponse(
-                'LaPoizWindBundle:Default:errorBlock.html.twig',
+            return $this->render('LaPoizWindBundle:Default:errorBlock.html.twig',
                 array('errMessage' => "Spot not find !"));
         }
 
@@ -239,7 +240,7 @@ class BOAjaxSpotController extends Controller
 
         $em->flush();
 
-        return $this->container->get('templating')->renderResponse('LaPoizWindBundle:BackOffice/Test:nbHoureNav.html.twig',
+        return $this->render('LaPoizWindBundle:BackOffice/Test:nbHoureNav.html.twig',
             array(
                 'spot' => $spot,
                 'tabNbHoure' => $tabNbHoureNav,
@@ -260,14 +261,13 @@ class BOAjaxSpotController extends Controller
         $spot = $em->find('LaPoizWindBundle:Spot', $id);
 
         if (!$spot) {
-            return $this->container->get('templating')->renderResponse(
-                'LaPoizWindBundle:Default:errorBlock.html.twig',
+            return $this->render('LaPoizWindBundle:Default:errorBlock.html.twig',
                 array('errMessage' => "Spot not find !"));
         }
 
         list($tabDataNbHoureNav,$tabDataMeteo)=NbHoureNav::createTabNbHoureNav($spot, $em);
 
-        return $this->container->get('templating')->renderResponse('LaPoizWindBundle:BackOffice/Test:dataNbHoureNav.html.twig',
+        return $this->render('LaPoizWindBundle:BackOffice/Test:dataNbHoureNav.html.twig',
             array(
                 'spot' => $spot,
                 'tabNbHoure' => $tabDataNbHoureNav,
@@ -277,4 +277,125 @@ class BOAjaxSpotController extends Controller
             ));
     }
 
+
+    /**
+     * @Template()
+     *
+     * http://localhost/Wind/web/app_dev.php/admin/BO/ajax/spot/1/add/SpotInfo
+     */
+    public function addSpotInfoAction($id=null, Request $request)
+    {
+        $em = $this->container->get('doctrine.orm.entity_manager');
+
+        if (isset($id) && $id!=-1)
+        {
+            $spot = $em->find('LaPoizWindBundle:Spot', $id);
+            if (!$spot) {
+                return $this->render('LaPoizWindBundle:BackOffice:errorPage.html.twig',
+                    array('errMessage' => "No spot find !"));
+            }
+            $formNew=ManageInfoSpot::createNewForm($this, $spot);
+
+            if ('POST' == $request->getMethod()) {
+                $formNew->handleRequest($request);
+                if ($formNew->isValid()) {
+                    // form submit
+                    $infoSpot = $formNew->getData();
+                    ManageInfoSpot::saveNewInfoSpot($spot, $infoSpot, $em);
+                    $formNew = ManageInfoSpot::createEditForm($this, $infoSpot);
+
+                    return $this->render('LaPoizWindBundle:BackOffice/Spot/Ajax:editInfoSpot.html.twig', array(
+                        'spot' => $spot,
+                        'form' => $formNew->createView(),
+                        'infoSpot' => $infoSpot
+                    ));
+                }
+            }
+            return $this->render('LaPoizWindBundle:BackOffice/Spot/Ajax:editInfoSpot.html.twig', array(
+                'spot' => $spot,
+                'form' => $formNew->createView()
+            ));
+        } else {
+            return $this->render('LaPoizWindBundle:BackOffice:errorPage.html.twig',
+                array('errMessage' => "Miss id of spot... !"));
+        }
+    }
+
+    /**
+     * @Template()
+     *
+     * http://localhost/Wind/web/app_dev.php/admin/BO/ajax/spot/spotInfo/1
+     */
+    public function editSpotInfoAction($id=null, Request $request)
+    {
+        $em = $this->container->get('doctrine.orm.entity_manager');
+
+        if (isset($id) && $id!=-1)
+        {
+            $infoSpot = $em->find('LaPoizWindBundle:InfoSpot', $id);
+            if (!$infoSpot)
+            {
+                return $this->render('LaPoizWindBundle:BackOffice:errorPage.html.twig',
+                    array('errMessage' => "No infoSpot find !"));
+            }
+
+            $form = ManageInfoSpot::createEditForm($this, $infoSpot);
+            $form->handleRequest($request);
+
+            if ($form->isValid()) {
+                        // Save
+                        $infoSpot = $form->getData();
+                        ManageInfoSpot::saveInfoSpot($infoSpot, $em);
+
+                        return $this->render('LaPoizWindBundle:BackOffice/Spot/Ajax:editInfoSpot.html.twig', array(
+                            'spot'  => $infoSpot->getSpot(),
+                            'form' => $form->createView(),
+                            'infoSpot' => $infoSpot
+                        ));
+            }
+            // "GET"
+            return $this->render('LaPoizWindBundle:BackOffice/Spot/Ajax:editInfoSpot.html.twig', array(
+                    'spot' => $infoSpot->getSpot(),
+                    'form' => $form->createView(),
+                    'infoSpot' => $infoSpot
+            ));
+        } else {
+            return $this->container->get('templating')->render(
+                'LaPoizWindBundle:BackOffice:errorPage.html.twig',
+                array('errMessage' => "Miss id of spot... !"));
+        }
+    }
+
+    /**
+     * @Template()
+     *
+     * http://localhost/Wind/web/app_dev.php/admin/BO/ajax/spot/remove/spotInfo/1
+     */
+    public function removeSpotInfoAction($id=null, Request $request)
+    {
+        $em = $this->container->get('doctrine.orm.entity_manager');
+
+        if (isset($id) && $id!=-1) {
+            $infoSpot = $em->find('LaPoizWindBundle:InfoSpot', $id);
+            if (!$infoSpot) {
+                return $this->container->get('templating')->render(
+                    'LaPoizWindBundle:BackOffice:errorPage.html.twig',
+                    array('errMessage' => "No infoSpot find !"));
+            }
+
+
+            // form submit
+            $spot = $infoSpot->getSpot();
+            try {
+                ManageInfoSpot::deleteInfoSpot($infoSpot, $em);
+                return $this->render('LaPoizWindBundle:BackOffice/Spot/Ajax:sucess.html.twig');
+            } catch (\Exception $e) {
+                return $this->render('LaPoizWindBundle:BackOffice:errorPage.html.twig',
+                    array('errMessage' => "Problem lors de l'opération demandé:" . $e->getMessage()));
+            }
+        } else {
+            return $this->render('LaPoizWindBundle:BackOffice:errorPage.html.twig',
+                array('errMessage' => "Miss id of spot... !"));
+        }
+    }
 }

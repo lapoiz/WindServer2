@@ -136,8 +136,20 @@ class Spot
      */
     private $region;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $baliseURL;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $webcamURL;
 
+    /**
+     * @ORM\OneToMany(targetEntity="InfoSpot", mappedBy="spot", cascade={"remove", "persist"}, orphanRemoval=true)
+     */
+    private $infoSpot;
 
     /**
      * Constructor
@@ -793,5 +805,87 @@ class Spot
     public function getRegion()
     {
         return $this->region;
+    }
+
+    /**
+     * Set baliseURL
+     *
+     * @param string $baliseURL
+     *
+     * @return Spot
+     */
+    public function setBaliseURL($baliseURL)
+    {
+        $this->baliseURL = $baliseURL;
+
+        return $this;
+    }
+
+    /**
+     * Get baliseURL
+     *
+     * @return string
+     */
+    public function getBaliseURL()
+    {
+        return $this->baliseURL;
+    }
+
+    /**
+     * Set webcamURL
+     *
+     * @param string $webcamURL
+     *
+     * @return Spot
+     */
+    public function setWebcamURL($webcamURL)
+    {
+        $this->webcamURL = $webcamURL;
+
+        return $this;
+    }
+
+    /**
+     * Get webcamURL
+     *
+     * @return string
+     */
+    public function getWebcamURL()
+    {
+        return $this->webcamURL;
+    }
+
+    /**
+     * Add infoSpot
+     *
+     * @param \LaPoiz\WindBundle\Entity\infoSpot $infoSpot
+     *
+     * @return Spot
+     */
+    public function addInfoSpot(\LaPoiz\WindBundle\Entity\infoSpot $infoSpot)
+    {
+        $this->infoSpot[] = $infoSpot;
+
+        return $this;
+    }
+
+    /**
+     * Remove infoSpot
+     *
+     * @param \LaPoiz\WindBundle\Entity\infoSpot $infoSpot
+     */
+    public function removeInfoSpot(\LaPoiz\WindBundle\Entity\infoSpot $infoSpot)
+    {
+        $this->infoSpot->removeElement($infoSpot);
+    }
+
+    /**
+     * Get infoSpot
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getInfoSpot()
+    {
+        return $this->infoSpot;
     }
 }

@@ -10,7 +10,7 @@
 
     <div class="row">
         <div class="col-sm-12">
-            <h3>Les sites</h3>
+            <h3>Les sites de prévisions</h3>
             <ul class="nav nav-pills nav-stacked">
                 <li class="" id="menuAddSite"> <a onclick="ajouterSite(this)"><i class="icon-plus icon-white"></i> Ajouter</a></li>
                 {% if spot.dataWindPrev is not null %}
@@ -20,7 +20,6 @@
                     </li>
                     {% endfor %}
                 {% endif %}
-                <li class="" id="menuMeteoNote"><a onclick="noteMeteo(this)">Note de la météo</a></li>
             </ul>
         </div>
     </div>
@@ -43,6 +42,21 @@
         </div>
     </div>
 
+    <div class="row">
+        <div class="col-sm-12">
+            <h3>Sites sur le spot</h3>
+            <ul class="nav nav-pills nav-stacked" id="menuInfoSite">
+                <li class="" id="menuAddInfoSite"> <a onclick="ajouterInfoSite(this)"><i class="icon-plus icon-white"></i> Ajouter</a></li>
+                {% if spot.infoSpot is not null %}
+                    {% for siteInfoSpot in spot.infoSpot %}
+                        <li class="" id="menuInfoSpot{{ siteInfoSpot.id }}">
+                            <a onclick="infoSpot(this,'{{ siteInfoSpot.id }}')">{{ siteInfoSpot.titre }}</a>
+                        </li>
+                    {% endfor %}
+                {% endif %}
+            </ul>
+        </div>
+    </div>
 
 
     <div class="row">
@@ -55,7 +69,6 @@
                     {% else %}
                         <li class="" id="menuMareeEditer"><a onclick="mareeEditer(this)"><i class="icon-pencil icon-white"></i> Editer</a></li>
                         <li class="" id="menuMareeGetData"><a onclick="getMareeData(this)"> Get Data</a></li>
-                        <li class="" id="menuMareeNote"><a onclick="noteMaree(this)">Note marée</a></li>
                     {% endif %}
                 {% else %}
                     <li class="" id="menuMareeCreate"> <a  onclick="addMaree(this)"><i class="icon-white icon-plus"></i> Ajouter</a></li>
@@ -100,6 +113,41 @@
             });
             return false;
         }
+
+
+        function ajouterInfoSite(elemLink) {
+            deselectAllMenu();
+            elemLink.parentNode.className = elemLink.parentNode.className+" active";
+            $('#result').html('<img src="{{ asset('bundles/lapoizwind/images/loading.gif') }}" alt="Loading Ajax data" />');
+            var id = {{ spot.id }};
+            $.ajax({
+                type: "GET",
+                url: "{{ path('_bo_ajax_spot_add_spot_info', {'id':spot.id})}}",
+                id: id,
+                cache: false,
+                success: function(data){
+                    $('#result').html(data);
+                }
+            });
+            return false;
+        }
+
+        function infoSpot(elemLink, infoSpotId) {
+            deselectAllMenu();
+            elemLink.parentNode.className = elemLink.parentNode.className+" active";
+            $('#result').html('<img src="{{ asset('bundles/lapoizwind/images/loading.gif') }}" alt="Loading Ajax data" />');
+            var URL = "{{ path('_bo_ajax_spot_edit_spot_info', {'id':'infoSpotId'}) }}".replace("/infoSpotId","/"+infoSpotId);
+            $.ajax({
+                type: "GET",
+                url: URL,
+                cache: false,
+                success: function(data){
+                    $('#result').html(data);
+                }
+            });
+            return false;
+        }
+
 
         function noteMeteo(elemLink){
             deselectAllMenu();
@@ -287,7 +335,7 @@
 
         function deselectAllMenu() {
             // liste des menu fixe et connu
-            idMenuArray = new Array ("menuEditer", "menuAddSite", "menuMeteoNote");
+            idMenuArray = new Array ("menuEditer", "menuAddInfoSite", "menuMeteoNote", "menuAddInfo");
             // ajouter les menu des webSites
 
             {% if spot.tempWaterURL is defined %}
@@ -317,6 +365,10 @@
                 idMenuArray.push(this.id);
             });
 
+            $( "li[id^='menuInfoSpot']" ).each(function() {
+                idMenuArray.push(this.id);
+            });
+
             for (i=0; i<idMenuArray.length; i++) {
                 menuElem = document.getElementById(idMenuArray[i]);
                 if (menuElem) {
@@ -327,6 +379,19 @@
             $('#navAjax').html('');
             $('#subNavAjax').html('');
         }
+
+        function loadMenuInfoSite(){
+            $.ajax({
+                type: "POST",
+                url: "{{ path('_bo_ajax_spot_load_menu_infoSite', {'id':spot.id})}}",
+                cache: false,
+                success: function(data){
+                    $('#menuInfoSite').html(data);
+                }
+            });
+            return false;
+        };
+
 
     </script>
 {% endmacro %}

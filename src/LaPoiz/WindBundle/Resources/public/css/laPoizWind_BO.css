@@ -8,3 +8,10 @@
 ul.listeSansPuce {
     list-style-type:none;
 }
+.nav-stacked > li {
+    margin-top: 0px;
+}
+.nav > li {
+    line-height: 0.25;
+    padding: 0 !important;
+}

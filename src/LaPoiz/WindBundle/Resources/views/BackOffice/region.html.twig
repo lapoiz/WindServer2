@@ -1,11 +1,5 @@
 {% extends 'LaPoizWindBundle:BackOffice:base.html.twig' %}
 
-{% block scripts %}
-    {{ parent() }}
-    <script type="text/javascript" src="{{ asset('bundles/lapoizwind/js/tinymce/tinymce.min.js') }}"></script>
-    {{ form_javascript(form) }}
-{% endblock %}
-
 {% block bodyPage %}
     <h1>{{ region.nom }}</h1>
 
