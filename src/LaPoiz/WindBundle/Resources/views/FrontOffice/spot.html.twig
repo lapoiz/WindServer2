@@ -20,7 +20,6 @@
 
 <h1>Prévisions météo et détails du spot: {{ spot.nom }}</h1>
 
-
     <div class="row">
         <div class="col-sm-12">
             {% from "LaPoizGraphBundle:Wind:graph.html.twig" import graph %}
@@ -28,93 +27,109 @@
         </div>
     </div>
 
-<div class="row">
-    <div class="col-sm-6 center-block text-center" heigth="300px">
-        <h3 class="titreSVG">Rosace du vent à {{ spot.nom }}</h3>
-        {% from "LaPoizWindBundle:BackOffice/Spot/Ajax:rosaceWind.html.twig" import displayRosace %}
-        {{ displayRosace("200px","200px") }}
+    <div class="row">
+        <div class="col-sm-6 center-block text-center" heigth="220px">
+            <h3 class="titreSVG">Orientation du vent à {{ spot.nom }}</h3>
 
-
-
-        <script>
-
-            // **************************************
-            // ** Gestion de l'orientation du vent **
-            // **************************************
-            var tabOrientationState = new Array(); // Array with orientation => state, used for rosace wind
-
-            getOrientationDataFromSpot();
-
-            // Récupére les données de l'objet spot et les pousse dans la rosace
-
-            function getOrientationDataFromSpot() {
-                // Parcour la liste des WindOrientation
-                {% for windOrientation in spot.windOrientation %}
-                tabOrientationState["{{ windOrientation.orientation }}"]="{{ windOrientation.state?windOrientation.state:"?" }}";
-                {% endfor %}
-
-                svgLoad(tabOrientationState, true);
-            }
-
-        </script>
-
-    </div>
-
-
-    <div class="col-sm-6 centered">
-        {% if spot.mareeURL|default is not empty %}
-
-            {% from "LaPoizWindBundle:BothOffice/Spot/Ajax/Maree:graph.html.twig" import graphMaree %}
-            {{ graphMaree(spot, "400px","300px" ) }}
+            <div class="row">
+                <div class="col-sm-6 centered">
+            {% from "LaPoizWindBundle:BackOffice/Spot/Ajax:rosaceWind.html.twig" import displayRosace %}
+            {{ displayRosace("200px","200px") }}
 
             <script>
 
                 // **************************************
-                // ** Charge les restrictions de marée **
+                // ** Gestion de l'orientation du vent **
                 // **************************************
+                var tabOrientationState = new Array(); // Array with orientation => state, used for rosace wind
 
-                jQuery(document).ready(function() {
-                    // Parcour la liste des MareeRestriction
-                    {% for mareeRestriction in spot.mareeRestriction %}
-                        drawPlotBandGraphMaree({{ mareeRestriction.hauteurMin }},{{ mareeRestriction.hauteurMax }},"{{ mareeRestriction.state }}");
+                getOrientationDataFromSpot();
+
+                // Récupére les données de l'objet spot et les pousse dans la rosace
+
+                function getOrientationDataFromSpot() {
+                    // Parcour la liste des WindOrientation
+                    {% for windOrientation in spot.windOrientation %}
+                    tabOrientationState["{{ windOrientation.orientation }}"]="{{ windOrientation.state?windOrientation.state:"?" }}";
                     {% endfor %}
-                });
 
-                function drawPlotBandMareeGraphSpot() {
-                    {% for mareeRestriction in spot.mareeRestriction %}
-                        drawOnePlotBandMareeGraphSpot({{ mareeRestriction.hauteurMin }},{{ mareeRestriction.hauteurMax }},"{{ mareeRestriction.state }}");
-                    {% endfor %}
+                    svgLoad(tabOrientationState, true);
                 }
-
-                // dessine sur le graph princiapl du spot, une restriction de marée
-                function drawOnePlotBandMareeGraphSpot(hMin, hMax, state) {
-                    $('#meteoGraph').highcharts().yAxis[1].addPlotBand({
-                                color: getColorPlotBandForState(state),
-                                from: hMin,
-                                to: hMax
-                            }
-                    )
-                }
-
 
             </script>
+                </div>
 
-        {% endif %}
+                <div class="col-sm-6 centered">
+                    {{ spot.infoOrientation|raw }}
+                </div>
+            </div>
+        </div>
+
+        {% if spot.mareeURL|default is not empty %}
+    <div class="col-sm-6 centered">
+        <div class="row">
+
+            <div class="col-sm-6 centered">
+                {% from "LaPoizWindBundle:BothOffice/Spot/Ajax/Maree:graph.html.twig" import graphMaree %}
+                {{ graphMaree(spot, "300px","220px" ) }}
+
+                {% from "LaPoizWindBundle:BothOffice/Spot/Ajax/Maree:restrictionJS.html.twig" import restrictionMaree %}
+                {{ restrictionMaree(spot) }}
+            </div>
+            <div class="col-sm-6 centered">
+                {{ spot.infoMaree|raw }}
+            </div>
+        </div>
     </div>
-
+        {% endif %}
 </div>
-
-
 
 
     <div class="row">
 
         <div class="col-sm-6">
-            <h3>Détail du spot de {{ spot.nom }}</h3>
+            <h3>Le Spot</h3>
 
-            {% from "LaPoizWindBundle:FrontOffice/spot:details.html.twig" import detail %}
+            <div class="row">
+                <div class="col-sm-12">
+                    <h4>Description</h4>
+                    {{ spot.description|raw }}
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <h4>Sites qui parlent du spot</h4>
+                    {% for infoSpot in spot.infoSpot %}
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <a target="_blank" href="{{ infoSpot.url }}">
+                                    {{ infoSpot.titre }}
+                                </a>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                    {{ infoSpot.commentaire|raw }}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6">
+            <h3>Localisation de {{ spot.nom }}</h3>
+
+            {% from "LaPoizWindBundle:FrontOffice/spot:localisation.html.twig" import detail %}
             {{ detail(spot) }}
         </div>
+    </div>
+
+
+
+    <div class="row">
 
         <div class="col-sm-6">
             <h3>Explications sur les graphiques</h3>
@@ -122,6 +137,11 @@
             {% from "LaPoizWindBundle:FrontOffice/spot:explications.html.twig" import info %}
             {{ info(spot) }}
         </div>
+
+        <div class="col-sm-6">
+            ... On verra ...
+        </div>
+
     </div>
 
 {% endblock %}

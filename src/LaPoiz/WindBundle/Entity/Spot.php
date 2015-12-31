@@ -40,8 +40,19 @@ class Spot
      * @ORM\Column(type="text",nullable=true)
      */    
     private $localisationDescription;
-    
-    
+
+
+    /**
+     * @ORM\Column(type="text",nullable=true)
+     */
+    private $infoOrientation;
+
+    /**
+     * @ORM\Column(type="text",nullable=true)
+     */
+    private $infoMaree;
+
+
     /**
      * @ORM\Column(type="decimal",nullable=true,scale=7)
      */    
@@ -887,5 +898,53 @@ class Spot
     public function getInfoSpot()
     {
         return $this->infoSpot;
+    }
+
+    /**
+     * Set infoOrientation
+     *
+     * @param string $infoOrientation
+     *
+     * @return Spot
+     */
+    public function setInfoOrientation($infoOrientation)
+    {
+        $this->infoOrientation = $infoOrientation;
+
+        return $this;
+    }
+
+    /**
+     * Get infoOrientation
+     *
+     * @return string
+     */
+    public function getInfoOrientation()
+    {
+        return $this->infoOrientation;
+    }
+
+    /**
+     * Set infoMaree
+     *
+     * @param string $infoMaree
+     *
+     * @return Spot
+     */
+    public function setInfoMaree($infoMaree)
+    {
+        $this->infoMaree = $infoMaree;
+
+        return $this;
+    }
+
+    /**
+     * Get infoMaree
+     *
+     * @return string
+     */
+    public function getInfoMaree()
+    {
+        return $this->infoMaree;
     }
 }

@@ -1,4 +1,4 @@
-{% macro graphMaree(spot, widthGraph, widthGraph, heightGraph) %}
+{% macro graphMaree(spot, widthGraph, heightGraph) %}
 
     <div id="mareeGraph" style="width:{{ (widthGraph is defined and widthGraph is not null)?widthGraph:"100%" }};
             height:{{ (heightGraph is defined and heightGraph is not null)?heightGraph:"100%"  }}"></div>
@@ -27,6 +27,7 @@
                 chart: {
                     marginBottom: 110,
                     renderTo: 'mareeGraph',
+                    height: 300,
                     reflow: false,
                     marginLeft: 50,
                     marginRight: 20,
