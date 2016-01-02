@@ -81,6 +81,9 @@
     color: black;
     text-align: center;
     line-height: 11px;
+
+    width: 20px;
+    white-space: nowrap;
 }
 
 

@@ -29,7 +29,7 @@ class DataWindPrev
     private $created;
     
     /**
-     * @ORM\OneToMany(targetEntity="PrevisionDate", mappedBy="dataWindPrev", cascade={"remove"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="PrevisionDate", mappedBy="dataWindPrev", cascade={"persist", "remove"}, orphanRemoval=true)
      */
     private $listPrevisionDate;
     

@@ -190,7 +190,7 @@ class WebsiteGetData
 					$prevDate->addListPrevision($prev);
 					$entityManager->persist($prevDate);
 					$entityManager->persist($prev);
-					$entityManager->flush(); // car sinon les éléments ne sont pas obligatoirement enregistrer dans l'ordre des heures
+					//$entityManager->flush(); // car sinon les éléments ne sont pas obligatoirement enregistrer dans l'ordre des heures
 				}
 
 				//TODO: calculate average etc...
@@ -218,8 +218,9 @@ class WebsiteGetData
 				}
 			}
 		}
-		$entityManager->persist($dataWindPrev);
-		$entityManager->flush();
+		//$entityManager->persist($dataWindPrev);
+		//$entityManager->flush();
+
 		return $result;
 	}
 

@@ -28,11 +28,14 @@
     <script>
 
         var listeSpotsMarker;
+        var infoBulle;
         var numDaySelected=0;
+        var linkPrevisionSpot="{{ path('_fo_spot_graph', {'id':'__idSpot__'}) }}";
+        var isMapInitilize = false;
 
         var spotsList = {"spots":[
             {% for spot in listSpot %}
-                { "nom:":"{{ spot.nom }}", "id":{{ spot.id }}, "lat":{{ spot.gpsLat }}, "lng": {{ spot.gpsLong }} },
+                { "nom":"{{ spot.nom }}", "id":{{ spot.id }}, "lat":{{ spot.gpsLat }}, "lng": {{ spot.gpsLong }} },
             {% endfor %}
         ]};
         var isSpotsListLoading=false;
@@ -66,7 +69,7 @@
         var map;
 
         function initialize() {
-
+            isMapInitilize=true;
             var mapOptions = {
                 zoom: 6,
                 center: {lat: 47.090039, lng: 2.377031},
@@ -75,34 +78,47 @@
             map = new google.maps.Map(document.getElementById('sitesMap'),
                     mapOptions);
             createMarker();
+            loadDateData(spotsList);
         }
 
 
         function createMarker() {
+            if (typeof(listeSpotsMarker) === "undefined") {
+                var spotMarker = {
+                    path: 'M 3 -7 A 10 10, 0, 1, 0, -3 -7 L 0 0 Z',
+                    fillColor: 'white',
+                    fillOpacity: 0.8,
+                    scale: 1,
+                    strokeColor: 'gray',
+                    strokeWeight: 1
+                };
+                listeSpotsMarker = [];
+                infoBulle = [];
 
-            var spotMarker = {
-                path: 'M 5 -10 A 20 20, 0, 1, 0, -5 -10 L 0 0 Z',
-                fillColor: 'white',
-                fillOpacity: 0.8,
-                scale: 1,
-                strokeColor: 'gray',
-                strokeWeight: 1
-            };
-            listeSpotsMarker=[];
+                for (index = 0; index < spotsList.spots.length; index++) {
+                    var spot = spotsList.spots[index];
 
-            for	(index = 0; index < spotsList.spots.length; index++) {
-                var spot=spotsList.spots[index];
+                    listeSpotsMarker[spot.id] = new MarkerWithLabel({
+                        position: spot,
+                        draggable: false,
+                        icon: spotMarker,
+                        map: map,
+                        labelAnchor: new google.maps.Point(10, 21.5),
+                        labelClass: "mapIconLabel", // the CSS class for the label
+                        labelContent: "?",
+                        labelStyle: {opacity: 0.75}
+                    });
 
-                listeSpotsMarker[spot.id] = new MarkerWithLabel({
-                    position: spot,
-                    draggable: false,
-                    icon: spotMarker,
-                    map: map,
-                    labelAnchor: new google.maps.Point(19, 45),
-                    labelClass: "mapIconLabel", // the CSS class for the label
-                    labelContent: "?",
-                    labelStyle: {opacity: 0.75}
-                });
+                    listeSpotsMarker[spot.id].infoBulleContent = '<h3>' + spot.nom + '</h3>';
+
+                    var infoBulle = new google.maps.InfoWindow();
+                    var marker = listeSpotsMarker[spot.id];
+                    google.maps.event.addListener(marker,'mouseover', (function(){
+                        infoBulle.setContent(this.infoBulleContent);
+                        infoBulle.open(map,this);
+                    }));
+
+                }
             }
         }
 
@@ -119,49 +135,50 @@
         };
 
         function loadDateData(spotsList) {
-            if (!listeSpotsMarker) {
-                createMarker();
-            }
-            if (!isSpotsListLoading) {
-                loadJSON();
-            } else {
-                $.each(spotsList, function (idSpot, spotData) {
-                    // selon la selection du site webSiteSelected
-                    // alert(spotData.nom);
-                    var spotDataDay=spotData.nbHourNav[numDaySelected];
-                    var nbH=getNbHoure(spotDataDay["websites"], webSiteSelected);
-                    var labelContent;
+            if (isMapInitilize) {
+                if (typeof(listeSpotsMarker) === "undefined") {
+                    createMarker();
+                }
+                if (!isSpotsListLoading) {
+                    loadJSON();
+                } else {
+                    $.each(spotsList, function (idSpot, spotData) {
+                        // selon la selection du site webSiteSelected
+                        //console.log("nom : "+spotData.nom);
+                        var spotDataDay = spotData.nbHourNav[numDaySelected];
+                        var nbH = getNbHoure(spotDataDay["websites"], webSiteSelected);
+                        var labelContent;
 
-                    if (nbH < 0 ) {
-                        // ?
-                        listeSpotsMarker[spotData.id].icon.fillColor="white";
-                        listeSpotsMarker[spotData.id].icon.strokeColor="gray";
-                        labelContent = "?";
-                    } else if (nbH<4) {
-                        // RED
-                        listeSpotsMarker[spotData.id].icon.fillColor="pink";
-                        listeSpotsMarker[spotData.id].icon.strokeColor="red";
-                        labelContent = nbH+"h";
+                        if (nbH < 0) {
+                            // ?
+                            listeSpotsMarker[spotData.id].icon.fillColor = "white";
+                            listeSpotsMarker[spotData.id].icon.strokeColor = "gray";
+                            labelContent = "?";
+                        } else if (nbH < 4) {
+                            // RED
+                            listeSpotsMarker[spotData.id].icon.fillColor = "pink";
+                            listeSpotsMarker[spotData.id].icon.strokeColor = "red";
+                            labelContent = nbH + "h";
 
-                    } else if (nbH<7) {
-                        // ORANGE
-                        listeSpotsMarker[spotData.id].icon.fillColor="orange";
-                        listeSpotsMarker[spotData.id].icon.strokeColor="red";
-                        labelContent = nbH+"h";
-                    } else {
-                        listeSpotsMarker[spotData.id].icon.fillColor="LightGreen";
-                        listeSpotsMarker[spotData.id].icon.strokeColor="green";
-                        labelContent = nbH+"h";
-                    }
+                        } else if (nbH < 7) {
+                            // ORANGE
+                            listeSpotsMarker[spotData.id].icon.fillColor = "orange";
+                            listeSpotsMarker[spotData.id].icon.strokeColor = "red";
+                            labelContent = nbH + "h";
+                        } else {
+                            listeSpotsMarker[spotData.id].icon.fillColor = "LightGreen";
+                            listeSpotsMarker[spotData.id].icon.strokeColor = "green";
+                            labelContent = nbH + "h";
+                        }
 
-                    labelContent+="<br />"+spotDataDay["tempMin"]+"/"+spotDataDay["tempMax"]+"°C";
-                    labelContent+="<br />"+spotDataDay["tempWater"]+"°C";
+                        listeSpotsMarker[spotData.id].labelContent = labelContent;
 
-                    listeSpotsMarker[spotData.id].labelContent=labelContent;
+                        listeSpotsMarker[spotData.id].setShape();
+                        listeSpotsMarker[spotData.id].label.setContent();
 
-                    listeSpotsMarker[spotData.id].setShape();
-                    listeSpotsMarker[spotData.id].label.setContent();
-                });
+                        listeSpotsMarker[spotData.id].infoBulleContent=createInfoBullContent(spotData,spotDataDay);
+                    });
+                }
             }
         }
 
@@ -192,6 +209,14 @@
                 return -1;
             }
         }
+
+        function createInfoBullContent(spotData,spotDataDay) {
+            return '<h3>'+spotData.nom+'</h3>'+
+                    '<a href="'+linkPrevisionSpot.replace('__idSpot__',spotData.id)+'">Prévisions du spot</a>'+
+                    '<p>Temp. de l\'aire: de '+spotDataDay["tempMin"]+' à '+spotDataDay["tempMax"]+'°C<br />'+
+                    'Temp. de l\'eau: '+spotDataDay["tempWater"]+'°C</p>';
+        }
+
 
         // Call the initialize function after the page has finished loading
         google.maps.event.addDomListener(window, 'load', initialize);
