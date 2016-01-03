@@ -259,7 +259,11 @@ _bo_ajax_spot_tempWater_save:
 
 _bo_ajax_spot_load_menu_infoSite:
   defaults: { _controller: LaPoizWindBundle:BOAjaxSpotLoadMenu:loadInfoSite }
-  pattern: /admin/BO/ajax/spot/{id}/load/infoSpot
+  pattern: /admin/BO/ajax/spot/{id}/load/infoSite
+
+_bo_ajax_spot_load_menu_webSite:
+  defaults: { _controller: LaPoizWindBundle:BOAjaxSpotLoadMenu:loadWebSite }
+  pattern: /admin/BO/ajax/spot/{id}/load/webSite
 
 
 _bo_ajax_spot_add_spot_info:

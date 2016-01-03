@@ -29,9 +29,9 @@ class WebSite
      * @Assert\Length(min=3)
      */    
     private $nom;
-    
+
     /**
-     * @ORM\OneToMany(targetEntity="DataWindPrev", mappedBy="website", cascade={"remove"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="DataWindPrev", mappedBy="website", cascade={"remove", "persist"}, orphanRemoval=true)
      */
     private $dataWindPrev;
     

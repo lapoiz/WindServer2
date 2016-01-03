@@ -4,16 +4,14 @@ namespace LaPoiz\WindBundle\Controller;
 
 use LaPoiz\WindBundle\core\websiteDataManage\WebsiteGetData;
 use LaPoiz\WindBundle\core\note\ManageNote;
+use LaPoiz\WindBundle\core\websiteDataManage\WebsiteManage;
 use LaPoiz\WindBundle\Entity\DataWindPrev;
-use LaPoiz\WindBundle\Entity\NotesDate;
-use LaPoiz\WindBundle\Entity\WebSite;
-use LaPoiz\WindBundle\Form\SpotType;
-use LaPoiz\WindBundle\Form\DataWindPrevType;
 use LaPoiz\WindBundle\core\note\NoteWind;
 use LaPoiz\WindBundle\core\note\NoteMeteo;
 use LaPoiz\WindBundle\core\note\NoteTemp;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\Security\Core\SecurityContext;
 use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\HttpFoundation\Request;
@@ -58,31 +56,44 @@ class BOAjaxSiteController extends Controller
                 if ($form->isValid()) {
                     // form submit
                     $dataWindPrev = $form->getData();
+                    // Uniquement url et spot.
 
-                    if ($dataWindPrev->getWebsite()->getNom() == WebsiteGetData::windguruName) {
-                        $dataWindPrevWindGuruPro = clone $dataWindPrev;
-                        $dataWindPrevWindGuruPro->getWebsite()->removeDataWindPrev($dataWindPrevWindGuruPro);
-                        $windGuruProWebsite = $em->getRepository('LaPoizWindBundle:WebSite')->findByNom(WebsiteGetData::windguruProName)[0];
-                        $dataWindPrevWindGuruPro->setWebsite($windGuruProWebsite);
-                        $this->saveDataWindPrev($spot, $dataWindPrevWindGuruPro, $em);
+                    // Récupération du webSite grace à l'url
+                    $website=WebsiteManage::getWebSiteEntityFromURL($dataWindPrev->getUrl(),$em);
+                    if ($website!=null) {
+                        // Check si le couple spot+website n'existe pas déjà ...
+                        $dataWindPrevInDB=$em->getRepository('LaPoizWindBundle:DataWindPrev')->getWithWebsiteAndSpot($website,$spot);
+
+                        if ($dataWindPrevInDB === null) {
+                            // OK il n'existe pas dans la BD -> on peut l'ajouter
+                            $dataWindPrev->setWebsite($website);
+
+                            if ($dataWindPrev->getWebsite()->getNom() == WebsiteGetData::windguruName) {
+                                $dataWindPrevWindGuruPro = clone $dataWindPrev;
+                                $dataWindPrevWindGuruPro->getWebsite()->removeDataWindPrev($dataWindPrevWindGuruPro);
+                                $windGuruProWebsite = $em->getRepository('LaPoizWindBundle:WebSite')->findByNom(WebsiteGetData::windguruProName)[0];
+                                $dataWindPrevWindGuruPro->setWebsite($windGuruProWebsite);
+                                $this->saveDataWindPrev($spot, $dataWindPrevWindGuruPro, $em);
+                            }
+
+                            $this->saveDataWindPrev($spot, $dataWindPrev, $em);
+
+
+                            return $this->render('LaPoizWindBundle:BackOffice/Spot/Ajax:addSite.html.twig', array(
+                                    'spot' => $spot,
+                                    'form' => $form->createView(),
+                                    'create' => false
+                                )
+                            );
+                        } else {
+                            // Le couple spot et website existe dans la BD
+                            $form->get('url')->addError(new FormError('Ce site de prévision est déjà existant pour ce spot.'));
+                        }
+                    } else {
+                        // pas trouvé dfe website correspondant
+                        $form->get('url')->addError(new FormError('Site internet non géré par laPoiz.com'));
                     }
-
-                    $this->saveDataWindPrev($spot, $dataWindPrev, $em);
-
-                    return $this->forward('LaPoizWindBundle:BO:editSpot', array(
-                            'id'  => $spot->getId()
-                        ));
-                    /*
-                    return $this->render('LaPoizWindBundle:BackOffice/Spot/Ajax:addSite.html.twig', array(
-                            'spot' => $spot,
-                            'form' => $form->createView(),
-                            'create' => true
-                        )
-                    );*/
                 }
-                /*else {
-                    return new Response($request);
-                }*/
             }
 
             return $this->render('LaPoizWindBundle:BackOffice/Spot/Ajax:addSite.html.twig', array(
@@ -149,10 +160,13 @@ class BOAjaxSiteController extends Controller
 
             $idSpot = $dataWindPrev->getSpot()->getId();
 
+            $dataWindPrev->getWebsite()->removeDataWindPrev($dataWindPrev);
+            $dataWindPrev->getSpot()->removeDataWindPrev($dataWindPrev);
+
             $em->remove($dataWindPrev);
             $em->flush();
 
-            return $this->forward('LaPoizWindBundle:BO:displaySpot', array(
+            return $this->forward('LaPoizWindBundle:BO:editSpot', array(
                     'id'  => $idSpot
                 ));
 

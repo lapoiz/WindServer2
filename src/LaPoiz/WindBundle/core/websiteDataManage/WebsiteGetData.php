@@ -12,7 +12,8 @@ class WebsiteGetData
 	const windguruName="Windguru";
     const windguruProName="WindguruPro";
 	const windFinderName="WindFinder";
-	const meteoFranceName="MeteoFrance"; 
+	const meteoFranceName="MeteoFrance";
+	const meteoConsultName="meteoConsult";
 
 	const windPowerMin=12;
 	const windPowerMinFun=15;
@@ -22,7 +23,8 @@ class WebsiteGetData
 			WebsiteGetData::meteoFranceName,
 			WebsiteGetData::windguruName,
             WebsiteGetData::windguruProName,
-			WebsiteGetData::windFinderName 
+			WebsiteGetData::windFinderName,
+			WebsiteGetData::meteoConsultName,
 		);
 	}
 
@@ -40,6 +42,9 @@ class WebsiteGetData
                 break;
 			case WebsiteGetData::windFinderName:
 				return new WindFinderGetData();
+				break;
+			case WebsiteGetData::meteoConsultName:
+				return new MeteoConsultGetData();
 				break;
 		}
 		return $result;

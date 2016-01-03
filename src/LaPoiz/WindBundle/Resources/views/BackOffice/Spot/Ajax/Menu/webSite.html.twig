@@ -1,0 +1,9 @@
+
+<li class="" id="menuAddSite"> <a onclick="ajouterSite(this)"><i class="icon-plus icon-white"></i> Ajouter</a></li>
+{% if spot.dataWindPrev is not null %}
+    {% for dataWindPrevSpot in spot.dataWindPrev %}
+        <li class="" id="menuSpot{{ dataWindPrevSpot.id }}">
+            <a onclick="dataWindPrev(this,'{{ dataWindPrevSpot.id }}')">{{ dataWindPrevSpot.website.nom }}</a>
+        </li>
+    {% endfor %}
+{% endif %}

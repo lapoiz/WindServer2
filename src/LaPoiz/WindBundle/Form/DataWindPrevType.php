@@ -17,7 +17,8 @@ class DataWindPrevType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options) {
         $builder
-            ->add('url')
+            ->add('url');
+            /*
             ->add('website','entity',
                 array('class' => 'LaPoizWindBundle:WebSite',
                     'query_builder' => function(EntityRepository $er) {
@@ -32,7 +33,7 @@ class DataWindPrevType extends AbstractType
                     'property' => 'nom',
                     'multiple' => false,
                     'read_only' => true))
-        ;
+        ;*/
     }
 
     /*

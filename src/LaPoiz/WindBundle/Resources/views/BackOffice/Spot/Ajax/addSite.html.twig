@@ -18,7 +18,7 @@
     </div>
 
     <script>
-        $("#addSite_form").on('submit', function(e){
+        $("#dataWindPrev_form").on('submit', function(e){
 
             $('#result').html('<img src="{{ asset('bundles/lapoizwind/images/loading.gif') }}" alt="Loading Ajax data" />');
             var create = {{ create }}
@@ -32,9 +32,7 @@
                 data: $this.serialize(),
                 success: function(html) {
                     $('#result').html(html);
-                    if (create == 1) {
-                        location.reload();
-                    }
+                    loadMenuWebSite();
                 }
             });
         })

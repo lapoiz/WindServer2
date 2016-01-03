@@ -197,6 +197,25 @@ Courbe de prévision du vent
     color: grey;
 }
 
+.pointMeteoConsult {
+    fill: black;
+    stroke:black;
+    stroke-width:1;
+}
+.pointMeteoConsult:hover {
+    fill: grey;
+    stroke:black;
+    stroke-width:2;
+}
+.courbePrevMeteoConsult {
+    fill: none;
+    stroke:black;
+    stroke-width:2;
+}
+.legend_label_MeteoConsult {
+    color: black;
+}
+
 /********************
     Maree
 **********************/

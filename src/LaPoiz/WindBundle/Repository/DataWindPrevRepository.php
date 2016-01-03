@@ -3,6 +3,8 @@
 namespace LaPoiz\WindBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use LaPoiz\WindBundle\Entity\Spot;
+use LaPoiz\WindBundle\Entity\WebSite;
 
 /**
  * DataWindPrevRepository
@@ -25,7 +27,21 @@ class DataWindPrevRepository extends EntityRepository
 			return null;
 		}
 	}
-	
+
+	public function getWithWebsiteAndSpot(WebSite $website, Spot $spot)
+	{
+		$queryBuilder = $this->createQueryBuilder('dataWindPrev')
+				->leftJoin('dataWindPrev.spot', 'spot')
+				->leftJoin('dataWindPrev.website', 'website')
+				->where("spot.id=".$spot->getId())
+				->andWhere("website.id=".$website->getId())
+				->setMaxResults(1);
+		try {
+			return $queryBuilder->getQuery()->getSingleResult();
+		} catch (\Doctrine\ORM\NoResultException $e) {
+			return null;
+		}
+	}
 
 	// same as spot->getDataWindPrev() ????
 	public  function getFromSpot($spot) {
