@@ -13,7 +13,7 @@ class WebsiteGetData
     const windguruProName="WindguruPro";
 	const windFinderName="WindFinder";
 	const meteoFranceName="MeteoFrance";
-	const meteoConsultName="meteoConsult";
+	const meteoConsultName="MeteoConsult";
 
 	const windPowerMin=12;
 	const windPowerMinFun=15;
