@@ -38,6 +38,9 @@ abstract class WebsiteManage {
                         case 'marine':
                             $nameWebSite = WebsiteGetData::meteoConsultName;
                             break;
+                        case 'allosurf':
+                            $nameWebSite = WebsiteGetData::alloSurfName;
+                            break;
                     }
                     if ($nameWebSite != null) {
                         return $em->getRepository('LaPoizWindBundle:WebSite')->findWithName($nameWebSite);

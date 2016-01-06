@@ -121,62 +121,68 @@
 /************************
 Courbe de prévision du vent
 *************************/
-.pointWindguru {
-    fill: rgba(255,0,0,0.5);
-    stroke:red;
-    stroke-width:1;
-}
-.pointWindguru:hover {
-     fill: rgba(255,0,0,0.5);
-     stroke:red;
-     stroke-width:2;
- }
-.courbePrevWindguru {
-    fill: none;
-    stroke:rgba(255,0,0,0.5);
-    stroke-width:2;
-}
-.legend_label_Windguru {
-    color: rgba(255,0,0,0.5);
-}
-.pointWindguruPro {
-    fill: rgba(255,0,0,1);
-    stroke:red;
-    stroke-width:1;
-}
-.pointWindguruPro:hover {
-    fill: red;
-    stroke:purple;
-    stroke-width:2;
-}
-.courbePrevWindguruPro {
-    fill: none;
-    stroke:rgba(255,0,0,1);
-    stroke-width:2;
-}
-.legend_label_WindguruPro {
-    color: rgba(255,0,0,1);
-}
 
 .pointWindFinder {
-    fill: blue;
-    stroke:blue;
+    fill: DarkRed;
+    stroke:DarkRed;
     stroke-width:1;
 }
 .pointWindFinder:hover {
-    fill: blue;
-    stroke:darkblue;
+    fill: DarkRed;
+    stroke:purple;
     stroke-width:2;
 }
-
 .courbePrevWindFinder {
     fill: none;
-    stroke:blue;
+    stroke:DarkRed;
     stroke-width:2;
 }
 .legend_label_WindFinder {
-    color: blue;
+    color: DarkRed;
 }
+
+.pointWindguruPro {
+    fill: DarkBlue;
+    stroke:DarkBlue;
+    stroke-width:1;
+}
+.pointWindguruPro:hover {
+    fill: DarkBlue;
+    stroke:DarkBlue;
+    stroke-width:2;
+}
+
+.courbePrevWindguruPro {
+    fill: none;
+    stroke:DarkBlue;
+    stroke-width:2;
+}
+.legend_label_WindguruPro {
+    color: DarkBlue;
+}
+
+
+.pointWindguru {
+    fill: LightGrey ;
+    stroke:LightGrey ;
+    stroke-width:1;
+}
+.pointWindguru:hover {
+    fill: LightGrey ;
+    stroke:LightGrey ;
+    stroke-width:2;
+}
+
+.courbePrevWindguru {
+    fill: none;
+    stroke:LightGrey ;
+    stroke-width:2;
+}
+.legend_label_Windguru {
+    color: LightGrey ;
+}
+
+
 
 .pointMeteoFrance {
     fill: grey;
@@ -198,21 +204,40 @@ Courbe de prévision du vent
 }
 
 .pointMeteoConsult {
-    fill: black;
-    stroke:black;
+    fill: DarkViolet ;
+    stroke:DarkViolet ;
     stroke-width:1;
 }
 .pointMeteoConsult:hover {
-    fill: grey;
+    fill: DarkViolet ;
     stroke:black;
     stroke-width:2;
 }
 .courbePrevMeteoConsult {
     fill: none;
-    stroke:black;
+    stroke:DarkViolet ;
     stroke-width:2;
 }
 .legend_label_MeteoConsult {
+    color: DarkViolet ;
+}
+
+.pointAlloSurf {
+    fill: black;
+    stroke:black;
+    stroke-width:1;
+}
+.pointAlloSurf:hover {
+    fill: grey;
+    stroke:black;
+    stroke-width:2;
+}
+.courbePrevAlloSurf {
+    fill: none;
+    stroke:black;
+    stroke-width:2;
+}
+.legend_label_AlloSurf {
     color: black;
 }
 

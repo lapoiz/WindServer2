@@ -14,6 +14,9 @@ class WebsiteGetData
 	const windFinderName="WindFinder";
 	const meteoFranceName="MeteoFrance";
 	const meteoConsultName="MeteoConsult";
+	const alloSurfName="AlloSurf";
+	// Pour ajout nouveau site, ajouter également dans : LaPoiz\WindBundle\core\websiteDataManage/WebsiteManage.php line 42
+	// + créer un loading Fixtures
 
 	const windPowerMin=12;
 	const windPowerMinFun=15;
@@ -25,6 +28,7 @@ class WebsiteGetData
             WebsiteGetData::windguruProName,
 			WebsiteGetData::windFinderName,
 			WebsiteGetData::meteoConsultName,
+			WebsiteGetData::alloSurfName,
 		);
 	}
 
@@ -45,6 +49,9 @@ class WebsiteGetData
 				break;
 			case WebsiteGetData::meteoConsultName:
 				return new MeteoConsultGetData();
+				break;
+			case WebsiteGetData::alloSurfName:
+				return new AlloSurfGetData();
 				break;
 		}
 		return $result;
