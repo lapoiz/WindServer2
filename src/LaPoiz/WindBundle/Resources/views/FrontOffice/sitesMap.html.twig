@@ -176,7 +176,7 @@
                         listeSpotsMarker[spotData.id].setShape();
                         listeSpotsMarker[spotData.id].label.setContent();
 
-                        listeSpotsMarker[spotData.id].infoBulleContent=createInfoBullContent(spotData,spotDataDay);
+                        listeSpotsMarker[spotData.id].infoBulleContent=createInfoBullContent(spotData,spotDataDay, nbH);
                     });
                 }
             }
@@ -210,10 +210,19 @@
             }
         }
 
-        function createInfoBullContent(spotData,spotDataDay) {
+        /**
+         *
+         * @param spotData
+         * @param spotDataDay
+         * @param nbH: nopmbre d'heure de navigation entre 8h à 20h
+         * @returns {string}
+         */
+        function createInfoBullContent(spotData,spotDataDay, nbH) {
             return '<h3>'+spotData.nom+'</h3>'+
                     '<a href="'+linkPrevisionSpot.replace('__idSpot__',spotData.id)+'">Prévisions du spot</a>'+
-                    '<p>Temp. de l\'aire: de '+spotDataDay["tempMin"]+' à '+spotDataDay["tempMax"]+'°C<br />'+
+                    '<p class="textMapInfoBulle">Nb d\'heure de navigation: '+nbH+'h<br />'+
+                    '<span class="infoBullAide">Sur 12h possible (de 8h à 20h).</span></p>'+
+                    '<p class="textMapInfoBulle">Temp. de l\'aire: de '+spotDataDay["tempMin"]+' à '+spotDataDay["tempMax"]+'°C<br />'+
                     'Temp. de l\'eau: '+spotDataDay["tempWater"]+'°C</p>';
         }
 
