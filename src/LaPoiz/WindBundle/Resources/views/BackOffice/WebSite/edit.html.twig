@@ -1,0 +1,17 @@
+{% extends 'LaPoizWindBundle:BackOffice:base.html.twig' %}
+
+
+{% block scripts %}
+    {{ parent() }}
+    {{ form_javascript(edit_form) }}
+    {{ form_javascript(delete_form) }}
+{% endblock %}
+
+
+{% block bodyPage %}
+    <h1>{{ website.nom }}</h1>
+
+    {{ form(edit_form) }}
+    {{ form(delete_form) }}
+
+{% endblock %}

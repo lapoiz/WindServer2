@@ -25,6 +25,7 @@ class BOController extends Controller
     $listRegion = $em->getRepository('LaPoizWindBundle:Region')->findAllOrderByNumDisplay();
     $listSpotNotValid = $em->getRepository('LaPoizWindBundle:Spot')->findAllNotValid();
       $listSpotsWithoutRegion = $em->getRepository('LaPoizWindBundle:Spot')->findAllWithoutRegion();
+      $listWebsites = $em->getRepository('LaPoizWindBundle:WebSite')->findAll();
 
 
     return $this->container->get('templating')->renderResponse('LaPoizWindBundle:BackOffice:index.html.twig',
@@ -32,7 +33,8 @@ class BOController extends Controller
             'listSpot' => $listSpot,
             'listRegion' => $listRegion,
             'listSpotNotValid' => $listSpotNotValid,
-            'listSpotsWithoutRegion' => $listSpotsWithoutRegion
+            'listSpotsWithoutRegion' => $listSpotsWithoutRegion,
+            'listWebsites' => $listWebsites
         ));
   }
 
@@ -51,6 +53,7 @@ class BOController extends Controller
         $listSpot = $em->getRepository('LaPoizWindBundle:Spot')->findAllValid();
         $listRegion = $em->getRepository('LaPoizWindBundle:Region')->findAllOrderByNumDisplay();
         $listSpotsWithoutRegion = $em->getRepository('LaPoizWindBundle:Spot')->findAllWithoutRegion();
+        $listWebsites = $em->getRepository('LaPoizWindBundle:WebSite')->findAll();
 
         if (isset($id) && $id!=-1)
         {
@@ -65,7 +68,8 @@ class BOController extends Controller
                     'spot' => $spot,
                     'listSpot' => $listSpot,
                     'listRegion' => $listRegion,
-                'listSpotsWithoutRegion' => $listSpotsWithoutRegion
+                    'listSpotsWithoutRegion' => $listSpotsWithoutRegion,
+                    'listWebsites' => $listWebsites
                 ));
         } else {
             return $this->container->get('templating')->renderResponse(
@@ -86,6 +90,7 @@ class BOController extends Controller
         $listSpot = $em->getRepository('LaPoizWindBundle:Spot')->findAllValid();
         $listRegion = $em->getRepository('LaPoizWindBundle:Region')->findAllOrderByNumDisplay();
         $listSpotsWithoutRegion = $em->getRepository('LaPoizWindBundle:Spot')->findAllWithoutRegion();
+        $listWebsites = $em->getRepository('LaPoizWindBundle:WebSite')->findAll();
 
         $spot = new Spot();
         $form = $this->createForm('spot',$spot);
@@ -104,17 +109,19 @@ class BOController extends Controller
                 $em->persist($spot);
                 $em->flush();
                 return $this->render('LaPoizWindBundle:BackOffice:spot.html.twig', array(
-                        'spot' => $spot,
-                        'listSpot' => $listSpot,
-                        'listRegion' => $listRegion,
-                    'listSpotsWithoutRegion' => $listSpotsWithoutRegion
+                     'spot' => $spot,
+                     'listSpot' => $listSpot,
+                     'listRegion' => $listRegion,
+                    'listSpotsWithoutRegion' => $listSpotsWithoutRegion,
+                    'listWebsites' => $listWebsites
                     ));
             } else {
                 return $this->render('LaPoizWindBundle:BackOffice/Spot:createSpot.html.twig', array(
                         'form' => $form->createView(),
                         'listSpot' => $listSpot,
                         'listRegion' => $listRegion,
-                    'listSpotsWithoutRegion' => $listSpotsWithoutRegion
+                    'listSpotsWithoutRegion' => $listSpotsWithoutRegion,
+                    'listWebsites' => $listWebsites
                     ));
             }
         }
@@ -122,7 +129,8 @@ class BOController extends Controller
                 'form' => $form->createView(),
                 'listSpot' => $listSpot,
                 'listRegion' => $listRegion,
-            'listSpotsWithoutRegion' => $listSpotsWithoutRegion
+            'listSpotsWithoutRegion' => $listSpotsWithoutRegion,
+            'listWebsites' => $listWebsites
             ));
     }
 
@@ -171,6 +179,7 @@ class BOController extends Controller
         $listSpot = $em->getRepository('LaPoizWindBundle:Spot')->findAllValid();
         $listRegion = $em->getRepository('LaPoizWindBundle:Region')->findAllOrderByNumDisplay();
         $listSpotsWithoutRegion = $em->getRepository('LaPoizWindBundle:Spot')->findAllWithoutRegion();
+        $listWebsites = $em->getRepository('LaPoizWindBundle:WebSite')->findAll();
 
         if (isset($id) && $id!=-1) {
             $region = $em->find('LaPoizWindBundle:Region', $id);
@@ -207,7 +216,8 @@ class BOController extends Controller
             'region' => $region,
             'listSpot' => $listSpot,
             'listRegion' => $listRegion,
-            'listSpotsWithoutRegion' => $listSpotsWithoutRegion
+            'listSpotsWithoutRegion' => $listSpotsWithoutRegion,
+            'listWebsites' => $listWebsites
         ));
     }
 
@@ -224,6 +234,7 @@ class BOController extends Controller
         $listSpot = $em->getRepository('LaPoizWindBundle:Spot')->findAllValid();
         $listRegion = $em->getRepository('LaPoizWindBundle:Region')->findAllOrderByNumDisplay();
         $listSpotsWithoutRegion = $em->getRepository('LaPoizWindBundle:Spot')->findAllWithoutRegion();
+        $listWebsites = $em->getRepository('LaPoizWindBundle:WebSite')->findAll();
 
         $region = new Region();
         $form = $this->createForm('region',$region);
@@ -247,14 +258,16 @@ class BOController extends Controller
                     'region' => $region,
                     'listSpot' => $listSpot,
                     'listRegion' => $listRegion,
-                    'listSpotsWithoutRegion' => $listSpotsWithoutRegion
+                    'listSpotsWithoutRegion' => $listSpotsWithoutRegion,
+                    'listWebsites' => $listWebsites
                 ));
             } else {
                 return $this->render('LaPoizWindBundle:BackOffice/Region:createRegion.html.twig', array(
                     'form' => $form->createView(),
                     'listSpot' => $listSpot,
                     'listRegion' => $listRegion,
-                    'listSpotsWithoutRegion' => $listSpotsWithoutRegion
+                    'listSpotsWithoutRegion' => $listSpotsWithoutRegion,
+                    'listWebsites' => $listWebsites
                 ));
             }
         }
@@ -262,7 +275,8 @@ class BOController extends Controller
             'form' => $form->createView(),
             'listSpot' => $listSpot,
             'listRegion' => $listRegion,
-            'listSpotsWithoutRegion' => $listSpotsWithoutRegion
+            'listSpotsWithoutRegion' => $listSpotsWithoutRegion,
+            'listWebsites' => $listWebsites
         ));
     }
 
@@ -311,6 +325,7 @@ class BOController extends Controller
         $listSpot = $em->getRepository('LaPoizWindBundle:Spot')->findAllValid();
         $listRegion = $em->getRepository('LaPoizWindBundle:Region')->findAllOrderByNumDisplay();
         $listSpotsWithoutRegion = $em->getRepository('LaPoizWindBundle:Spot')->findAllWithoutRegion();
+        $listWebsites = $em->getRepository('LaPoizWindBundle:WebSite')->findAll();
 
         if (isset($id) && $id!=-1)
         {
@@ -327,7 +342,8 @@ class BOController extends Controller
                     'spot' => $spot,
                     'listSpot' => $listSpot,
                     'listSpotsWithoutRegion' => $listSpotsWithoutRegion,
-                    'listRegion' => $listRegion)
+                    'listRegion' => $listRegion,
+                    'listWebsites' => $listWebsites)
             );
         } else {
             return $this->container->get('templating')->renderResponse(

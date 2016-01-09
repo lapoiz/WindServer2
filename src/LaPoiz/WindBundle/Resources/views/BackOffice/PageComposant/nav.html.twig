@@ -1,4 +1,4 @@
-{% macro view(listRegion, listSpotsWithoutRegion) %}
+{% macro view(listRegion, listSpotsWithoutRegion, listWebsites) %}
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -72,6 +72,7 @@
                         <li><a href="{{ path('_bo_region_create') }}"><span class="glyphicon glyphicon-plus"></span> Créer une region</a></li>
                     </ul>
                 </li>
+
                 <li class="dropdown {% if app.request.attributes.get('_route') starts with '_bo_test' %} active{% endif %}">
                     <a data-toggle="dropdown" href="#">Tests<b class="caret"></b></a>
                     <ul class="dropdown-menu">
@@ -79,6 +80,24 @@
                         <li><a href="#">Test Ajax</a></li>
                     </ul>
                 </li>
+
+
+                <li class="dropdown {% if app.request.attributes.get('_route') starts with '_bo_website' %} active{% endif %}">
+                    <a data-toggle="dropdown" href="#">Gestion des sites web<b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        {% if listWebsites is not null %}
+                            {% for website in listWebsites %}
+                                <li class="{% if app.request.attributes.get('_route') starts with '_bo_website_edit' and
+                                website.id in app.request.uri|split('/') %} active{% endif %}">
+                                    <a href="{{ path('_bo_website_edit',{'id':website.id}) }}">{{ website.nom }}</a></li>
+                            {% endfor %}
+                        {% endif %}
+                        <li class="divider"></li>
+                        <li><a href="{{ path('_bo_website_create') }}"><span class="glyphicon glyphicon-plus"></span> Créer un site</a></li>
+                    </ul>
+                </li>
+
+
             </ul>
             <ul class="nav navbar-nav navbar-right">
                     {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}

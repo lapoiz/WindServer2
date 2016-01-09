@@ -129,6 +129,20 @@ _bo_dataWindPrev:
   defaults: { _controller: LaPoizWindBundle:BO:dataWindPrev }
   pattern: /admin/spot/dataWindPrev/{id}
 
+
+_bo_website_delete:
+  defaults: { _controller: LaPoizWindBundle:BOWebSite:delete }
+  pattern: /admin/BO/website/delete/{id}
+
+_bo_website_edit:
+  defaults: { _controller: LaPoizWindBundle:BOWebSite:edit }
+  pattern: /admin/BO/website/edit/{id}
+
+_bo_website_create:
+  defaults: { _controller: LaPoizWindBundle:BOWebSite:create }
+  pattern: /admin/BO/website/new
+
+
 _bo_ajax_spot_delete:
   defaults: { _controller: LaPoizWindBundle:BOAjaxSpot:spotDelete }
   pattern: /admin/BO/ajax/spot/delete/{id}

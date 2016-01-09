@@ -45,7 +45,7 @@
     {% if listSpot is defined %}
 
     {% from "LaPoizWindBundle:BackOffice/PageComposant:nav.html.twig" import view %}
-    {{ view(listRegion, listSpotsWithoutRegion) }}
+    {{ view(listRegion, listSpotsWithoutRegion, listWebsites) }}
 
     {% endif %}
 

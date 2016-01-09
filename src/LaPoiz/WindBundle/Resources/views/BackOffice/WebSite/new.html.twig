@@ -1,0 +1,12 @@
+{% extends 'LaPoizWindBundle:BackOffice:base.html.twig' %}
+
+
+{% block scripts %}
+    {{ parent() }}
+    {{ form_javascript(form) }}
+{% endblock %}
+
+{% block bodyPage %}
+    <h1>Creation d'un Site internet</h1>
+    {{ form(form) }}
+{% endblock %}
