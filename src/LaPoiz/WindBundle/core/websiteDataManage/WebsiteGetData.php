@@ -262,7 +262,7 @@ class WebsiteGetData
 
 
     function getNodeValue(Crawler $crawler, $filter) {
-        if (!empty($crawler->filter($filter)->getNode(0))) {
+        if (!is_null($crawler->filter($filter)->getNode(0))) {
             return trim($crawler->filter($filter)->getNode(0)->nodeValue);
         } else {
             return null;
