@@ -13,7 +13,6 @@
         <div class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
 
-
                 <li class="dropdown {% if app.request.attributes.get('_route') starts with '_bo_spot' %} active{% endif %}">
                     <a data-toggle="dropdown" href="#">Gestion des spots<b class="caret"></b></a>
                     <ul class="dropdown-menu">
@@ -98,7 +97,21 @@
                 </li>
 
 
+                <li class="dropdown {% if app.request.attributes.get('_route') starts with '_bo_tools' %} active{% endif %}">
+                    <a data-toggle="dropdown" href="#">Outils divers<b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li class="{% if app.request.attributes.get('_route') starts with '_bo_tools_svg_convert' %} active{% endif %}">
+                                    <a href="{{ path('_bo_tools_svg_convert_index') }}">Convertion SVG en PNG</a>
+                        </li>
+
+                    </ul>
+                </li>
+
             </ul>
+
+
+
+
             <ul class="nav navbar-nav navbar-right">
                     {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
                         <li><a href="{{ path('logout') }}">{{ "header.connected.link.label.logout" | trans }}</a></li>
@@ -107,6 +120,9 @@
                         <li><a class="btn pull-right" data-toggle="modal" href="#login">{{ "header.connected.link.label.login" | trans }}</a></li>
                     {% endif %}
             </ul>
+
+
+
         </div>
     </div>
 {% endmacro %}

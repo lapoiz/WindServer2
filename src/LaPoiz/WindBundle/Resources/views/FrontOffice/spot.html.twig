@@ -10,6 +10,8 @@
 
         <script src="{{ asset('bundles/lapoizgraph/js/Legend.js') }}"></script>
         <script src="{{ asset('bundles/lapoizgraph/js/graphSpot.js') }}"></script>
+
+        <script type="text/javascript" src="http://google-maps-utility-library-v3.googlecode.com/svn/trunk/infobox/src/infobox.js"></script>
     {% endblock %}
 
     {% block stylesheets %}
@@ -33,7 +35,7 @@
 
             <div class="row">
                 <div class="col-sm-6 centered">
-            {% from "LaPoizWindBundle:BackOffice/Spot/Ajax:rosaceWind.html.twig" import displayRosace %}
+            {% from "LaPoizWindBundle:BothOffice/Spot:rosaceWind.html.twig" import displayRosace %}
             {{ displayRosace("200px","200px") }}
 
             <script>

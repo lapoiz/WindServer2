@@ -21,7 +21,7 @@
         </div>
 
         <div class="col-sm-4 centered" >
-            {% from "LaPoizWindBundle:BackOffice/Spot/Ajax:rosaceWind.html.twig" import displayRosace %}
+            {% from "LaPoizWindBundle:BothOffice/Spot:rosaceWind.html.twig" import displayRosace %}
             {{ displayRosace() }}
         </div>
     </div>
@@ -54,7 +54,7 @@
     </script>
 
 
-    {% from "LaPoizWindBundle:BackOffice/Spot/Ajax:rosaceWindJS.html.twig" import js %}
+    {% from "LaPoizWindBundle:BackOffice/Spot/Ajax:rosaceWindAdminJS.html.twig" import js %}
     {{ js(spot) }}
 
 {% endif %}

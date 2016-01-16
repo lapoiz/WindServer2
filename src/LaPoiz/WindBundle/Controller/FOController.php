@@ -54,7 +54,7 @@ class FOController extends Controller
     /**
      * @Template()
      */
-    public function sitesMapAction() {
+    public function spotsPrevMapAction() {
         $em = $this->container->get('doctrine.orm.entity_manager');
         // récupere tous les spots
         $listSpot = $em->getRepository('LaPoizWindBundle:Spot')->findAllValid();
@@ -63,7 +63,26 @@ class FOController extends Controller
         $listSpotsWithoutRegion = $em->getRepository('LaPoizWindBundle:Spot')->findAllWithoutRegion();
         $listSites = $em->getRepository('LaPoizWindBundle:WebSite')->findAll();
 
-        return $this->container->get('templating')->renderResponse('LaPoizWindBundle:FrontOffice:sitesMap.html.twig',
+        return $this->container->get('templating')->renderResponse('LaPoizWindBundle:FrontOffice/Map:spotsPrevMap.html.twig',
+            array(
+                'listSpot' => $listSpot,
+                'listRegion' => $listRegion,
+                'listSpotsWithoutRegion' => $listSpotsWithoutRegion,
+                'listSites' => $listSites ));
+    }
+
+    /**
+     * @Template()
+     */
+    public function spotsOrientMapAction() {
+        $em = $this->container->get('doctrine.orm.entity_manager');
+        // récupere tous les spots
+        $listSpot = $em->getRepository('LaPoizWindBundle:Spot')->findAllValid();
+        $listRegion = $em->getRepository('LaPoizWindBundle:Region')->findAllOrderByNumDisplay();
+        $listSpotsWithoutRegion = $em->getRepository('LaPoizWindBundle:Spot')->findAllWithoutRegion();
+        $listSites = $em->getRepository('LaPoizWindBundle:WebSite')->findAll();
+
+        return $this->container->get('templating')->renderResponse('LaPoizWindBundle:FrontOffice/Map:spotsOrientMap.html.twig',
             array(
                 'listSpot' => $listSpot,
                 'listRegion' => $listRegion,

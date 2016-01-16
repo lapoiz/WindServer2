@@ -15,9 +15,12 @@
             <ul class="nav navbar-nav">
 
                 <li class=" {% if app.request.attributes.get('_route') starts with '_fo_sites_map' %}active{% endif %}">
-                    <a href="{{ path('_fo_sites_map') }}">Carte des sites</a>
+                    <a href="{{ path('_fo_spotes_prev_map') }}">Carte des spots (prévisions)</a>
                 </li>
 
+                <li class=" {% if app.request.attributes.get('_route') starts with '_fo_sites_map' %}active{% endif %}">
+                    <a href="{{ path('_fo_spotes_orient_map') }}">Carte des spots (orientations)</a>
+                </li>
 
                 <li class="dropdown {% if app.request.attributes.get('_route') starts with '_fo_spot_graph' %} active{% endif %}">
                     <a data-toggle="dropdown" href="#">Les spots<b class="caret"></b></a>

@@ -20,13 +20,21 @@ _index:
   defaults: { _controller: LaPoizWindBundle:FO:index }
   pattern: /index
 
-_fo_sites_map:
-  defaults: { _controller: LaPoizWindBundle:FO:sitesMap }
-  pattern: /map
+_fo_spotes_prev_map:
+  defaults: { _controller: LaPoizWindBundle:FO:spotsPrevMap }
+  pattern: /map/prev
+
+_fo_spotes_orient_map:
+  defaults: { _controller: LaPoizWindBundle:FO:spotsOrientMap}
+  pattern: /map/orientation
 
 _fo_ajax_sites_info_prev:
   defaults: { _controller: LaPoizWindBundle:FOJson:getInfoPrev }
   pattern: /fo/ajax/sites/prev
+
+_fo_ajax_spots_info_orient:
+  defaults: { _controller: LaPoizWindBundle:FOJson:getInfoOrient }
+  pattern: /fo/ajax/spots/orient
 
 
 _fo_concept:
@@ -189,6 +197,17 @@ _bo_ajax_region_add_spot:
 _bo_ajax_region_remove_spot:
   defaults: { _controller: LaPoizWindBundle:BOAjaxRegion:removeSpot }
   pattern: /admin/BO/ajax/region/remove/spot/{id}/{idSpot}
+
+_bo_tools_svg_convert_index:
+  defaults: { _controller: LaPoizWindBundle:BOTools:convertSVG }
+  pattern: /admin/BO/tools/convert/svg
+
+
+
+
+
+
+
 
 
 

@@ -11,7 +11,7 @@
 
     <div class="row">
         <div class="col-md-12">
-            <h2>Cartes des sites</h2>
+            <h2>Cartes des prévisions des spots <span id="loading"></span></h2>
 
             <SELECT id="selectDates" NAME="Date"></SELECT>
 
@@ -130,11 +130,13 @@
                     spotsList=jsonResult;
                     isSpotsListLoading=true;
                     loadDateData(spotsList);
+                    $('#loading').html('');
                 }
             });
         };
 
         function loadDateData(spotsList) {
+            $('#loading').html('<img src="{{ asset('bundles/lapoizwind/images/loading.gif') }}" alt="Loading Ajax data" />');
             if (isMapInitilize) {
                 if (typeof(listeSpotsMarker) === "undefined") {
                     createMarker();

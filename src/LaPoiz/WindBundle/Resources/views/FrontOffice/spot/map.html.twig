@@ -5,10 +5,17 @@
         </div>
     </div>
 
+
+    {% from "LaPoizWindBundle:BothOffice/Spot:rosaceWindSVG2.html.twig" import svg %}
+    {{ svg(15,15) }}
+
+
+
+
     <script type="text/javascript">
 
         var map;
-        function initMap() {
+        function initMap2() {
 
             var centerPt={lat: {{ spot.gpsLat }}, lng: {{ spot.gpsLong }} };
 
@@ -26,13 +33,77 @@
 
         }
 
-        function old() {
-            var marker = new google.maps.Marker({
-                position: spotLatlng,
-                map: map,
-                title: 'Spot'
+
+        function initMap() {
+            var centerPt={lat: {{ spot.gpsLat }}, lng: {{ spot.gpsLong }} };
+            map = new google.maps.Map(document.getElementById('map-canvas'), {
+                center: centerPt,
+                zoom: 15,
+                mapTypeId: google.maps.MapTypeId.SATELLITE
             });
+
+            // set marker width and height
+            var markerWidth = 32;
+            var markerHeight = 32;
+
+            // dynamically generate SVG element somehow using marker width and height (some Javascript function)
+            var markerSVG = getWindRosaceSVG(markerWidth, markerHeight);
+
+            // marker number div
+            var markerNumber = $('<div></div>').text('99').css({
+                position: 'absolute',
+                top: 0, right: 0, bottom: 0, left: 0,
+                lineHeight: markerHeight + 'px',
+                textAlign: 'center',
+                zIndex: 1
+            });
+
+            // div to hold the SVG element and marker number
+            var markerDiv = $('<div></div>').append(markerSVG, markerNumber).css({
+                width: markerWidth + 'px',
+                height: markerHeight + 'px',
+                position: 'relative'
+            });
+
+            // create new InfoBox and set content to markerDiv
+            var markerInfoBox = new InfoBox({
+                alignBottom: true,
+                content: markerDiv[0],
+                closeBoxURL: '',
+                pixelOffset: new google.maps.Size(markerWidth * -0.5, 0),
+                pane: 'overlayImage',
+                position: new google.maps.LatLng(getMarkerLat(), getMarkerLng())
+            });
+
+
+            // use jQuery to handle events
+            markerDiv.on('click', function (e) {
+// do something
+            });
+
+            // show the marker
+            markerInfoBox.open(map);
+
+            // change the number in the marker
+            markerNumber.text('69');
+
+            // hide the marker
+            markerInfoBox.close();
         }
+        function getWindRosaceSVG(width, height) {
+            return $('#rosaceWindSVG');
+        }
+
+        function getMarkerLat() {
+            return {{ spot.gpsLat }};
+        }
+        function getMarkerLng() {
+            return {{ spot.gpsLong }};
+        }
+
+
+
+
     </script>
     <script async defer
             src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBsZg9TbRTh7n4zfPArWf3lqVLdVB1xlko&callback=initMap">

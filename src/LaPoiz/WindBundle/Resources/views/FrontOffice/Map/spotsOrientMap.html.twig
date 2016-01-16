@@ -1,0 +1,102 @@
+{% extends 'LaPoizWindBundle:FrontOffice:base.html.twig' %}
+
+{% block javascriptsHeader %}
+    <script src="{{ asset('bundles/lapoizgraph/js/moment.min.js') }}"></script>
+    <script src="https://maps.googleapis.com/maps/api/js"></script>
+    <script type="text/javascript" src="http://google-maps-utility-library-v3.googlecode.com/svn/trunk/markerwithlabel/src/markerwithlabel.js"></script>
+
+{% endblock %}
+
+{% block bodyPage %}
+
+    <div class="row">
+        <div class="col-md-12">
+            <h2>Cartes des orientations des spots <span id="loading"></span></h2>
+
+            <div id="sitesMap"></div>
+
+            <div id="rosaceDiv">
+                {% from "LaPoizWindBundle:BothOffice/Spot:rosaceWindSVG.html.twig" import svg %}
+                {{ svg(50,50) }}
+            </div>
+
+        </div>
+    </div>
+
+    <script src="{{ asset('bundles/lapoizwind/js/rosaceWind.js') }}"></script>
+
+    <script>
+
+        var listeSpotsMarker;
+        var linkPrevisionSpot="{{ path('_fo_spot_graph', {'id':'__idSpot__'}) }}";
+        var isMapInitilize = false;
+        var infoBulle;
+
+        var spotsList = {"spots":[
+            {% for spot in listSpot %}
+                { "nom":"{{ spot.nom }}", "id":{{ spot.id }}, "lat":{{ spot.gpsLat }}, "lng": {{ spot.gpsLong }} },
+            {% endfor %}
+        ]};
+        var isSpotsListLoading=false;
+
+        var map;
+
+        function initialize() {
+            console.log("initialize ");
+            isMapInitilize=true;
+            var mapOptions = {
+                zoom: 6,
+                center: {lat: 47.090039, lng: 2.377031},
+                mapTypeId: google.maps.MapTypeId.TERRAIN
+            };
+            map = new google.maps.Map(document.getElementById('sitesMap'),
+                    mapOptions);
+            createMarker();
+            //loadJSON();
+            //loadOrientData(spotsList);
+        }
+
+
+        function createMarker() {
+            console.log("createMarker ");
+            if (typeof(listeSpotsMarker) === "undefined") {
+                listeSpotsMarker = [];
+                infoBulle = [];
+
+                for (index = 0; index < spotsList.spots.length; index++) {
+                    var spot = spotsList.spots[index];
+                    var urlIcon="{{ asset('images/windRosaces/') }}"+spot.id+".png";
+
+                    listeSpotsMarker[spot.id] = new google.maps.Marker({
+                        position: spot,
+                        //icon: spotMarker,
+                        //icon: { url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(strRosaceSpot) },
+                        icon: { url: urlIcon },
+                        map: map,
+                        title: spot.nom
+                    });
+
+
+                    listeSpotsMarker[spot.id].infoBulleContent = '<h3>'+spot.nom+'</h3>'+
+                            '<a href="'+linkPrevisionSpot.replace('__idSpot__',spot.id)+'">Prévisions du spot</a>';
+
+                    var infoBulle = new google.maps.InfoWindow();
+                    var marker = listeSpotsMarker[spot.id];
+                    google.maps.event.addListener(marker,'mouseover', (function(){
+                        infoBulle.setContent(this.infoBulleContent);
+                        infoBulle.open(map,this);
+                    }));
+
+                }
+            }
+        }
+
+
+        // Call the initialize function after the page has finished loading
+        google.maps.event.addDomListener(window, 'load', initialize);
+
+    </script>
+
+
+
+{% endblock %}

@@ -217,4 +217,65 @@ class FOJsonController extends Controller
         }
     }
 
+
+    /**
+     * @Template()
+     *
+     * http://localhost/Wind/web/app_dev.php/fo/ajax/spots/orient
+     * Utilisé dans la carte des spots (or  ientations)
+     */
+    public function getInfoOrientAction()
+    {
+        try {
+            $em = $this->container->get('doctrine.orm.entity_manager');
+            $listSpots = $em->getRepository('LaPoizWindBundle:Spot')->findAllValid();
+
+            $spots = array();
+            foreach ($listSpots as $spot) {
+                $spotData = array();
+                $spotData["nom"] = $spot->getNom();
+                $spotData["id"] = $spot->getId();
+                $spotData["lat"] = $spot->getgpsLat();
+                $spotData["lng"] = $spot->getgpsLong();
+                $listeNotesDate = $spot->getNotesDate();
+
+                $day= new \DateTime("now");
+                $tabNotes = array();
+                $spotData["nbHourNav"]=array();
+                for ($nbPrevision=0; $nbPrevision<7; $nbPrevision++) {
+                    $tabNotes[$day->format('Y-m-d')]=$nbPrevision;
+                    $spotData["nbHourNav"][$nbPrevision]=null;
+                    $day->modify('+1 day');
+                }
+
+                foreach ($listeNotesDate as $notesDate) {
+                    if (array_key_exists($notesDate->getDatePrev()->format('Y-m-d'), $tabNotes)) {
+                        $index=$tabNotes[$notesDate->getDatePrev()->format('Y-m-d')];
+                        $nbHPrev=array();
+
+                        $websites=array();
+                        foreach ($notesDate->getNbHoureNav() as $nbHoureNav) {
+                            $websites[$nbHoureNav->getWebsite()->getNom()]=$nbHoureNav->getNbHoure();
+                        }
+                        $nbHPrev["websites"]=$websites;
+                        $nbHPrev["tempMax"]=round($notesDate->getTempMax());
+                        $nbHPrev["tempMin"]=round($notesDate->getTempMin());
+                        $nbHPrev["tempWater"]=round($notesDate->getTempWater());
+                        $spotData["nbHourNav"][$index]=$nbHPrev;
+                    }
+                }
+                $spots[]=$spotData;
+            }
+
+            return new JsonResponse($spots);
+        } catch (\Exception $e) {
+            return new JsonResponse(array(
+                'success' => false,
+                'description' => "Exception: "+$e->getMessage()
+            ));
+        }
+    }
+
+
+
 }

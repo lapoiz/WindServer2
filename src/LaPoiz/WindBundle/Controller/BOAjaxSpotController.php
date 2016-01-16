@@ -2,6 +2,7 @@
 namespace LaPoiz\WindBundle\Controller;
 
 use LaPoiz\WindBundle\Command\CreateNbHoureCommand;
+use LaPoiz\WindBundle\core\imagesManage\RosaceWindManage;
 use LaPoiz\WindBundle\core\maree\MareeTools;
 use LaPoiz\WindBundle\core\nbHoure\NbHoureMaree;
 use LaPoiz\WindBundle\core\nbHoure\NbHoureMeteo;
@@ -72,6 +73,7 @@ class BOAjaxSpotController extends Controller
                     $spot = $form->getData();
                     $em->persist($spot);
                     $em->flush();
+                    RosaceWindManage::createRosaceWind($spot, $this);
                 }
                 /*else {
                     return new Response($request);
