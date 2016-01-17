@@ -2,7 +2,7 @@
 /*
  Couleur par defaut, lorsque pas d'etat: blanc, sinon noir
  */
-function olorState(state, defaultColor) {
+function colorState(state, defaultColor) {
     var colorState = "green";
 
     switch (state) {
