@@ -198,10 +198,13 @@ _bo_ajax_region_remove_spot:
   defaults: { _controller: LaPoizWindBundle:BOAjaxRegion:removeSpot }
   pattern: /admin/BO/ajax/region/remove/spot/{id}/{idSpot}
 
-_bo_tools_svg_convert_index:
-  defaults: { _controller: LaPoizWindBundle:BOTools:convertSVG }
-  pattern: /admin/BO/tools/convert/svg
+_bo_tools_rosace_convert_png:
+  defaults: { _controller: LaPoizWindBundle:BOTools:rosaceConvertPNG }
+  pattern: /admin/BO/tools/rosace/convert/png
 
+_bo_tools_rosace_convert_all_spots:
+  defaults: { _controller: LaPoizWindBundle:BOTools:rosaceConvertPNGAllSpots }
+  pattern: /admin/BO/tools/rosace/convert/png/all/spots
 
 
 
