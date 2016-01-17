@@ -100,10 +100,13 @@
                 <li class="dropdown {% if app.request.attributes.get('_route') starts with '_bo_tools' %} active{% endif %}">
                     <a data-toggle="dropdown" href="#">Outils divers<b class="caret"></b></a>
                     <ul class="dropdown-menu">
-                        <li class="{% if app.request.attributes.get('_route') starts with '_bo_tools_svg_convert' %} active{% endif %}">
-                                    <a href="{{ path('_bo_tools_svg_convert_index') }}">Convertion SVG en PNG</a>
+                        <li class="{% if app.request.attributes.get('_route') starts with '_bo_tools_rosace_convert_png' %} active{% endif %}">
+                                    <a href="{{ path('_bo_tools_rosace_convert_png') }}">Create Rosace (png)</a>
                         </li>
 
+                        <li class="{% if app.request.attributes.get('_route') starts with '_bo_tools_rosace_convert_all_spots' %} active{% endif %}">
+                            <a href="{{ path('_bo_tools_rosace_convert_all_spots') }}">Create Rosace (png) for all spots</a>
+                        </li>
                     </ul>
                 </li>
 

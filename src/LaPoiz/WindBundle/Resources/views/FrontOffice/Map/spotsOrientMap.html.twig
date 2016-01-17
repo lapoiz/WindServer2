@@ -65,13 +65,13 @@
 
                 for (index = 0; index < spotsList.spots.length; index++) {
                     var spot = spotsList.spots[index];
-                    var urlIcon="{{ asset('images/windRosaces/') }}"+spot.id+".png";
+                    var urlIcon="{{ asset('images/windRosaces/') }}"+spot.id+".min.png";
 
                     listeSpotsMarker[spot.id] = new google.maps.Marker({
                         position: spot,
-                        //icon: spotMarker,
-                        //icon: { url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(strRosaceSpot) },
-                        icon: { url: urlIcon },
+                        icon: {
+                            url: urlIcon,
+                            anchor: new google.maps.Point(25,25) },
                         map: map,
                         title: spot.nom
                     });

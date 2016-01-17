@@ -5,17 +5,10 @@
         </div>
     </div>
 
-
-    {% from "LaPoizWindBundle:BothOffice/Spot:rosaceWindSVG2.html.twig" import svg %}
-    {{ svg(15,15) }}
-
-
-
-
     <script type="text/javascript">
 
         var map;
-        function initMap2() {
+        function initMap() {
 
             var centerPt={lat: {{ spot.gpsLat }}, lng: {{ spot.gpsLong }} };
 
@@ -25,16 +18,21 @@
                 mapTypeId: google.maps.MapTypeId.SATELLITE
             });
 
+            var urlIcon="{{ asset('images/windRosaces/') }}{{ spot.id }}.png";
             var marker = new google.maps.Marker({
                 position: centerPt,
                 map: map,
-                title: 'Spot'
+                title: "{{ spot.nom }}",
+                icon: {
+                    url: urlIcon,
+                    anchor: new google.maps.Point(100,100)
+                }
             });
 
         }
 
 
-        function initMap() {
+        function initMap2() {
             var centerPt={lat: {{ spot.gpsLat }}, lng: {{ spot.gpsLong }} };
             map = new google.maps.Map(document.getElementById('map-canvas'), {
                 center: centerPt,
@@ -66,6 +64,7 @@
             });
 
             // create new InfoBox and set content to markerDiv
+            /*
             var markerInfoBox = new InfoBox({
                 alignBottom: true,
                 content: markerDiv[0],
@@ -88,7 +87,7 @@
             markerNumber.text('69');
 
             // hide the marker
-            markerInfoBox.close();
+            markerInfoBox.close();*/
         }
         function getWindRosaceSVG(width, height) {
             return $('#rosaceWindSVG');

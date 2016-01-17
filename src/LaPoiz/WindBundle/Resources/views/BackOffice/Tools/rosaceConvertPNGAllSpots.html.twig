@@ -1,0 +1,67 @@
+{% extends 'LaPoizWindBundle:BackOffice:base.html.twig' %}
+
+{% block bodyPage %}
+
+    <div class="starter-template">
+        <h1>Create all PNG Rosace</h1>
+
+
+        <div class="row">
+            <div class="col-sm-12">
+                <a class="btn btn-primary" href="{{ path('_bo_tools_rosace_convert_all_spots') }}">Create all PNG</a>
+            </div>
+        </div>
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="row">
+                        {% set nbInLine = 0 %}
+                   {% for spot in listSpot  %}
+
+                       {% if nbInLine > 3 %}
+                           <div class="row">
+                       {% endif %}
+
+                       <div class="col-sm-4">
+                           <span>{{ spot.nom }}</span>
+                           <img src="{{ asset('images/windRosaces/') }}{{ spot.id }}.png">
+                       </div>
+
+                       {% if nbInLine > 3 %}
+                           </div>
+                           {% set nbInLine=0 %}
+                       {% endif %}
+
+                       {% set nbInLine=nbInLine+1 %}
+                   {% endfor %}
+                </div>
+            </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="row">
+                {% set nbInLine = 0 %}
+                {% for spot in listSpotNotValid  %}
+
+                    {% if nbInLine > 3 %}
+                    <div class="row">
+                    {% endif %}
+
+                        <div class="col-sm-4">
+                            <span>{{ spot.nom }}</span>
+                            <img src="{{ asset('images/windRosaces/') }}{{ spot.id }}.png">
+                        </div>
+
+                    {% if nbInLine > 3 %}
+                    </div>
+                        {% set nbInLine=0 %}
+                    {% endif %}
+
+                    {% set nbInLine=nbInLine+1 %}
+                {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

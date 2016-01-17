@@ -1,0 +1,22 @@
+{% extends 'LaPoizWindBundle:BackOffice:base.html.twig' %}
+
+{% block bodyPage %}
+
+    <div class="starter-template">
+        <h1>Create PNG Rosace</h1>
+
+        <h2>{{ spot.nom }}</h2>
+            <div class="row">
+                <div class="col-sm-12">
+                    {% from "LaPoizWindBundle:BothOffice/spot:map.html.twig" import map %}
+                    {{ map(spot) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <a class="btn btn-primary" href="{{ path('_bo_tools_rosace_convert_png') }}">Create PNG</a>
+                </div>
+            </div>
+    </div>
+
+{% endblock %}
