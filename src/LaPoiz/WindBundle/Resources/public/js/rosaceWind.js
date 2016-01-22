@@ -31,11 +31,6 @@ function svgLoad(orientationState, small) {
             $('#'+id+'Txt').attr("fill", colorState(orientationState[name],'b'));
         }
     }
-    /*
-     if (typeof small !== 'undefined' & small) {
-     $('#rosaceWindSVG').attr('transform','scale(0.5)');
-     }
-     */
 }
 
 function orientationIdFromName(name) {

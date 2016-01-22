@@ -15,15 +15,8 @@
 
             <div id="sitesMap"></div>
 
-            <div id="rosaceDiv">
-                {% from "LaPoizWindBundle:BothOffice/Spot:rosaceWindSVG.html.twig" import svg %}
-                {{ svg(50,50) }}
-            </div>
-
         </div>
     </div>
-
-    <script src="{{ asset('bundles/lapoizwind/js/rosaceWind.js') }}"></script>
 
     <script>
 
@@ -42,7 +35,6 @@
         var map;
 
         function initialize() {
-            console.log("initialize ");
             isMapInitilize=true;
             var mapOptions = {
                 zoom: 6,
@@ -52,13 +44,10 @@
             map = new google.maps.Map(document.getElementById('sitesMap'),
                     mapOptions);
             createMarker();
-            //loadJSON();
-            //loadOrientData(spotsList);
         }
 
 
         function createMarker() {
-            console.log("createMarker ");
             if (typeof(listeSpotsMarker) === "undefined") {
                 listeSpotsMarker = [];
                 infoBulle = [];
@@ -90,7 +79,6 @@
                 }
             }
         }
-
 
         // Call the initialize function after the page has finished loading
         google.maps.event.addDomListener(window, 'load', initialize);
