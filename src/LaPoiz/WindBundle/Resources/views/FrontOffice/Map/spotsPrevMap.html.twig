@@ -49,11 +49,12 @@
 
 
         select.change(function() {
-              var str = "";
-              $( "select option:selected" ).each(function() {
+            //console.log("date change");
+            var str = "";
+            $( "select option:selected" ).each(function() {
                   numDaySelected=$( this ).val();
                   loadDateData(spotsList);
-              });}
+            });}
         ).trigger( "change" );
 
         var webSiteSelected=[{% for webSite in listSites %} "{{ webSite.nom }}", {% endfor %}];
@@ -69,6 +70,7 @@
         var map;
 
         function initialize() {
+            //console.log("initialize");
             isMapInitilize=true;
             var mapOptions = {
                 zoom: 6,
@@ -83,6 +85,7 @@
 
 
         function createMarker() {
+            //console.log("createMarker");
             if (typeof(listeSpotsMarker) === "undefined") {
                 var spotMarker = {
                     path: 'M 3 -7 A 10 10, 0, 1, 0, -3 -7 L 0 0 Z',
@@ -123,6 +126,8 @@
         }
 
         function loadJSON() {
+            //console.log("loadJSON");
+            $('#loading').html('<img src="{{ asset('bundles/lapoizwind/images/loading.gif') }}" alt="Loading Ajax data" />');
             $.ajax({
                 url: "{{ path('_fo_ajax_sites_info_prev') }}",
                 type: "GET",
@@ -136,7 +141,7 @@
         };
 
         function loadDateData(spotsList) {
-            $('#loading').html('<img src="{{ asset('bundles/lapoizwind/images/loading.gif') }}" alt="Loading Ajax data" />');
+            //console.log("loadDateData");
             if (isMapInitilize) {
                 if (typeof(listeSpotsMarker) === "undefined") {
                     createMarker();
@@ -147,38 +152,42 @@
                     $.each(spotsList, function (idSpot, spotData) {
                         // selon la selection du site webSiteSelected
                         //console.log("nom : "+spotData.nom);
-                        var spotDataDay = spotData.nbHourNav[numDaySelected];
-                        var nbH = getNbHoure(spotDataDay["websites"], webSiteSelected);
-                        var labelContent;
+                        try {
+                            var spotDataDay = spotData.nbHourNav[numDaySelected];
+                            var nbH = getNbHoure(spotDataDay["websites"], webSiteSelected);
+                            var labelContent;
+                            //console.log("nbH : "+nbH);
+                            if (nbH < 0) {
+                                // ?
+                                listeSpotsMarker[spotData.id].icon.fillColor = "white";
+                                listeSpotsMarker[spotData.id].icon.strokeColor = "gray";
+                                labelContent = "?";
+                            } else if (nbH < 4) {
+                                // RED
+                                listeSpotsMarker[spotData.id].icon.fillColor = "pink";
+                                listeSpotsMarker[spotData.id].icon.strokeColor = "red";
+                                labelContent = nbH + "h";
 
-                        if (nbH < 0) {
-                            // ?
-                            listeSpotsMarker[spotData.id].icon.fillColor = "white";
-                            listeSpotsMarker[spotData.id].icon.strokeColor = "gray";
-                            labelContent = "?";
-                        } else if (nbH < 4) {
-                            // RED
-                            listeSpotsMarker[spotData.id].icon.fillColor = "pink";
-                            listeSpotsMarker[spotData.id].icon.strokeColor = "red";
-                            labelContent = nbH + "h";
+                            } else if (nbH < 7) {
+                                // ORANGE
+                                listeSpotsMarker[spotData.id].icon.fillColor = "orange";
+                                listeSpotsMarker[spotData.id].icon.strokeColor = "red";
+                                labelContent = nbH + "h";
+                            } else {
+                                listeSpotsMarker[spotData.id].icon.fillColor = "LightGreen";
+                                listeSpotsMarker[spotData.id].icon.strokeColor = "green";
+                                labelContent = nbH + "h";
+                            }
 
-                        } else if (nbH < 7) {
-                            // ORANGE
-                            listeSpotsMarker[spotData.id].icon.fillColor = "orange";
-                            listeSpotsMarker[spotData.id].icon.strokeColor = "red";
-                            labelContent = nbH + "h";
-                        } else {
-                            listeSpotsMarker[spotData.id].icon.fillColor = "LightGreen";
-                            listeSpotsMarker[spotData.id].icon.strokeColor = "green";
-                            labelContent = nbH + "h";
+                            listeSpotsMarker[spotData.id].labelContent = labelContent;
+
+                            listeSpotsMarker[spotData.id].setShape();
+                            listeSpotsMarker[spotData.id].label.setContent();
+
+                            listeSpotsMarker[spotData.id].infoBulleContent = createInfoBullContent(spotData, spotDataDay, nbH);
+                        } catch (ex) {
+                            console.error("Exception: ", ex.message);
                         }
-
-                        listeSpotsMarker[spotData.id].labelContent = labelContent;
-
-                        listeSpotsMarker[spotData.id].setShape();
-                        listeSpotsMarker[spotData.id].label.setContent();
-
-                        listeSpotsMarker[spotData.id].infoBulleContent=createInfoBullContent(spotData,spotDataDay, nbH);
                     });
                 }
             }
