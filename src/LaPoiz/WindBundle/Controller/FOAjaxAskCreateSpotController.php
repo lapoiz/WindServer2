@@ -2,6 +2,7 @@
 namespace LaPoiz\WindBundle\Controller;
 
 use LaPoiz\WindBundle\core\websiteDataManage\WebsiteGetData;
+use LaPoiz\WindBundle\core\websiteDataManage\WebsiteManage;
 use LaPoiz\WindBundle\Entity\Spot;
 use LaPoiz\WindBundle\Entity\Contact;
 use LaPoiz\WindBundle\Entity\DataWindPrev;
@@ -77,9 +78,6 @@ class FOAjaxAskCreateSpotController extends Controller
 
             if ($form->isValid()) {
                 $contact = $form->getData();
-
-                //Todo: Verifie si email ou username exist
-
                 try {
                     // enregistre le contact
                     $em->persist($contact);
@@ -183,35 +181,49 @@ class FOAjaxAskCreateSpotController extends Controller
                         // form submit
                         $dataWindPrev = $form->getData();
 
-                        // test si l'url est OK
-                        $webSite = WebsiteGetData::getWebSiteObject($dataWindPrev);
-                        if ($webSite->isDataWindPrevOK($dataWindPrev)) {
-                            // Il est possible de parser le site de cet URL
+                        // Récupération du webSite grace à l'url
+                        $website=WebsiteManage::getWebSiteEntityFromURL($dataWindPrev->getUrl(),$em);
+                        if ($website!=null) {
+                            $dataWindPrevInDB=$em->getRepository('LaPoizWindBundle:DataWindPrev')->getWithWebsiteAndSpot($website,$spot);
+                            if ($dataWindPrevInDB === null) {
+                                $dataWindPrev->setWebsite($website);
+                                // test si l'url est OK
+                                $webSite = WebsiteGetData::getWebSiteObject($dataWindPrev);
+                                if ($webSite->isDataWindPrevOK($dataWindPrev)) {
+                                    // Il est possible de parser le site de cet URL
 
-                            if ($dataWindPrev->getWebsite()->getNom() == WebsiteGetData::windguruName) {
-                                $dataWindPrevWindGuruPro = clone $dataWindPrev;
-                                $dataWindPrevWindGuruPro->getWebsite()->removeDataWindPrev($dataWindPrevWindGuruPro);
-                                $windGuruProWebsite = $em->getRepository('LaPoizWindBundle:WebSite')->findByNom(WebsiteGetData::windguruProName)[0];
-                                $dataWindPrevWindGuruPro->setWebsite($windGuruProWebsite);
-                                $this->saveDataWindPrev($spot, $dataWindPrevWindGuruPro, $em);
+                                    if ($dataWindPrev->getWebsite()->getNom() == WebsiteGetData::windguruName) {
+                                        $dataWindPrevWindGuruPro = clone $dataWindPrev;
+                                        $dataWindPrevWindGuruPro->getWebsite()->removeDataWindPrev($dataWindPrevWindGuruPro);
+                                        $windGuruProWebsite = $em->getRepository('LaPoizWindBundle:WebSite')->findByNom(WebsiteGetData::windguruProName)[0];
+                                        $dataWindPrevWindGuruPro->setWebsite($windGuruProWebsite);
+                                        $this->saveDataWindPrev($spot, $dataWindPrevWindGuruPro, $em);
+                                    }
+
+                                    $this->saveDataWindPrev($spot, $dataWindPrev, $em);
+
+                                    // clean the form and display it
+                                    $dataWindPrev = new DataWindPrev();
+                                    $dataWindPrev->setSpot($spot);
+                                    $form = $this->createForm('dataWindPrevForm', $dataWindPrev)
+                                        ->add('Ajoute et test le site', 'submit');
+
+                                    return $this->render('LaPoizWindBundle:FrontOffice:AskNewSpot/blockAddSite.html.twig', array(
+                                        'form' => $form->createView(),
+                                        'spot' => $spot,
+                                        'idContact' => $idContact
+                                    ));
+                                } else {
+                                    // URL n'est pas bonne
+                                    return new JsonResponse(array('message' => $website->getNom().' est déjà spécifié pour ce spot'), 419);
+                                }
+                            } else {
+                                // URL n'est pas bonne
+                                return new JsonResponse(array('message' => 'Impossible de parser l URL'), 419);
                             }
-
-                            $this->saveDataWindPrev($spot, $dataWindPrev, $em);
-
-                            // clean the form and display it
-                            $dataWindPrev = new DataWindPrev();
-                            $dataWindPrev->setSpot($spot);
-                            $form = $this->createForm('dataWindPrevForm',$dataWindPrev)
-                                ->add('Ajoute et test le site','submit');
-
-                            return $this->render('LaPoizWindBundle:FrontOffice:AskNewSpot/blockAddSite.html.twig', array(
-                                    'form' => $form->createView(),
-                                    'spot' => $spot,
-                                    'idContact' => $idContact
-                                ));
                         } else {
                             // URL n'est pas bonne
-                            return new JsonResponse(array('message' => 'Impossible de parser l URL'), 419);
+                            return new JsonResponse(array('message' => 'Cette URL ne correspond à aucun site parser par LaPoizWind.'), 419);
                         }
                     }
                     /*else {
@@ -363,6 +375,9 @@ class FOAjaxAskCreateSpotController extends Controller
 
                 try {
                     // enregistre le comment
+                    if ($comment->getComment()===null) {
+                        $comment->setComment("");
+                    }
                     $contact->setComment($comment->getComment()."  ***** spot add:".$spot->getNom());
                     $em->persist($contact);
                     $em->flush();

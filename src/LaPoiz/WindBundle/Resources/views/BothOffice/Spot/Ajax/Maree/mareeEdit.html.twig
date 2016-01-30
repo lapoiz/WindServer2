@@ -36,11 +36,12 @@
                             <div class="col-sm-3">
                                 {{ form_row(restriction.state) }}
                             </div>
-                        </div>
+                        </div> <!--fermer dans function ajoutant le btn supprime mareeEdit -->
                         {% endfor %}
                     </div>
                 </div>
             </div>
+            <br />
             {{ form_rest(form) }}
         </form>
     </div>
@@ -55,15 +56,12 @@
     // Récupère le div qui contient la collection de restrictions
     var collectionHolder = $('div.restrictions');
 
-    // ajoute un lien « add a restriction »
-    var $addRestrictionButton = $('<button type="button" class="btn btn-primary" onclick="addRestriction()">Ajouter</button><br><br>');
-    var $newButtonDiv = $('<div></div>').append($addRestrictionButton);
+    // ajoute un lien « add a div.restrictions »
+    var addRestrictionButton = $('<div class="col-sm-3"><button type="button" class="btn btn-primary" onclick="addRestrictionForm()">Ajouter</button></div>');
+    var newButtonDiv = $('<div class="row" id="addButton"></div>').append(addRestrictionButton);
 
-    function addRestriction() {
-        addRestrictionForm(collectionHolder, $newButtonDiv);
-    }
-
-    function addRestrictionForm(collectionHolder, $newButtonDiv) {
+    function addRestrictionForm() {
+        console.log("addRestrictionForm");
         // Récupère l'élément ayant l'attribut data-prototype comme expliqué plus tôt
         var prototype = collectionHolder.attr('data-prototype');
 
@@ -72,29 +70,36 @@
         var newForm = prototype.replace(/__name__/g, collectionHolder.children().length);
 
         // Affiche le formulaire dans la page dans un div, avant le button "ajouter"
-        var $newFormDiv = $('<div></div>').append(newForm);
-        $newButtonDiv.before($newFormDiv);
+        var newFormDiv = $('<div class="row"></div>').append(newForm);
+        newButtonDiv.before(newFormDiv);
 
-        addRestrictionFormDeleteButton($newFormDiv);
+        //addRestrictionFormDeleteButton($newFormDiv);
+        addRestrictionFormDeleteButton(newFormDiv);
     }
 
-    function addRestrictionFormDeleteButton($newFormDiv) {
-        var $removeFormButton = $('<div class="col-sm-3"><button type="button" class="btn btn-danger">Supprimer</button></div>');
-        $newFormDiv.append($removeFormButton);
+    //function addRestrictionFormDeleteButton($newFormDiv) {
+    function addRestrictionFormDeleteButton(formDiv) {
+        console.log("addRestrictionFormDeleteButton");
+        //console.log("formDiv:"+formDiv);
+        var removeFormButton = $('<div class="col-sm-3"><button type="button" class="btn btn-danger">Supprimer</button></div>');
+        formDiv.append(removeFormButton);
 
-        $removeFormButton.on('click', function(e) {
-            // Todo: remove PlotBand
-            $newFormDiv.remove();
+        removeFormButton.on('click', function(e) {
+            formDiv.remove();
         });
     }
 
 
     jQuery(document).ready(function() {
-        collectionHolder.append($newButtonDiv);
+        console.log("ready");
+        collectionHolder.append(newButtonDiv);
 
         collectionHolder.find('div.row').each(function() {
-            addRestrictionFormDeleteButton($(this));
-            addPlotBandOnGraph($(this));
+            console.log("find div.row");
+            if ($(this).attr('id')!="addButton") {
+                addRestrictionFormDeleteButton($(this));
+                addPlotBandOnGraph($(this));
+            }
         });
 
     });

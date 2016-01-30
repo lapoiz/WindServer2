@@ -26,6 +26,7 @@ class BOController extends Controller
     $listSpotNotValid = $em->getRepository('LaPoizWindBundle:Spot')->findAllNotValid();
       $listSpotsWithoutRegion = $em->getRepository('LaPoizWindBundle:Spot')->findAllWithoutRegion();
       $listWebsites = $em->getRepository('LaPoizWindBundle:WebSite')->findAll();
+      $listContacts = $em->getRepository('LaPoizWindBundle:Contact')->findAll();
 
 
     return $this->container->get('templating')->renderResponse('LaPoizWindBundle:BackOffice:index.html.twig',
@@ -34,7 +35,8 @@ class BOController extends Controller
             'listRegion' => $listRegion,
             'listSpotNotValid' => $listSpotNotValid,
             'listSpotsWithoutRegion' => $listSpotsWithoutRegion,
-            'listWebsites' => $listWebsites
+            'listWebsites' => $listWebsites,
+            'listContacts' => $listContacts,
         ));
   }
 

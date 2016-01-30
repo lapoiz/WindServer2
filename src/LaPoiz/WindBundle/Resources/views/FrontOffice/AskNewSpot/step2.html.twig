@@ -23,7 +23,7 @@
 
         <div class="col-sm-4 centered" >
             <h3>Rosace des vents de ce spot</h3>
-            {% from "LaPoizWindBundle:BackOffice/Spot/Ajax:rosaceWind.html.twig" import displayRosace %}
+            {% from "LaPoizWindBundle:BothOffice/Spot:rosaceWind.html.twig" import displayRosace %}
             {{ displayRosace() }}
 
             <p>
@@ -59,7 +59,7 @@
         displayStep(2);
     </script>
 
-    {% from "LaPoizWindBundle:BackOffice/Spot/Ajax:rosaceWindJS.html.twig" import js %}
+    {% from "LaPoizWindBundle:BackOffice/Spot/Ajax:rosaceWindAdminJS.html.twig" import js %}
     {{ js(spot) }}
 
 

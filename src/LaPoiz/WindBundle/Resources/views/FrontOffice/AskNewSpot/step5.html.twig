@@ -4,36 +4,16 @@
     {{ contact.username }}<br />
     {{ contact.mail }}
 
-<h3>Le spot</h3>
-    {% from "LaPoizWindBundle:FrontOffice/spot:details.html.twig" import detail %}
-    {{ detail(spot) }}
-
 <h3>Les sites de prevision météo</h3>
     {% if spot.dataWindPrev is not null %}
         <ul>
         {% for dataWindPrevSpot in spot.dataWindPrev %}
-            <li>{{ dataWindPrevSpot.website.nom }}</li>
+            <li>{{ dataWindPrevSpot.website.nom }}: <a href="{{ dataWindPrevSpot.url }}" target="_blank">{{ dataWindPrevSpot.url }}</a></li>
         {% endfor %}
         </ul>
     {% endif %}
 
-<h3>Les marées</h3>
-    {% if spot.mareeURL is defined %}
-        {% if spot.mareeURL is  null %}
-            Pas de problème de marée pour ce spot.
-        {% else %}
-
-            URL: {{ spot.mareeURL }}
-
-            {% from "LaPoizWindBundle:BothOffice/Spot/Ajax/Maree:graph.html.twig" import graphMaree %}
-            {{ graphMaree(spot) }}
-
-
-        {% endif %}
-    {% endif %}
-
-
-
+<h3>Autre infos ?</h3>
     {{ form_start(form, {
         'style': 'horizontal',
         'label_col': 2,

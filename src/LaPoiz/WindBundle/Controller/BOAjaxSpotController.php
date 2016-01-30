@@ -116,12 +116,19 @@ class BOAjaxSpotController extends Controller
             $em->flush();
 
             $listSpot = $em->getRepository('LaPoizWindBundle:Spot')->findAllValid();
+            $listRegion = $em->getRepository('LaPoizWindBundle:Region')->findAllOrderByNumDisplay();
+            $listSpotsWithoutRegion = $em->getRepository('LaPoizWindBundle:Spot')->findAllWithoutRegion();
+            $listWebsites = $em->getRepository('LaPoizWindBundle:WebSite')->findAll();
+
             $listSpotNotValid = $em->getRepository('LaPoizWindBundle:Spot')->findAllNotValid();
 
             return $this->container->get('templating')->renderResponse('LaPoizWindBundle:BackOffice:index.html.twig',
                 array(
                     'listSpot' => $listSpot,
                     'listSpotNotValid' => $listSpotNotValid,
+                    'listRegion' => $listRegion,
+                    'listSpotsWithoutRegion' => $listSpotsWithoutRegion,
+                    'listWebsites' => $listWebsites
                 )
             );
         } else {

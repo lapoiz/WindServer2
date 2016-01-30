@@ -5,10 +5,12 @@
     <div class="starter-template">
         <h1>Page d'accueil du Back office</h1>
 
-        <h2>Spots à valider</h2>
+        <div class="row">
+            <div class="col-md-4">
+                <h2>Spots à valider</h2>
 
-        <form id="selectedValidSpotForm">
-            <table data-click-to-select="true">
+                <form id="selectedValidSpotForm">
+            <table data-click-to-select="true" class="table-bordered">
                 <thead>
                     <tr>
                         <th data-field="spot" data-align="center">Spots</th>
@@ -23,7 +25,7 @@
                         {% for spot in listSpotNotValid %}
                             <tr id="line_spotID_{{ spot.id }}">
                                 <td>{{ spot.nom }}</td>
-                                <td><a onclick="showSpot({{ spot.id }})"><i class="icon-eye-open"></i></a></td>
+                                <td><a onclick="showSpot({{ spot.id }})"><i class="icon-eye"></i></a></td>
                                 <td><input type="checkbox" name="valid" value="{{ spot.id }}"></td>
                                 <td><input type="checkbox" name="delete" value="{{ spot.id }}"></td>
                             </tr>
@@ -35,10 +37,47 @@
             <button class="btn btn-primary" id="validButton">Valider</button>
             <button class="btn btn-danger" id="deleteButton">Supprimer</button>
         </form>
+            </div>
+
+            <div class="col-md-8">
+                <h2>Contact</h2>
+
+                <table class="table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Nom</th>
+                            <th>Mail</th>
+                            <th>Comment</th>
+                            <th>Effacer</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% if listContacts is not null %}
+                            {% for contact in listContacts %}
+                                <tr id="line_contactID_{{ contact.id }}">
+                                    <td>{{ contact.username }}</td>
+                                    <td>{{ contact.mail }}</td>
+                                    <td>{{ contact.comment }}</td>
+                                    <td><i class="icon-trash" onclick="deleteContact({{ contact.id }})"></i></td>
+                                </tr>
+                            {% endfor %}
+                        {% endif %}
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+
+
 
         <script>
             function showSpot(spotId) {
                 alert("show spot site id:"+spotId);
+            }
+
+            function deleteContact(contactId) {
+                alert("Delete "+contactId);
             }
 
             $("#deleteButton").click(function(event)
