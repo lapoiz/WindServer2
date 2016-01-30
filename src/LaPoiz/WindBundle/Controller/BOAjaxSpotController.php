@@ -119,6 +119,7 @@ class BOAjaxSpotController extends Controller
             $listRegion = $em->getRepository('LaPoizWindBundle:Region')->findAllOrderByNumDisplay();
             $listSpotsWithoutRegion = $em->getRepository('LaPoizWindBundle:Spot')->findAllWithoutRegion();
             $listWebsites = $em->getRepository('LaPoizWindBundle:WebSite')->findAll();
+            $listContacts = $em->getRepository('LaPoizWindBundle:Contact')->findAll();
 
             $listSpotNotValid = $em->getRepository('LaPoizWindBundle:Spot')->findAllNotValid();
 
@@ -128,7 +129,8 @@ class BOAjaxSpotController extends Controller
                     'listSpotNotValid' => $listSpotNotValid,
                     'listRegion' => $listRegion,
                     'listSpotsWithoutRegion' => $listSpotsWithoutRegion,
-                    'listWebsites' => $listWebsites
+                    'listWebsites' => $listWebsites,
+                    'listContacts' => $listContacts
                 )
             );
         } else {
