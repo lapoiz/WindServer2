@@ -365,12 +365,16 @@ class FOAjaxAskCreateSpotController extends Controller
         $contact = $em->find('LaPoizWindBundle:Contact', $idContact);
 
         $comment = new Contact();
-        $form = $this->createForm('comentForm',$comment);
+        $form = $this->createForm('commentForm',$comment)
+        ->add('Envoie de la demande','submit');
+
+        $comment->setUsername($contact->getUsername());
+        $comment->setMail($contact->getMail());
 
         if ('POST' == $request->getMethod()) {
             $form->handleRequest($request);
 
-            if ($form->isValid()) {
+            //if ($form->isValid()) { -> always valid
                 $comment = $form->getData();
 
                 try {
@@ -381,15 +385,18 @@ class FOAjaxAskCreateSpotController extends Controller
                     $contact->setComment($comment->getComment()."  ***** spot add:".$spot->getNom());
                     $em->persist($contact);
                     $em->flush();
+                    return $this->render('LaPoizWindBundle:FrontOffice:Ajax/ok.html.twig');
                 } catch (\Exception $e) {
                     return $this->container->get('templating')->renderResponse(
                         'LaPoizWindBundle:FrontOffice:errorPage.html.twig',
                         array('errMessage' => "Exception : ".$e->getMessage()));
                 }
-            }
+           // }
         }
-        return $this->render('LaPoizWindBundle:FrontOffice:AskNewSpot/step1.html.twig', array(
-                'form' => $form->createView()
+        return $this->render('LaPoizWindBundle:FrontOffice:AskNewSpot/step5.html.twig', array(
+            'spot' => $spot,
+            'contact' => $contact,
+            'form' => $form->createView()
             ));
     }
 

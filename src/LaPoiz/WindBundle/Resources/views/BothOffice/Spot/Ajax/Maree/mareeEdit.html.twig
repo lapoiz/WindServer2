@@ -61,7 +61,6 @@
     var newButtonDiv = $('<div class="row" id="addButton"></div>').append(addRestrictionButton);
 
     function addRestrictionForm() {
-        console.log("addRestrictionForm");
         // Récupère l'élément ayant l'attribut data-prototype comme expliqué plus tôt
         var prototype = collectionHolder.attr('data-prototype');
 
@@ -79,8 +78,6 @@
 
     //function addRestrictionFormDeleteButton($newFormDiv) {
     function addRestrictionFormDeleteButton(formDiv) {
-        console.log("addRestrictionFormDeleteButton");
-        //console.log("formDiv:"+formDiv);
         var removeFormButton = $('<div class="col-sm-3"><button type="button" class="btn btn-danger">Supprimer</button></div>');
         formDiv.append(removeFormButton);
 
@@ -91,11 +88,9 @@
 
 
     jQuery(document).ready(function() {
-        console.log("ready");
         collectionHolder.append(newButtonDiv);
 
         collectionHolder.find('div.row').each(function() {
-            console.log("find div.row");
             if ($(this).attr('id')!="addButton") {
                 addRestrictionFormDeleteButton($(this));
                 addPlotBandOnGraph($(this));

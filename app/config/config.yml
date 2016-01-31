@@ -88,4 +88,4 @@ genemu_form:
     captcha: ~
 
 fos_js_routing:
-    routes_to_expose: [ _bo_ajax_spot_delete, _bo_ajax_spot_valid ]
+    routes_to_expose: [ _bo_ajax_spot_delete, _bo_ajax_spot_valid, _bo_ajax_contact_delete ]

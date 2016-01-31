@@ -151,6 +151,11 @@ _bo_website_create:
   pattern: /admin/BO/website/new
 
 
+_bo_ajax_contact_delete:
+  defaults: { _controller: LaPoizWindBundle:BOAjaxContact:delete }
+  pattern: /admin/BO/ajax/contact/delete/{id}
+
+
 _bo_ajax_spot_delete:
   defaults: { _controller: LaPoizWindBundle:BOAjaxSpot:spotDelete }
   pattern: /admin/BO/ajax/spot/delete/{id}

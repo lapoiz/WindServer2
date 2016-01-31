@@ -19,7 +19,7 @@
         'label_col': 2,
         'widget_col': 8,
         'methode' : 'POST',
-        'action' : path('_fo_ajax_spot_ask_create_step5', {'id': spot.id, 'idContact': contact.id})
+        'action' : path('_fo_ajax_spot_ask_create_send', {'id': spot.id, 'idContact': contact.id})
     })}}
 
             {{ form_errors(form, { 'global_errors': true }) }}
@@ -41,10 +41,16 @@
             type: $this.attr('method'),
             data: $this.serialize(),
             success : function(code_html, statut){
-                window.location.href="{{ path('_index') }}";
+                console.log("code_html: --->"+code_html+"<---");
+                if (code_html == 'ok') {
+                    // ok.html.twig
+                    window.location.href = "{{ path('_index') }}";
+                } else {
+                    $('#contentAskNewSpot').html(code_html);
+                }
             },
             error : function(resultat, statut, erreur){
-                alert("Problème de connexion !");
+                alert("Problème de connexion ! - Erreur:"+erreur);
                 $('#contentAskNewSpot').html(htmlBackup);
             }
         });

@@ -25,9 +25,9 @@
                         {% for spot in listSpotNotValid %}
                             <tr id="line_spotID_{{ spot.id }}">
                                 <td>{{ spot.nom }}</td>
-                                <td><a onclick="showSpot({{ spot.id }})"><i class="icon-eye"></i></a></td>
-                                <td><input type="checkbox" name="valid" value="{{ spot.id }}"></td>
-                                <td><input type="checkbox" name="delete" value="{{ spot.id }}"></td>
+                                <td class="text-center"><a onclick="showSpot({{ spot.id }})"><i class="icon-eye"></i></a></td>
+                                <td class="text-center"><input type="checkbox" name="valid" value="{{ spot.id }}"></td>
+                                <td class="text-center"><input type="checkbox" name="delete" value="{{ spot.id }}"></td>
                             </tr>
                         {% endfor %}
                     {% endif %}
@@ -40,7 +40,7 @@
             </div>
 
             <div class="col-md-8">
-                <h2>Contact</h2>
+                <h2>Contact <span id="contactActionLogo"></span></h2>
 
                 <table class="table-bordered">
                     <thead>
@@ -59,7 +59,7 @@
                                     <td>{{ contact.username }}</td>
                                     <td>{{ contact.mail }}</td>
                                     <td>{{ contact.comment }}</td>
-                                    <td><i class="icon-trash" onclick="deleteContact({{ contact.id }})"></i></td>
+                                    <td class="text-center"><i class="icon-trash" onclick="deleteContact({{ contact.id }})"></i></td>
                                 </tr>
                             {% endfor %}
                         {% endif %}
@@ -77,7 +77,25 @@
             }
 
             function deleteContact(contactId) {
-                alert("Delete "+contactId);
+                $('#contactActionLogo').html('<img src="{{ asset('bundles/lapoizwind/images/loading.gif') }}" alt="Loading Ajax data" />');
+
+                var urlDeleteContact=Routing.generate('_bo_ajax_contact_delete', { id: contactId });;
+                $.ajax({
+
+                    url: urlDeleteContact,
+                    type: "POST",
+                    success: function(html) {
+                        if (html!="ok") {
+                            alert("probleme lors de la suppression du contact:"+html);
+                        }
+                        deleteLineContact(contactId);
+                        $('#contactActionLogo').html('');
+                    },
+                    error : function(resultat, statut, erreur){
+                        $('#contactActionLogo').html('');
+                        alert("Problème lors de l'opération ! - Erreur:"+erreur);
+                    }
+                });
             }
 
             $("#deleteButton").click(function(event)
@@ -140,6 +158,11 @@
             function deleteLine(spotId) {
                 $("#line_spotID_"+spotId).remove();
             }
+
+            function deleteLineContact(contactId) {
+                $("#line_contactID_"+contactId).remove();
+            }
+
 
         </script>
 
