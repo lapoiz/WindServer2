@@ -8,7 +8,7 @@ use Symfony\Component\DomCrawler\Crawler;
 class WindFinderGetData extends WebsiteGetData
 {
 	const idLastUpdate = '#last-update';            // <span id="last-update">17:38</span>
-    const goodSectionClass = '.tabcontent';         // <section class="tabcontent">
+    const goodSectionClass = '.tab-content';         // <section class="tab-content">
     const dataDayDivClass = '.forecast-day';        // <div class="weathertable forecast-day forecast forecast-day-8">
     const dataDateDivClass = '.weathertable__header';// <div class="weathertable__header">Sunday, Dec 06</div>
     const dataHoureDivClass = '.weathertable__row'; // <div class="weathertable__row row-stripe">
@@ -27,13 +27,17 @@ class WindFinderGetData extends WebsiteGetData
 	 */
 	function analyseData($pageHTML,$url)	{
 
+    /*    $fp = fopen('windFinder_HTML.html', 'w'); // save on web directory
+        fwrite($fp, $pageHTML->html());
+        fclose($fp);
+    */
 		$previsionTab = array();
 		if (empty($pageHTML)) {
 			return null;
 		} else {
             $section=$pageHTML->filter(WindFinderGetData::goodSectionClass);
             if (empty($section)){
-                echo '<br />Element not find is section id="'.WindFinderGetData::goodSectionId.'" ... Windfinder change the page ?<br />';
+                echo '<br />Element not find is section id="'.WindFinderGetData::goodSectionClass.'" ... Windfinder change the page ?<br />';
             } else {
                 // Dans la section -> on récupére tous les div de data
                 foreach ($section->filter(WindFinderGetData::dataDayDivClass) as $divDayDomElem)  {
@@ -149,163 +153,172 @@ class WindFinderGetData extends WebsiteGetData
         return $lastUpdateDT->format('Y-m-d H:i:s');
     }
 
-/*
-	function transformData($htmlTabData) {
-		$cleanTabData = array();
-		$whichColumn = WindFinderGetData::getWichColumTab($htmlTabData);
-		
-		$today = WindFinderGetData::getTodayFromHTML($htmlTabData);
-		$nbLineTabPerLineWeb = $whichColumn["nbLineTabPerLineWeb"];
-		$timeCol = $whichColumn["time"];
-
-        // Page WindFinder construit sur 4 blocks de 22 lignes. Chaques blocs représentant 2 jours
-		for ($numLine=0;$numLine<(WindFinderGetData::nbLine);$numLine++) {
-
-			$nbCol=count($htmlTabData[$numLine*$nbLineTabPerLineWeb+$timeCol])-1;
-			$prevHoure=WindFinderGetData::getTimePrevFromHTML($htmlTabData[$numLine*$nbLineTabPerLineWeb+$timeCol][1]);
-			$datePrev = WindFinderGetData::getDatePrevFromHTML($htmlTabData[$numLine*$nbLineTabPerLineWeb][1]);
-            // Boucle sur toutes les colonnes du block (2 jours)
-			for ($numCol=0;$numCol<$nbCol;$numCol++) {
-				$timePrev = WindFinderGetData::getTimePrevFromHTML($htmlTabData[$numLine*$nbLineTabPerLineWeb+$timeCol][$numCol+1]);
-				//echo '<br/>$timePrev:'.$timePrev.'  $prevHoure:'.$prevHoure.'  $datePrev:'.$datePrev.'  $numLine'.$numLine.'   $numCol:'.$numCol;
-				if ($timePrev<$prevHoure) {
-					// new day
-					$datePrev = WindFinderGetData::getDatePrevFromHTML($htmlTabData[$numLine*$nbLineTabPerLineWeb][2]);
-				}
-                // Récupere toutes les infos du block
-				$lineData = WindFinderGetData::getWindFinderHtmlData($htmlTabData,$whichColumn,$numLine,$numCol,$today,$datePrev,$timePrev);
-				//$prevHoure=$lineData['timePrev'];
-				$prevHoure=$lineData['heure'];
-				
-				$cleanTabData[$datePrev][] = $lineData;
-			}
-		}
-		return $cleanTabData;
-	}
-	
-
-	
-	static private function getWindFinderHtmlData($htmlTabData,$whichColumn,$numLine,$numCol,$today,$datePrev,$timePrev) {
-		$nbLineTabPerLineWeb=$whichColumn["nbLineTabPerLineWeb"];
-		$colClean = array();
-		//$colClean['date'] = $today;
-		//$colClean['datePrev'] = $datePrev;
-		$colClean['date'] = $datePrev;
-		$colClean['heure'] = $timePrev;
-		$colClean['wind'] = WindFinderGetData::getWindPrevFromHTML($htmlTabData[$numLine*$nbLineTabPerLineWeb+$whichColumn["wind"]][$numCol]);//corection orientation
-		$colClean['maxWind'] = WindFinderGetData::getMaxWindPrevFromHTML($htmlTabData[$numLine*$nbLineTabPerLineWeb+$whichColumn["maxWind"]][$numCol]);
-		$colClean['temp'] = WindFinderGetData::getTempPrevFromHTML($htmlTabData[$numLine*$nbLineTabPerLineWeb+$whichColumn["temp"]][$numCol]);
-		$colClean['orientation'] = WindFinderGetData::getOrientationPrevFromHTML($htmlTabData[$numLine*$nbLineTabPerLineWeb+$whichColumn["orientation"]][$numCol]);
-        $colClean['precipitation'] = WindFinderGetData::getPrecipitationPrevFromHTML($htmlTabData[$numLine*$nbLineTabPerLineWeb+$whichColumn["precipitation"]][$numCol]);
-		return $colClean;
-	}
-	
-
-	static private function getTodayFromHTML($htmlData) {
-		return date("Y-m-d");
-	}
-
-
-	
-	// 08h
-	static private function getTimePrevFromHTML($htmlData) {
-		preg_match('#([0-9]{2})h#',$htmlData,$data);
-		return $data[1];
-	}
-	static private function getWindPrevFromHTML($htmlData) {
-		if (preg_match('#[0-9]+#',$htmlData,$data)>0) {
-			return $data[0];
-		} else {
-			return "?";
-		}
-	}
-	static private function getMaxWindPrevFromHTML($htmlData) {
-		if (preg_match('#[0-9]+#',$htmlData,$data)>0) {
-			return $data[0];
-		} else {
-			return "?";
-		}
-	}
-	static private function getTempPrevFromHTML($htmlData) {
-		if (preg_match('#[0-9]+#',$htmlData,$data)>0) {
-			return $data[0];
-		} else {
-			return "?";
-		}
-	}
-
-    static private function getPrecipitationPrevFromHTML($htmlData) {
-        if (preg_match('#[0-9]+#',$htmlData,$data)>0) {
-            return $data[0];
-        } else {
-            return "?";
-        }
+    /**
+     * @param $resulGetData: resultat de la fonction getDataURL, ici Crawler
+     * @return ce qu'on affiche
+     */
+    static function displayGetData($resultGetDataURL) {
+        return $resultGetDataURL->text();
     }
-	static private function getOrientationPrevFromHTML($htmlData) {
-		if (preg_match('#[nsew]+#',$htmlData,$data)>0) {
-			return $data[0];
-		} else { 
-			return "?";
-		}
-	}
-	
-	
-	// Delete	
-	
 
-	static private function getElemeInPart($windPart) 
-	{	 		
-		return preg_split('/,/',$windPart);
-	}
-	
-    static private function getPart($expres,$line) 
-	{ 
-      //$patternPart = '#\"WINDSPD\":\[([\d\.,\"]*)#';
-      $patternPart = '#\"'.$expres.'\":\[([\d\.,\"]*)#';
-	  preg_match_all($patternPart,$line,$parts);
-      return $parts[1][0];
-	}
 
-	//need special with hr_d can't be send in param of a function...
-    static private function getDatePart($line) 
-	{
-      $patternPart = '#\"hr\_d\":\[([\d\.,\"]*)#';
-      //$patternPart = '#"hr_d":\[([0-9\.,"]+)\]#';
-	  preg_match_all($patternPart,$line,$parts);
-	  $result= preg_replace('#\"#','',$parts[1][0]);
-      return $result;
-	}
+    /*
+        function transformData($htmlTabData) {
+            $cleanTabData = array();
+            $whichColumn = WindFinderGetData::getWichColumTab($htmlTabData);
 
-	// need special with hr_h can't be send in param of a function...
-    static private function getHourePart($line) 
-	{
-      $patternPart = '#\"hr\_h\":\[([\d\.,\"]*)#';
-	  preg_match_all($patternPart,$line,$parts);
-	  $result= preg_replace('#\"#','',$parts[1][0]);
-      return $result;
-	}
-	
-	/**
-	 * transforme date like '15' in saved date : '05/12/2011'
-	 * @param string $date
-	 *
-	static private function getCompleteDate($date) {
-		$today= new \DateTime("now");
-		if ($today->format('d') > $date) {
-			//nest month
-			$today->modify( '+1 month' );			
-		}
-		$result=$today->format('Y-m-').$date;
-		return $result;
-	}
+            $today = WindFinderGetData::getTodayFromHTML($htmlTabData);
+            $nbLineTabPerLineWeb = $whichColumn["nbLineTabPerLineWeb"];
+            $timeCol = $whichColumn["time"];
 
-	
-	/*
-	 * 3627|3|1281931200|169|'France - Saint-Aubin-sur-Mer'|'16.08. 2010 06'|1|0|2|23|46|49.8768|0.8025
-	 *
-	private function getDateFromHTML($htmlLine) {
-		preg_match('#([0-9]{2}).([0-9]{2}).\s([0-9]{4})\s#',$htmlLine[5],$data);
-		return $data[3].'-'.$data[2].'-'.$data[1];
-	}
-*/
+            // Page WindFinder construit sur 4 blocks de 22 lignes. Chaques blocs représentant 2 jours
+            for ($numLine=0;$numLine<(WindFinderGetData::nbLine);$numLine++) {
+
+                $nbCol=count($htmlTabData[$numLine*$nbLineTabPerLineWeb+$timeCol])-1;
+                $prevHoure=WindFinderGetData::getTimePrevFromHTML($htmlTabData[$numLine*$nbLineTabPerLineWeb+$timeCol][1]);
+                $datePrev = WindFinderGetData::getDatePrevFromHTML($htmlTabData[$numLine*$nbLineTabPerLineWeb][1]);
+                // Boucle sur toutes les colonnes du block (2 jours)
+                for ($numCol=0;$numCol<$nbCol;$numCol++) {
+                    $timePrev = WindFinderGetData::getTimePrevFromHTML($htmlTabData[$numLine*$nbLineTabPerLineWeb+$timeCol][$numCol+1]);
+                    //echo '<br/>$timePrev:'.$timePrev.'  $prevHoure:'.$prevHoure.'  $datePrev:'.$datePrev.'  $numLine'.$numLine.'   $numCol:'.$numCol;
+                    if ($timePrev<$prevHoure) {
+                        // new day
+                        $datePrev = WindFinderGetData::getDatePrevFromHTML($htmlTabData[$numLine*$nbLineTabPerLineWeb][2]);
+                    }
+                    // Récupere toutes les infos du block
+                    $lineData = WindFinderGetData::getWindFinderHtmlData($htmlTabData,$whichColumn,$numLine,$numCol,$today,$datePrev,$timePrev);
+                    //$prevHoure=$lineData['timePrev'];
+                    $prevHoure=$lineData['heure'];
+
+                    $cleanTabData[$datePrev][] = $lineData;
+                }
+            }
+            return $cleanTabData;
+        }
+
+
+
+        static private function getWindFinderHtmlData($htmlTabData,$whichColumn,$numLine,$numCol,$today,$datePrev,$timePrev) {
+            $nbLineTabPerLineWeb=$whichColumn["nbLineTabPerLineWeb"];
+            $colClean = array();
+            //$colClean['date'] = $today;
+            //$colClean['datePrev'] = $datePrev;
+            $colClean['date'] = $datePrev;
+            $colClean['heure'] = $timePrev;
+            $colClean['wind'] = WindFinderGetData::getWindPrevFromHTML($htmlTabData[$numLine*$nbLineTabPerLineWeb+$whichColumn["wind"]][$numCol]);//corection orientation
+            $colClean['maxWind'] = WindFinderGetData::getMaxWindPrevFromHTML($htmlTabData[$numLine*$nbLineTabPerLineWeb+$whichColumn["maxWind"]][$numCol]);
+            $colClean['temp'] = WindFinderGetData::getTempPrevFromHTML($htmlTabData[$numLine*$nbLineTabPerLineWeb+$whichColumn["temp"]][$numCol]);
+            $colClean['orientation'] = WindFinderGetData::getOrientationPrevFromHTML($htmlTabData[$numLine*$nbLineTabPerLineWeb+$whichColumn["orientation"]][$numCol]);
+            $colClean['precipitation'] = WindFinderGetData::getPrecipitationPrevFromHTML($htmlTabData[$numLine*$nbLineTabPerLineWeb+$whichColumn["precipitation"]][$numCol]);
+            return $colClean;
+        }
+
+
+        static private function getTodayFromHTML($htmlData) {
+            return date("Y-m-d");
+        }
+
+
+
+        // 08h
+        static private function getTimePrevFromHTML($htmlData) {
+            preg_match('#([0-9]{2})h#',$htmlData,$data);
+            return $data[1];
+        }
+        static private function getWindPrevFromHTML($htmlData) {
+            if (preg_match('#[0-9]+#',$htmlData,$data)>0) {
+                return $data[0];
+            } else {
+                return "?";
+            }
+        }
+        static private function getMaxWindPrevFromHTML($htmlData) {
+            if (preg_match('#[0-9]+#',$htmlData,$data)>0) {
+                return $data[0];
+            } else {
+                return "?";
+            }
+        }
+        static private function getTempPrevFromHTML($htmlData) {
+            if (preg_match('#[0-9]+#',$htmlData,$data)>0) {
+                return $data[0];
+            } else {
+                return "?";
+            }
+        }
+
+        static private function getPrecipitationPrevFromHTML($htmlData) {
+            if (preg_match('#[0-9]+#',$htmlData,$data)>0) {
+                return $data[0];
+            } else {
+                return "?";
+            }
+        }
+        static private function getOrientationPrevFromHTML($htmlData) {
+            if (preg_match('#[nsew]+#',$htmlData,$data)>0) {
+                return $data[0];
+            } else {
+                return "?";
+            }
+        }
+
+
+        // Delete
+
+
+        static private function getElemeInPart($windPart)
+        {
+            return preg_split('/,/',$windPart);
+        }
+
+        static private function getPart($expres,$line)
+        {
+          //$patternPart = '#\"WINDSPD\":\[([\d\.,\"]*)#';
+          $patternPart = '#\"'.$expres.'\":\[([\d\.,\"]*)#';
+          preg_match_all($patternPart,$line,$parts);
+          return $parts[1][0];
+        }
+
+        //need special with hr_d can't be send in param of a function...
+        static private function getDatePart($line)
+        {
+          $patternPart = '#\"hr\_d\":\[([\d\.,\"]*)#';
+          //$patternPart = '#"hr_d":\[([0-9\.,"]+)\]#';
+          preg_match_all($patternPart,$line,$parts);
+          $result= preg_replace('#\"#','',$parts[1][0]);
+          return $result;
+        }
+
+        // need special with hr_h can't be send in param of a function...
+        static private function getHourePart($line)
+        {
+          $patternPart = '#\"hr\_h\":\[([\d\.,\"]*)#';
+          preg_match_all($patternPart,$line,$parts);
+          $result= preg_replace('#\"#','',$parts[1][0]);
+          return $result;
+        }
+
+        /**
+         * transforme date like '15' in saved date : '05/12/2011'
+         * @param string $date
+         *
+        static private function getCompleteDate($date) {
+            $today= new \DateTime("now");
+            if ($today->format('d') > $date) {
+                //nest month
+                $today->modify( '+1 month' );
+            }
+            $result=$today->format('Y-m-').$date;
+            return $result;
+        }
+
+
+        /*
+         * 3627|3|1281931200|169|'France - Saint-Aubin-sur-Mer'|'16.08. 2010 06'|1|0|2|23|46|49.8768|0.8025
+         *
+        private function getDateFromHTML($htmlLine) {
+            preg_match('#([0-9]{2}).([0-9]{2}).\s([0-9]{4})\s#',$htmlLine[5],$data);
+            return $data[3].'-'.$data[2].'-'.$data[1];
+        }
+    */
 }
