@@ -26,7 +26,8 @@ class TempWaterGetData {
         // ajax pour avoir les infos: http://www.meteocity.com/ajax/Beach/ajaxChangeBeachView/?date=20151203+&citId=76217&modificateur=1
 
         $ajaxUrlType=TempWaterGetData::buildMeteocityAjaxURL($tempWaterInfoURL); // ajaxURL avec "__date__" à remplacer par un truc du type 20151203
-        $regExGetTempWater = '#([0-9]+)°C#';
+        //$regExGetTempWater = '#([0-9]+)°C#';
+        $regExGetTempWater = '#([0-9]+)#';
 
         $client = new Client();
         $prevTempWater = array();

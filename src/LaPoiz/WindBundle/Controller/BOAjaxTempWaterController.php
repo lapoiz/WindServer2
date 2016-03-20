@@ -19,7 +19,7 @@ class BOAjaxTempWaterController extends Controller
     /**
      * @Template()
      *
-     * http://localhost/WindServer/web/app_dev.php/admin/BO/ajax/tempwater/get/1
+     * http://localhost/Wind/web/app_dev.php/admin/BO/ajax/spot/tempwater/get/1
      */
     public function getTempWaterPrevAction($id=null)
     {

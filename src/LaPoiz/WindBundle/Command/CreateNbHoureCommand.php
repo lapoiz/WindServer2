@@ -45,10 +45,10 @@ class CreateNbHoureCommand extends ContainerAwareCommand  {
             list($tabDataNbHoureNav,$tabDataMeteo)=NbHoureNav::createTabNbHoureNav($spot, $em);
             $tabNbHoureNav=NbHoureNav::calculateNbHourNav($tabDataNbHoureNav);
 
-
+            $output->writeln('<info>           *** Nb Heure nav ***</info>');
             // Save nbHoure on spot
             foreach ($tabNbHoureNav as $keyDate=>$tabWebSite) {
-                $output->write('<info>' . $keyDate . ': ');
+                $output->writeln('<info>' . $keyDate . ': ');
                 foreach ($tabWebSite as $keyWebSite=>$nbHoureNav) {
                     $output->writeln('<info>    '.$keyWebSite.' : '.$nbHoureNav.'</info> ');
                     $noteDates=ManageNote::getNotesDate($spot, \DateTime::createFromFormat('Y-m-d',$keyDate), $em);
@@ -59,6 +59,7 @@ class CreateNbHoureCommand extends ContainerAwareCommand  {
                 }
             }
 
+            $output->writeln('<info>           *** Meteo ***</info>');
             // Save meteo
             $tabMeteo=NbHoureMeteo::calculateMeteoNav($tabDataMeteo);
             foreach ($tabMeteo as $keyDate=>$tabMeteoDay) {
@@ -72,9 +73,15 @@ class CreateNbHoureCommand extends ContainerAwareCommand  {
                 $em->persist($noteDates);
             }
 
-
+            $output->writeln('<info>           *** T C de l eau ***</info>');
             //********** Température de l'eau **********
-            $tabTempWater=TempWaterGetData::getTempWaterFromSpot($spot, $output);
+            try {
+                $tabTempWater = null;
+                $tabTempWater = TempWaterGetData::getTempWaterFromSpot($spot, $output);
+            } catch (\Exception $e) {
+                $output->writeln('<warn>'.$e->getMessage().'</warn>');
+                $output->writeln('<warn> * End Warn * </warn>');
+            }
 
             if ($tabTempWater != null) {
                 $currentDay = new \DateTime("now");
