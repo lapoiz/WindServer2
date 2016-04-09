@@ -33,37 +33,77 @@
                     {% for notesDate in listNotesDate %}
                 <td>
 
+                    <style type="text/css">
+                        .bs-example{
+                            margin: 200px 150px 0;
+                        }
+                        .bs-example button{
+                            margin: 10px;
+                    </style>
+
                         <!-- Wind -->
 
                             {% if notesDate is not null %}
                                 <div class="row">
 
                                     <div class="col-sm-5"> <!-- partie note du vent -->
-                                        <div class="row">
-                                {% if notesDate.nbHoureNav is not null %}
-                                    {% for nbHoureNavElem in notesDate.nbHoureNav %}
-                                        {% if nbHoureNavElem is not null %}
-                                            {% set classNbH = classTop %}
-                                            {% set classBorderColor = classBorderTop %}
-                                            {% if nbHoureNavElem.nbHoure<3 %}
-                                                {% set classNbH = classNule %}
-                                                {% set classBorderColor = classBorderNule %}
-                                            {% elseif nbHoureNavElem.nbHoure<8 %}
-                                                {% set classNbH = classBof %}
-                                                {% set classBorderColor = classBorderBof %}
-                                            {% endif %}
 
-                                            <div class="col-sm-4 {{ classNbH }} noPadding">
-                                                <img src="{{ asset('bundles/lapoizwind/images/logos/'~nbHoureNavElem.website.logo|e) }}"
-                                                     alt="{{ nbHoureNavElem.website.nom }}" class="logoWebsite">
-                                                <span class="nbHourNavCircle {{ classBorderColor }}">
-                                                {{ (nbHoureNavElem.nbHoure)|number_format(0, ',', '.') }}h
+
+                                        {% set classNbH = classTop %}
+                                        {% set classBorderColor = classBorderTop %}
+                                        {% if notesDate.nbHoureNavCalc<3 %}
+                                            {% set classNbH = classNule %}
+                                            {% set classBorderColor = classBorderNule %}
+                                        {% elseif notesDate.nbHoureNavCalc<8 %}
+                                            {% set classNbH = classBof %}
+                                            {% set classBorderColor = classBorderBof %}
+                                        {% endif %}
+
+
+                                        <div class="row">
+                                            <div class="col-xs-12 {{ classNbH }}">
+                                                <i class="icon-wind"></i>
+                                                <span class="nbHourNavCircle {{ classBorderColor }}"
+                                                      data-toggle="popover{{ notesDate.id }}">
+                                                {{ (notesDate.nbHoureNavCalc)|number_format(0, ',', '.') }}h
                                                 </span>
                                             </div>
-                                        {% endif %}
-                                    {% endfor %}
-                                {% endif %}
                                         </div>
+
+                                        <script type="text/javascript">
+                                            $(document).ready(function(){
+                                                $('[data-toggle="popover{{ notesDate.id }}"]').popover({
+                                                    placement : 'top',
+                                                    trigger : 'hover',
+                                                    html : true,
+                                                    content : '<div class="row">' +
+                                                    {% if notesDate.nbHoureNav is not null %}
+                                                    {% for nbHoureNavElem in notesDate.nbHoureNav %}
+                                                        {% if nbHoureNavElem is not null %}
+                                                            {% set classNbH = classTop %}
+                                                            {% set classBorderColor = classBorderTop %}
+                                                            {% if nbHoureNavElem.nbHoure<3 %}
+                                                            {% set classNbH = classNule %}
+                                                            {% set classBorderColor = classBorderNule %}
+                                                            {% elseif nbHoureNavElem.nbHoure<8 %}
+                                                            {% set classNbH = classBof %}
+                                                            {% set classBorderColor = classBorderBof %}
+                                                            {% endif %}
+
+                                                            '<div class="col-sm-4 {{ classNbH }} noPadding">'+
+                                                                '<img src="{{ asset('bundles/lapoizwind/images/logos/'~nbHoureNavElem.website.logo|e) }}" '+
+                                                                'alt="{{ nbHoureNavElem.website.nom }}" class="logoWebsite">'+
+                                                                '<span class="nbHourNavCircle {{ classBorderColor }}">'+
+                                                                '{{ (nbHoureNavElem.nbHoure)|number_format(0, ',', '.') }}h '+
+                                                                '</span>'+
+                                                                '</div>'+
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                        {% endif %}
+                                                    '</div>'
+                                                });
+                                            });
+                                        </script>
                                     </div>
 
                                 {% set classTemp = classTop %}

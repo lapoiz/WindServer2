@@ -27,6 +27,12 @@ class NotesDate
      */
     private $nbHoureNav;
 
+
+    /**
+     * @ORM\Column(type="decimal", scale=2, nullable=true)
+     */
+    private $nbHoureNavCalc;
+
     /**
      * @ORM\Column(type="decimal", scale=2, nullable=true)
      */
@@ -303,4 +309,28 @@ class NotesDate
         return $this->tempWater;
     }
 
+
+    /**
+     * Set nbHoureNavCalc
+     *
+     * @param string $nbHoureNavCalc
+     *
+     * @return NotesDate
+     */
+    public function setNbHoureNavCalc($nbHoureNavCalc)
+    {
+        $this->nbHoureNavCalc = $nbHoureNavCalc;
+
+        return $this;
+    }
+
+    /**
+     * Get nbHoureNavCalc
+     *
+     * @return string
+     */
+    public function getNbHoureNavCalc()
+    {
+        return $this->nbHoureNavCalc;
+    }
 }

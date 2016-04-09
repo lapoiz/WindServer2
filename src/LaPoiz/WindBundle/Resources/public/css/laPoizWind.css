@@ -127,7 +127,7 @@
 }
 
 .nbHourNavCircle {
-    display: block;
+    display: inline-block;
     background: white;
     border-radius: 50%;
     border: 2px solid black;

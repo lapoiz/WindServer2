@@ -49,12 +49,23 @@ class CreateNbHoureCommand extends ContainerAwareCommand  {
             // Save nbHoure on spot
             foreach ($tabNbHoureNav as $keyDate=>$tabWebSite) {
                 $output->writeln('<info>' . $keyDate . ': ');
+                $nbHoureNavCalc=0;
+                $nbSiteCalc=0;
                 foreach ($tabWebSite as $keyWebSite=>$nbHoureNav) {
                     $output->writeln('<info>    '.$keyWebSite.' : '.$nbHoureNav.'</info> ');
                     $noteDates=ManageNote::getNotesDate($spot, \DateTime::createFromFormat('Y-m-d',$keyDate), $em);
                     $nbHoureNavObj=ManageNote::getNbHoureNav($noteDates, $keyWebSite, $em);
                     $nbHoureNavObj->setNbHoure($nbHoureNav);
                     $em->persist($nbHoureNavObj);
+                    $em->persist($noteDates);
+                    if ($nbHoureNav>0) {
+                        $nbSiteCalc++;
+                        $nbHoureNavCalc += $nbHoureNav;
+                    }
+                }
+                if ($nbSiteCalc>0) {
+                    $output->writeln('<info>    ' . $keyWebSite . ' : ' . $nbHoureNavCalc . ' / ' . $nbSiteCalc . ' = ' . ($nbHoureNavCalc / $nbSiteCalc) . '</info> ');
+                    $noteDates->setNbHoureNavCalc($nbHoureNavCalc / $nbSiteCalc);
                     $em->persist($noteDates);
                 }
             }

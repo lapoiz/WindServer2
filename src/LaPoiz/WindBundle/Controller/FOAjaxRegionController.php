@@ -16,7 +16,7 @@ class FOAjaxRegionController extends Controller {
     /**
      * @Template()
      * Affiche le tableau (<Table>) des spots de la region avec toutes les infos importantes (nb heur de nav, température ...)
-     * http://localhost/Wind/web/app_dev.php/fo/ajax/region/spots/nbHeureNav/1
+     * http://localhost/Wind/web/app_dev.php/fo/ajax/region/spots/infoNav/4
      */
     public function listSpotsInfoNavAction($id=null, Request $request) {
         $em = $this->container->get('doctrine.orm.entity_manager');
