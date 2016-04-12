@@ -64,7 +64,7 @@ class CreateNbHoureCommand extends ContainerAwareCommand  {
                     }
                 }
                 if ($nbSiteCalc>0) {
-                    $output->writeln('<info>    ' . $keyWebSite . ' : ' . $nbHoureNavCalc . ' / ' . $nbSiteCalc . ' = ' . ($nbHoureNavCalc / $nbSiteCalc) . '</info> ');
+                    $output->writeln('<info>    ' . $keyDate . ' : ' . $nbHoureNavCalc . ' / ' . $nbSiteCalc . ' = ' . ($nbHoureNavCalc / $nbSiteCalc) . '</info> ');
                     $noteDates->setNbHoureNavCalc($nbHoureNavCalc / $nbSiteCalc);
                     $em->persist($noteDates);
                 }

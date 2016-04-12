@@ -51,6 +51,7 @@ class NbHoureNav {
         foreach ($listALlPrevisionDate as $previsionDate) {
             $tabAllPrevisionDate[$previsionDate->getDatePrev()->format('Y-m-d')][]=$previsionDate;
         }
+        // $tabAllPrevisionDate with data
 
         foreach ($tabDataNbHoureNav as $keyDate=>$toto) {
             if (array_key_exists($keyDate,$tabAllPrevisionDate)) {

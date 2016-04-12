@@ -15,7 +15,9 @@ class WebsiteGetData
 	const meteoFranceName="MeteoFrance";
 	const meteoConsultName="MeteoConsult";
 	const alloSurfName="AlloSurf";
-	// Pour ajout nouveau site, ajouter également dans : LaPoiz\WindBundle\core\websiteDataManage/WebsiteManage.php line 42
+	// Pour ajout nouveau site, ajouter également dans :
+	// 				LaPoiz\WindBundle\core\websiteDataManage/WebsiteManage.php line 42
+	//				LaPoiz\WindBundle\core\nbHoure\NbHoureWind.php line 43
 	// + créer un loading Fixtures
 
 	const windPowerMin=12;

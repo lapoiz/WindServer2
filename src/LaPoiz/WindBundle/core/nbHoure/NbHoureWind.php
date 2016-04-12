@@ -40,6 +40,15 @@ class NbHoureWind {
                     case WebsiteGetData::meteoFranceName :
                         NbHoureWind::calculNbHoureNavMeteoFrance($previsionDate,$tabRosaceOrientation,$tabHoure);
                         break;
+
+                    case WebsiteGetData::meteoConsultName :
+                        NbHoureWind::calculNbHoureNavMeteoConsult($previsionDate,$tabRosaceOrientation,$tabHoure);
+                        break;
+
+                    case WebsiteGetData::alloSurfName :
+                        NbHoureWind::calculNbHoureNavAlloSurf($previsionDate,$tabRosaceOrientation,$tabHoure);
+                        break;
+
                 }
             }
         }
@@ -87,11 +96,24 @@ class NbHoureWind {
         NbHoureWind::calculNbHoureNavWebSite($previsionDate,$tabRosaceOrientation,$tabHoure);
     }
 
-    // calcul le nb Heure de nav pour ce previsionDate qui est du site MeteoFrance
+    // calcul le nb Heure de nav pour ce previsionDate qui est du site WindFinder
     static private function calculNbHoureNavWindFinder($previsionDate,$tabRosaceOrientation,&$tabHoure) {
         // On boucle sur les previsions du spot, du jour, de WindGuru
         NbHoureWind::calculNbHoureNavWebSite($previsionDate,$tabRosaceOrientation,$tabHoure);
     }
+
+    // calcul le nb Heure de nav pour ce previsionDate qui est du site MeteoConsult
+    static private function calculNbHoureNavMeteoConsult($previsionDate,$tabRosaceOrientation,&$tabHoure) {
+        // On boucle sur les previsions du spot, du jour, de WindGuru
+        NbHoureWind::calculNbHoureNavWebSite($previsionDate,$tabRosaceOrientation,$tabHoure);
+    }
+
+    // calcul le nb Heure de nav pour ce previsionDate qui est du site AlloSurf
+    static private function calculNbHoureNavAlloSurf($previsionDate,$tabRosaceOrientation,&$tabHoure) {
+        // On boucle sur les previsions du spot, du jour, de WindGuru
+        NbHoureWind::calculNbHoureNavWebSite($previsionDate,$tabRosaceOrientation,$tabHoure);
+    }
+
 
     /**
      * Function principal sur la récupération des données de doctrine dans un tableau utiliser pour calculer
