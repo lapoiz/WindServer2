@@ -77,6 +77,14 @@ class AlloSurfGetData extends WebsiteGetData
 		}
 	}
 
+	/**
+	 * @param $resulGetData: resultat de la fonction getDataURL, ici Crawler
+	 * @return ce qu'on affiche
+	 */
+	static function displayGetData($resultGetDataURL) {
+		return $resultGetDataURL->text();
+	}
+
 	// input: wind_sse
 	// return: sse
 	// attention wind_oso -> wsw
