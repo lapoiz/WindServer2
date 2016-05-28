@@ -15,6 +15,7 @@ class WebsiteGetData
 	const meteoFranceName="MeteoFrance";
 	const meteoConsultName="MeteoConsult";
 	const alloSurfName="AlloSurf";
+	const allPrevName="AllPrev";
 	// Pour ajout nouveau site, ajouter également dans :
 	// 				LaPoiz\WindBundle\core\websiteDataManage/WebsiteManage.php line 42
 	//				LaPoiz\WindBundle\core\nbHoure\NbHoureWind.php line 43
@@ -54,6 +55,9 @@ class WebsiteGetData
 				break;
 			case WebsiteGetData::alloSurfName:
 				return new AlloSurfGetData();
+				break;
+			case WebsiteGetData::allPrevName:
+				return new AllPrevGetData();
 				break;
 		}
 		return $result;
@@ -177,34 +181,36 @@ class WebsiteGetData
 				$windCalculate = array("max" => 0, "min" => 0, "cumul" => 0, "nbPrev" => 0);
 
 				foreach ($lineWindData as $dataPrev) {
-					$prev = new Prevision();
-					$prev->setOrientation($dataPrev["orientation"]);
-					$prev->setWind($dataPrev["wind"]);
-					$hour = new \DateTime();
-					if (isset($dataPrev["heure"]) && !empty($dataPrev["heure"]) && strlen($dataPrev["heure"]) > 0) {
-						$hour->setTime($dataPrev["heure"], "00");
-					} else {
-						$hour->setTime("01", "00");
-					}
-					$prev->setTime($hour);
+					if (isset($dataPrev["wind"]) && !empty($dataPrev["wind"]) && strlen($dataPrev["wind"]) > 0) {
+						$prev = new Prevision();
+						$prev->setOrientation($dataPrev["orientation"]);
+						$prev->setWind($dataPrev["wind"]);
+						$hour = new \DateTime();
+						if (isset($dataPrev["heure"]) && !empty($dataPrev["heure"]) && strlen($dataPrev["heure"]) > 0) {
+							$hour->setTime($dataPrev["heure"], "00");
+						} else {
+							$hour->setTime("01", "00");
+						}
+						$prev->setTime($hour);
 
-					if (isset($dataPrev["meteo"])) {
-						$prev->setMeteo($dataPrev["meteo"]);
-					}
-					if (isset($dataPrev["precipitation"])) {
-						$prev->setPrecipitation($dataPrev["precipitation"]);
-					}
-					if (isset($dataPrev["temp"])) {
-						$prev->setTemp($dataPrev["temp"]);
-					}
+						if (isset($dataPrev["meteo"])) {
+							$prev->setMeteo($dataPrev["meteo"]);
+						}
+						if (isset($dataPrev["precipitation"])) {
+							$prev->setPrecipitation($dataPrev["precipitation"]);
+						}
+						if (isset($dataPrev["temp"])) {
+							$prev->setTemp($dataPrev["temp"]);
+						}
 
-					WindFinderGetData::calculateWind($windCalculate, $prev);
+						WindFinderGetData::calculateWind($windCalculate, $prev);
 
-					$prev->setPrevisionDate($prevDate);
-					$prevDate->addListPrevision($prev);
-					$entityManager->persist($prevDate);
-					$entityManager->persist($prev);
-					//$entityManager->flush(); // car sinon les éléments ne sont pas obligatoirement enregistrer dans l'ordre des heures
+						$prev->setPrevisionDate($prevDate);
+						$prevDate->addListPrevision($prev);
+						$entityManager->persist($prevDate);
+						$entityManager->persist($prev);
+						//$entityManager->flush(); // car sinon les éléments ne sont pas obligatoirement enregistrer dans l'ordre des heures
+					}
 				}
 
 				//TODO: calculate average etc...
