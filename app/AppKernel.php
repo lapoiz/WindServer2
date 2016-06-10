@@ -22,6 +22,7 @@ class AppKernel extends Kernel
             new Braincrafted\Bundle\BootstrapBundle\BraincraftedBootstrapBundle(),
             new FOS\JsRoutingBundle\FOSJsRoutingBundle(),
             new LaPoiz\GraphBundle\LaPoizGraphBundle(),
+            new LaPoiz\TableBundle\LaPoizTableBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
