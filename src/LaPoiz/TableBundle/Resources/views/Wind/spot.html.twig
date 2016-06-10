@@ -1,0 +1,29 @@
+<!DOCTYPE html><!-- document HTML5 -->
+<html>
+    <head>
+        <link href="{{ asset('bundles/lapoizwind/css/bootstrap.css') }}" rel="stylesheet" media="screen">
+        <link href="{{ asset('bundles/lapoiztable/css/tableSpot.css') }}" rel="stylesheet" media="screen">
+
+        <script src="{{ asset('bundles/lapoizwind/js/jquery-1.10.2.min.js') }}"></script>
+        <script src="{{ asset('bundles/lapoizwind/js/bootstrap.min.js') }}"></script>
+
+        <script src="{{ asset('bundles/lapoiztable/js/moment.min.js') }}"></script>
+
+        <script src="{{ asset('bundles/lapoiztable/js/tableSpot.js') }}"></script>
+        <script src="{{ asset('bundles/lapoiztable/js/windTable.js') }}"></script>
+
+
+    </head>
+    <body>
+        <h1>Test table wind</h1>
+
+
+        <div>
+            <div class="col-sm-12">
+                {% from "LaPoizTableBundle:Wind:table.html.twig" import table %}
+                {{ table(spot) }}
+            </div>
+        </div>
+
+    </body>
+</html>

@@ -1,0 +1,51 @@
+{% macro table(spot) %}
+    <div class="row">
+        <div class="col-lg-12">
+            <div id="wait"></div>
+        </div>
+    </div>
+
+        <div class="row">
+            <table id="windTable">
+            </table>
+        </div>
+
+
+        <script>
+            orientationVentSpot=[];
+            {% for windOrientation in spot.windOrientation %}
+            orientationVentSpot["{{ windOrientation.orientationDeg|e }}"]="{{ windOrientation.state|e }}";
+            {% endfor %}
+
+            isMaree = {{ spot.mareeURL is not null ? "true":"false" }};
+
+            $( document ).ready(function() {
+                windTable=new WindTable("windTable");
+                getJson();
+            });
+
+            function getJson() {
+                $('#wait').html('<img src="{{ asset('bundles/lapoizwind/images/loading.gif') }}" alt="Loading Ajax data" />');
+
+                $.getJSON( "{{ path('_fo_json_lapoizGraph_spot_data',{ 'id':spot.id }) }}", function( json ) {
+                    putPrevOnTable(json);
+                    getMaree();
+                    $('#wait').html('');
+                });
+            }
+
+            function getMaree() {
+                if (isMaree) {
+                    $('#wait').html('<img src="{{ asset('bundles/lapoizwind/images/loading.gif') }}" alt="Loading Ajax data" />');
+                    $.getJSON("{{ path('_fo_json_lapoizGraph_maree_data',{ 'id':spot.id }) }}", function (json) {
+                        if (json.success) {
+                            putMareeOnTable(json.data);
+                        }
+                        $('#wait').html('');
+                    });
+                }
+            }
+
+        </script>
+
+{% endmacro %}

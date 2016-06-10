@@ -1,0 +1,7 @@
+la_poiz_table_homepage:
+    path:     /
+    defaults: { _controller: LaPoizTableBundle:Default:index }
+
+garph_spot:
+    path:     /spot/{id}
+    defaults: { _controller: LaPoizTableBundle:WindTable:spot }

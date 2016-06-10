@@ -2,6 +2,8 @@
 namespace LaPoiz\WindBundle\Controller;
 
 use LaPoiz\WindBundle\core\imagesManage\RosaceWindManage;
+use LaPoiz\WindBundle\core\websiteDataManage\AllPrevGetData;
+use LaPoiz\WindBundle\core\websiteDataManage\WebsiteGetData;
 use LaPoiz\WindBundle\Entity\Spot;
 use LaPoiz\WindBundle\Entity\Region;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -13,6 +15,40 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 class BOToolsController extends Controller
 
 {
+
+  /**
+   * @Template()
+   *
+   */
+  public function createAllPrevisionSpotAction($id=null)
+  {
+    $em = $this->container->get('doctrine.orm.entity_manager');
+
+    $spot = $em->find('LaPoizWindBundle:Spot', $id);
+    $allPrevWebSite = $em->getRepository('LaPoizWindBundle:WebSite')->findWithName(WebsiteGetData::allPrevName);
+
+    AllPrevGetData::calculateWindAllPrev($allPrevWebSite, $spot, $em);
+
+    $listSpot = $em->getRepository('LaPoizWindBundle:Spot')->findAllValid();
+    $listRegion = $em->getRepository('LaPoizWindBundle:Region')->findAllOrderByNumDisplay();
+    $listSpotNotValid = $em->getRepository('LaPoizWindBundle:Spot')->findAllNotValid();
+    $listSpotsWithoutRegion = $em->getRepository('LaPoizWindBundle:Spot')->findAllWithoutRegion();
+    $listWebsites = $em->getRepository('LaPoizWindBundle:WebSite')->findAll();
+
+    return $this->container->get('templating')->renderResponse('LaPoizWindBundle:BackOffice/Tools:calculAllPrevSpot.html.twig',
+        array(
+            'spot' => $spot,
+            'listSpot' => $listSpot,
+            'listRegion' => $listRegion,
+            'listSpotNotValid' => $listSpotNotValid,
+            'listSpotsWithoutRegion' => $listSpotsWithoutRegion,
+            'listWebsites' => $listWebsites
+        ));
+  }
+
+
+
+
   /**
    * @Template()
    *

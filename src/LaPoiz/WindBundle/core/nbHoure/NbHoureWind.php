@@ -40,15 +40,16 @@ class NbHoureWind {
                     case WebsiteGetData::meteoFranceName :
                         NbHoureWind::calculNbHoureNavMeteoFrance($previsionDate,$tabRosaceOrientation,$tabHoure);
                         break;
-
                     case WebsiteGetData::meteoConsultName :
                         NbHoureWind::calculNbHoureNavMeteoConsult($previsionDate,$tabRosaceOrientation,$tabHoure);
                         break;
-
                     case WebsiteGetData::alloSurfName :
                         NbHoureWind::calculNbHoureNavAlloSurf($previsionDate,$tabRosaceOrientation,$tabHoure);
                         break;
 
+                    case WebsiteGetData::allPrevName :
+                        NbHoureWind::calculNbHoureNavAllPrev($previsionDate,$tabRosaceOrientation,$tabHoure);
+                        break;
                 }
             }
         }
@@ -114,6 +115,11 @@ class NbHoureWind {
         NbHoureWind::calculNbHoureNavWebSite($previsionDate,$tabRosaceOrientation,$tabHoure);
     }
 
+    // Calcul le nb Heure de nav pour ce previsionDate de toutes les prevision du spot
+    static private function calculNbHoureNavAllPrev($previsionDate,$tabRosaceOrientation,&$tabHoure) {
+
+        // Todo: calcul les prev depuis tous les autres prev
+    }
 
     /**
      * Function principal sur la récupération des données de doctrine dans un tableau utiliser pour calculer

@@ -211,7 +211,9 @@ _bo_tools_rosace_convert_all_spots:
   defaults: { _controller: LaPoizWindBundle:BOTools:rosaceConvertPNGAllSpots }
   pattern: /admin/BO/tools/rosace/convert/png/all/spots
 
-
+_bo_tools_create_allprevision_spot:
+  defaults: { _controller: LaPoizWindBundle:BOTools:createAllPrevisionSpot }
+  pattern: /admin/BO/tools/creat/allprevision/spots/{id}
 
 
 
